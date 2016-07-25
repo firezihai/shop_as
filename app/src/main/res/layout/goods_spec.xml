@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/specName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text=""
+        android:textSize="14dp"
+        android:textColor="@color/darkgrey"/>
+    <com.fengbeibei.shop.widget.FlowLayout
+        android:id="@+id/specValueView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:horizontal_space="8dp"
+        app:vertical_space="8dp"/>
+     <!--   app:textSize="16sp"
+        app:equally="true"
+        app:stype="select"
+        app:isSingle="false"
+        app:itemPaddingLeft="5dp"
+        app:itemPaddingTop="2dp"
+        app:itemPaddingRight="5dp"
+        app:itemPaddingBottom="2dp"
+        app:textColor="@color/test_flowlayout_item_text_color"
+        app:flowBackground="@drawable/flow_item_bg_selector"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"-->/>
+</LinearLayout>

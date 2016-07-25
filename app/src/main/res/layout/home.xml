@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+	<LinearLayout
+	    android:id="@+id/homeHead"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/green"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="0dp"
+            android:layout_margin="5dp"
+            android:background="@null"
+            android:drawableTop="@drawable/icon_scan"
+            android:drawablePadding="2dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/scan"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingRight="5dp"
+            android:paddingEnd="5dp"
+            android:layout_weight="1"
+            android:background="@color/lightgrey"
+            android:drawableLeft="@drawable/icon_search"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/icon_search"
+            android:gravity="center_vertical|start"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/search_goods"
+            android:textColor="@color/darkgrey"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="0dp"
+            android:layout_margin="5dp"
+            android:background="@null"
+            android:drawablePadding="2dp"
+            android:drawableTop="@drawable/icon_message"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/message"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+    <com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/homePullToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+         android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        ptr:ptrAnimationStyle="rotate"
+        ptr:ptrHeaderBackground="@color/lightgrey"
+        ptr:ptrHeaderSubTextColor="@color/black"
+        ptr:ptrHeaderTextColor="@color/black"
+        ptr:ptrScrollingWhileRefreshingEnabled="false"
+        ptr:ptrRotateDrawableWhilePulling="false" >
+        <LinearLayout
+            android:id="@+id/homeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightgrey"
+            android:orientation="vertical">
+	       <RelativeLayout
+	          android:layout_width="match_parent"
+	          android:layout_height="@dimen/home_slide_height" >
+	
+	          <android.support.v4.view.ViewPager
+	              android:id="@+id/adViewPager"
+	              android:layout_width="match_parent"
+	              android:layout_height="@dimen/home_slide_height" />
+	          <LinearLayout 
+	              android:layout_width="60dp"
+	              android:layout_height="wrap_content"
+	              android:layout_alignParentBottom="true"
+	              android:layout_alignParentRight="true"
+	              android:layout_alignParentEnd="true"
+	              android:paddingBottom="10dp"
+	              android:paddingTop="10dp">
+                  <com.fengbeibei.shop.widget.indicator.CirclePageIndicator
+                    android:id="@+id/adPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fillColor="@color/green"
+                    app:pageColor="@color/white"
+                    app:radius="2dp"/>
+                  </LinearLayout>
+	       </RelativeLayout>
+
+	      <LinearLayout
+	          android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	          android:background="@color/white"
+	          android:orientation="horizontal"
+	          android:paddingBottom="5dp"
+	          android:paddingTop="5dp" >
+	
+	          <Button
+	              android:id="@+id/categoryMenu"
+	              style="@style/HomeMenu"
+	              android:drawableTop="@drawable/icon_menu_category"
+	              android:text="@string/goods_category" />
+	
+	          <Button
+	              android:id="@+id/ucenterMenu"
+	              style="@style/HomeMenu"
+	              android:drawableTop="@drawable/icon_manage"
+	              android:text="@string/my_ucenter" />
+	
+	          <Button
+	              android:id="@+id/orderMenu"
+	              style="@style/HomeMenu"
+	              android:drawableTop="@drawable/icon_manage"
+	              android:text="@string/my_order" />
+	
+	          <Button
+	              android:id="@+id/collectMenu"
+	              style="@style/HomeMenu"
+	              android:drawableTop="@drawable/icon_manage"
+	              android:text="@string/my_collect" />
+	      </LinearLayout>
+	
+	      <View
+	          android:layout_width="match_parent"
+	          android:layout_height="1px"
+	          android:background="#F0F0F0" />
+	
+	      <LinearLayout
+	          android:id="@+id/homeData"
+	          android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	          android:layout_marginTop="10dp"
+	          android:orientation="vertical" >
+	      </LinearLayout>
+     	</LinearLayout>
+    </com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView>
+
+</LinearLayout>
