@@ -69,7 +69,7 @@ public class GoodsCommendAdapter extends BaseAdapter{
         viewHolder.goodsPrice.setText(goodsCommend.getGoodsPrice());
         mImageLoader.displayImage(goodsCommend.getGoodsImageUrl(),viewHolder.goodsImage,mOptions,mAnimateFirstListener);
         setOnClick(convertView,"goods",goodsCommend.getGoodsId());
-        return null;
+        return convertView;
     }
 
     class ViewHolder{

@@ -153,6 +153,8 @@ public class HttpClientHelper {
 							 if(obj.has(RESULT)){
 								 msg.getData().putString(RESULT, obj.getString(RESULT));
 							 }
+						}else{
+							msg.obj = json;
 						}
 					}else{
 						msg.what = HttpStatus.SC_INTERNAL_SERVER_ERROR;

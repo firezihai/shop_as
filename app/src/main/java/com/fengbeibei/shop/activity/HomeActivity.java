@@ -42,7 +42,22 @@ public class HomeActivity extends FragmentActivity{
 		mFragmentManager = getSupportFragmentManager();
 		mFragmentId = R.id.fragmentContainer;
 		setRegisterButtonClick();
-		intoHome();
+		int fragmentNum = getIntent().getIntExtra("type",0);
+		switch (fragmentNum){
+			case 1:
+				intoCategory();
+				break;
+			case 2:
+				intoCart();
+				break;
+			case 3:
+				intoUcenter();
+				break;
+			default:
+				intoHome();
+				break;
+		}
+
 	}
 
 	protected void setRegisterButtonClick() {

@@ -47,13 +47,21 @@ public final class Constants {
 	  */
 	 public final static String PARENT_CATEGORY_URL = APP_URL+"act=goods_class";
 	 /**
-	  * 子分类商品请求接口
+	  * 子商品分类请求接口
 	  */
 	 public final static String CHILD_CATEGORY_URL = APP_URL+"act=goods_class&op=get_child_list";
 	 /**
 	  * 商品详情请求接品
 	  */
 	 public final static String GOODS_DETAIL_URL = APP_URL+"act=goods&op=goods_detail";
+	/**
+	 * 商品图文请求接口
+	 */
+	public final static String GOODS_DETIAL_GRAPH_URL = APP_URL+"act=goods&op=goods_body";
+	/**
+	 * 商品评价
+	 */
+	public final static String GOODS_EVAL_URL = APP_URL+"act=goods&op=goods_evaluate";
 	 /**
 	  * 购物车商品接口
 	  */
@@ -69,7 +77,7 @@ public final class Constants {
 	 public final static String MEMBER_INFO_URL = APP_URL +"act=member_index&op=index";
 	 
 	 /**
-	  * 
+	  * 会员订单
 	  */
 	 public static final String ORDER_LIST_URL = APP_URL + "act=member_order&op=order_list";
 }

@@ -75,8 +75,27 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/line_color</item>
     </style>
+	<!--商品详情页popWindow动画-->
 	<style name="animationFade">
 		<item name="android:windowEnterAnimation">@anim/goods_popup</item>
 		<item name="android:windowExitAnimation">@anim/goods_popup_exit</item>
+	</style>
+
+	<style name="GoodsTabPagerIndicator" parent="AppTheme">
+		<item name="vpiTabPageIndicatorStyle" >@style/MyPagerIndicator</item>
+	</style>
+	<style name="MyPagerIndicator" >
+		<item name="android:background">@drawable/goods_tab_indicator</item>
+		<item name="android:paddingLeft">22dp</item>
+		<item name="android:paddingRight">22dp</item>
+		<item name="android:gravity">center</item>
+		<item name="android:paddingTop">12dp</item>
+		<item name="android:paddingBottom">12dp</item>
+		<item name="android:textSize">14sp</item>
+		<item name="android:textAppearance">@style/MyPagerIndicator.text</item>
+		<item name="android:maxLines">1</item>
+	</style>
+	<style name="MyPagerIndicator.text" parent="android:TextAppearance.Medium">
+		<item name="android:textColor">@drawable/goods_tab_text_indicator</item>
 	</style>
 </resources>

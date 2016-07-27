@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
+import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 import com.fengbeibei.shop.adapter.AdViewPagerAdapter;
 import com.fengbeibei.shop.adapter.Home3GridViewAdapter;

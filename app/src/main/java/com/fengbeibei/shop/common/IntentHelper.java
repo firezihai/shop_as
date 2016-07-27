@@ -4,9 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
+import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 
 public class IntentHelper {
+
+	public static void home(Context context,int position){
+		Intent intent = new Intent(context, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("type",position);
+		context.startActivity(intent);
+	}
 
 	public static void goodsDetail(Context context,String goods_id){
 		Intent intent  = new Intent(context,GoodsDetailActivity.class);
@@ -19,7 +27,7 @@ public class IntentHelper {
 		intent.putExtra("data", url);
 		context.startActivity(intent);
 	}
-	
+
 	public static void filter(Context context,String type ,final String data){
 		if(type.equals("keyword")){
 			

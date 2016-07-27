@@ -90,6 +90,7 @@
  <string name="selected">已选</string>
  <string name="shipping">送至</string>
  <string name="salenum">销量：</string>
+    <string name="store">店铺</string>
  <string name="add_cart">加入购物车</string>
  <string name="buy_now">立即购买</string>
 </resources>

@@ -36,6 +36,7 @@
         <activity
             android:name=".activity.GoodsDetailActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/GoodsTabPagerIndicator"
             android:label="@string/login">
         </activity>
         <activity

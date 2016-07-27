@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="推存商品"/>
-    <com.fengbeibei.shop.widget.MyGridView
-        android:id="@+id/goodsCommendGridView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:horizontalSpacing="1dp"
-        android:listSelector="@null"
-        android:numColumns="2"
-        android:verticalSpacing="1dp">
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="推存商品"/>
+        <com.fengbeibei.shop.widget.MyGridView
+            android:id="@+id/goodsCommendGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"
+            android:padding="10dp"
+            android:gravity="center"
+            android:background="@null"
+            android:horizontalSpacing="10dp"
+            android:listSelector="@null"
+            android:numColumns="3"
+            android:verticalSpacing="10dp">
 
-    </com.fengbeibei.shop.widget.MyGridView>
-    <View
-        style="@style/h_line"
-        android:layout_height="0.5dp"/>
+        </com.fengbeibei.shop.widget.MyGridView>
+        <View
+            style="@style/h_line"
+            android:layout_height="0.5dp"/>
 </LinearLayout>
