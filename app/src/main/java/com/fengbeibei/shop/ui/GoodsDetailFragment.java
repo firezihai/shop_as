@@ -109,8 +109,22 @@ public class GoodsDetailFragment extends Fragment{
         mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
 
 
-        String goods_id = getActivity().getIntent().getStringExtra("goods_id");
-        String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + goods_id;
+        String goodsId = getActivity().getIntent().getStringExtra("goods_id");
+
+        initData(goodsId);
+        mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getActivity() instanceof OnPopWindow){
+                    ((OnPopWindow) getActivity()).setOnPopWindow();;
+                }
+            }
+        });
+        return layout;
+    }
+
+    public void initData(String goodsId){
+        String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + goodsId;
         HttpClientHelper.asynGet(request_url, new HttpClientHelper.CallBack() {
 
             @Override
@@ -152,16 +166,6 @@ public class GoodsDetailFragment extends Fragment{
             }
 
         });
-
-        mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getActivity() instanceof OnPopWindow){
-                    ((OnPopWindow) getActivity()).setOnPopWindow();;
-                }
-            }
-        });
-        return layout;
     }
     private void goodsInfo(String goodsInfo){
 

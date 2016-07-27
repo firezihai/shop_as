@@ -77,9 +77,10 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
     /* 商品规格控件 */
     private HashMap<String,View> mSpecViews = new HashMap<String,View>();
-    private String mSpecToGoods;
+    private String mSpecListJson;
     /*当前商品的规格*/
     private ArrayList<String> mGoodsSpecSelected = new ArrayList<String>();
+    private HashMap<String,String> mSelectedSpec = new HashMap<String,String>();
     /*图片缓存*/
     protected ImageLoader mImageLoader = ImageLoader.getInstance();
     private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
@@ -152,7 +153,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         try{
             JSONObject goodsObj = new JSONObject(goodsDetail);
             String goods_info = goodsObj.getString("goods_info");
-            mSpecToGoods = goodsObj.getString("spec_list");
+            mSpecListJson = goodsObj.getString("spec_list");
             JSONObject obj = new JSONObject(goods_info);
             if(obj.length()>0){
 
@@ -167,12 +168,11 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                 if(!goodsSpec.equals("") && !goodsSpec.equals("null")){
                     JSONObject objGoodsSpec = new JSONObject(goodsSpec);
                     Iterator<?> itGoodsSpec = objGoodsSpec.keys();
-                    int i=0;
+
                     while(itGoodsSpec.hasNext()){
                         final String goodsSpecId = itGoodsSpec.next().toString();
                        // String goodsSpecName = objGoodsSpec.getString(goodsSpecId);
                         mGoodsSpecSelected.add(goodsSpecId);
-                        i++;
                     }
                 }
                 //  mImageLoader.displayImage(goodsImageArr[0], mGoodsImage, mOptions, mAnimateListener);
@@ -215,10 +215,13 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                             CheckBox specValueItemView = (CheckBox) getLayoutInflater().inflate(R.layout.goods_spec_item,null);
                             specValueItemView.setText(specValueName);
                             if (mGoodsSpecSelected.contains(specValueId)) {
+                                mSelectedSpec.put(specId,specValueId);
                                 specValueItemView.setChecked(true);
                             }
 
                             mSpecViews.put(specValueId, specValueItemView);
+
+                            specValueItemView.setOnClickListener(new RegSpecOnClickListener(specId,specValueId));
                             specValueView.addView(specValueItemView);
 
                         }
@@ -229,7 +232,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                     }
 
 
-
+                    System.out.println(mSelectedSpec);
 
                 }
             }
@@ -329,22 +332,39 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
     class RegSpecOnClickListener implements View.OnClickListener{
         private String specId;
-        public RegSpecOnClickListener(String specId) {
+        private String curSpecValueId;
+        private String curKey = "";
+        public RegSpecOnClickListener(String specId,String specValueId) {
             this.specId = specId;
+            this.curSpecValueId = specValueId;
         }
 
         @Override
         public void onClick(View v) {
             Iterator iterator = mSpecViews.keySet().iterator();
-
+            mSelectedSpec.put(specId, curSpecValueId);
+            System.out.println(mSelectedSpec);
             while(iterator.hasNext()) {
                 String  specValueId = iterator.next().toString();
                 CheckBox checkBox = (CheckBox) mSpecViews.get(specValueId);
-                if(specValueId.equals(specId)){
-                    checkBox.setChecked(true);
-                }else{
-                    checkBox.setChecked(false);
+                checkBox.setChecked(false);
+                Iterator it = mSelectedSpec.keySet().iterator();
+                while (it.hasNext()){
+                    String selectedSpecId = it.next().toString();
+                    String selectedSpecValueId = mSelectedSpec.get(selectedSpecId);
+                    if(selectedSpecValueId.equals(specValueId)){
+                        checkBox.setChecked(true);
+                        curKey += "|"+specValueId;
+                    }
                 }
+            }
+            curKey = curKey.replaceFirst("\\|","");
+            try{
+                JSONObject obj = new JSONObject(mSpecListJson);
+
+                String goods_id = obj.getString(curKey);
+            }catch (JSONException e){
+                e.printStackTrace();
             }
         }
     }
