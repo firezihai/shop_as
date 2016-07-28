@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,13 +26,16 @@ import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
+import com.fengbeibei.shop.activity.PhotoActivity;
 import com.fengbeibei.shop.adapter.GoodsCommendAdapter;
+import com.fengbeibei.shop.adapter.GoodsImagePagerAdapter;
 import com.fengbeibei.shop.bean.GoodsCommend;
 import com.fengbeibei.shop.bean.GoodsStoreInfo;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.SystemHelper;
+import com.fengbeibei.shop.interf.FragmentListener;
 import com.fengbeibei.shop.utils.ScreenUtil;
 import com.fengbeibei.shop.widget.MyGridView;
 import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
@@ -54,7 +58,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/7/26.
  */
-public class GoodsDetailFragment extends Fragment{
+public class GoodsDetailFragment extends Fragment implements FragmentListener{
 
     @BindView(R.id.viewPagerWrapper) RelativeLayout mViewPagerWrapper;
     @BindView(R.id.goodsImageViewPager) ViewPager mImageViewPager;
@@ -93,10 +97,32 @@ public class GoodsDetailFragment extends Fragment{
     private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener mAnimateListener = new AnimateFirstDisplayListener();
 
-
-
+    private String mGoodsId;
+    private FragmentListener mFragmentListener;
     public interface OnPopWindow{
         void setOnPopWindow();
+    }
+
+
+   public static GoodsDetailFragment newInstance( String goodsId){
+       GoodsDetailFragment goodsDetailFragment = new GoodsDetailFragment();
+        Bundle args = new Bundle();
+        args.putString("goodsId",goodsId);
+
+        goodsDetailFragment.setArguments(args);
+
+        return goodsDetailFragment;
+    }
+
+    @Override
+    public void onCreate( Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            mGoodsId = bundle.getString("goodsId");
+        }
+
+
     }
 
     @Override
@@ -107,11 +133,7 @@ public class GoodsDetailFragment extends Fragment{
         mScreenWidth = ScreenUtil.getScreenWidth(getActivity());
 
         mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
-
-
-        String goodsId = getActivity().getIntent().getStringExtra("goods_id");
-
-        initData(goodsId);
+        initData(mGoodsId);
         mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +146,7 @@ public class GoodsDetailFragment extends Fragment{
     }
 
     public void initData(String goodsId){
+
         String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + goodsId;
         HttpClientHelper.asynGet(request_url, new HttpClientHelper.CallBack() {
 
@@ -149,8 +172,9 @@ public class GoodsDetailFragment extends Fragment{
                         goodsStoreInfo(store_info);
                         goodsCommend(goods_commend_list);
 
-                        GoodsDetailActivity goodsDetailActivity = (GoodsDetailActivity)getActivity();
-                        goodsDetailActivity.setCallBack(json);
+                        mFragmentListener.OnUpdateUI(json);
+                    //    GoodsDetailActivity goodsDetailActivity = (GoodsDetailActivity) getActivity();
+                    //    goodsDetailActivity.setCallBack(json);
 
 
                     } catch (JSONException e) {
@@ -224,12 +248,12 @@ public class GoodsDetailFragment extends Fragment{
         mGoodsCommend.setAdapter(new GoodsCommendAdapter(goodsCommends, getActivity()));
 
     }
-    private void goodsImage(String goodsImage){
+    private void goodsImage(final String goodsImage){
 
         if(goodsImage.equals("") && goodsImage.equals("null")){
             return;
         }
-        String[] goodsImageArr = goodsImage.split(",");
+        final String[] goodsImageArr = goodsImage.split(",");
         if(goodsImageArr.length<=0){
             return ;
         }
@@ -237,23 +261,36 @@ public class GoodsDetailFragment extends Fragment{
         mImageViewPager.removeAllViews();
         goodsImageData.clear();
         for(int i=0 ;i<goodsImageArr.length;i++){
+            final int position = i;
             String url = goodsImageArr[i];
             ImageView imageView = new ImageView(getActivity());
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
             mImageLoader.displayImage(url, imageView, mOptions, mAnimateListener);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PhotoActivity.class);
+                    intent.putExtra("position",position);
+                    intent.putExtra("images",goodsImageArr);
+                    getActivity().startActivity(intent);
+                }
+            });
             goodsImageData.add(imageView);
         }
         //	mHandler.sendEmptyMessageAtTime(SHOW_NEXT,3000);
 
 
-        GoodsImageAdapter adapter = new GoodsImageAdapter(goodsImageData);
+        GoodsImagePagerAdapter adapter = new GoodsImagePagerAdapter(goodsImageData);
         mImageViewPager.setAdapter(adapter);
 
         mPointViewPager.setViewPager(mImageViewPager);
         mPointViewPager.setCurrentItem(0);
-        mImageViewPager.setOnTouchListener(new RegOnTouchListener());
-        mImageViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+
+
+      /*  mImageViewPager.setOnTouchListener(new RegOnTouchListener());
+        mImageViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -277,7 +314,7 @@ public class GoodsDetailFragment extends Fragment{
                 mIsScroll = false;
             }
 
-        });
+        });*/
 
 	/*	mHandler = new Handler(){
 
@@ -308,51 +345,8 @@ public class GoodsDetailFragment extends Fragment{
 		}
 	}*/
 
-    private class GoodsImageAdapter extends PagerAdapter {
-        private ArrayList<ImageView> mData;
 
-
-        /**
-         * @param data
-         */
-        public GoodsImageAdapter(ArrayList<ImageView> data) {
-            super();
-            this.mData = data;
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return this.mData.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            // TODO Auto-generated method stub
-            return (arg0 == arg1);
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            // TODO Auto-generated method stub
-            super.destroyItem(container, position, object);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            // TODO Auto-generated method stub
-            return super.getItemPosition(object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            // TODO Auto-generated method stub
-            ((ViewPager) container).addView(mData.get(position));
-            return mData.get(position);
-        }
-
-    }
-    private class RegOnTouchListener implements View.OnTouchListener{
+   /* private class RegOnTouchListener implements View.OnTouchListener{
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -371,6 +365,19 @@ public class GoodsDetailFragment extends Fragment{
             return false;
         }
 
+    }*/
+
+    @Override
+    public void OnUpdateUI(String data) {
+        System.out.println("GoodsFragment onUpdateUI "+data);
+        initData(data);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        if(context instanceof FragmentListener){
+            mFragmentListener = (FragmentListener) context;
+        }
+        super.onAttach(context);
+    }
 }
