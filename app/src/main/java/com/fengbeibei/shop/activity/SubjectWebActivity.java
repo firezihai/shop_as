@@ -46,6 +46,7 @@ public class SubjectWebActivity extends Activity{
 	    }
 		
 		String data = getIntent().getStringExtra("data");
+		data = data.replace("http://www.fengbeibei.com/","");
 		data = "http://www.fengbeibei.com/"+data;
 		mWebView.setWebChromeClient(new MyWebChromeClient());
 		

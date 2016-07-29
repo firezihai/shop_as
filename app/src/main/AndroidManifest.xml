@@ -57,6 +57,11 @@
             android:name=".activity.SubjectWebActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"></activity>
+        <activity
+            android:name=".activity.PhotoActivity"
+            android:theme="@style/AppGoodsPhotoTheme"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

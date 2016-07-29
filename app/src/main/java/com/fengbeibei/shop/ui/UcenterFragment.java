@@ -1,11 +1,8 @@
 package com.fengbeibei.shop.ui;
 
 import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.LoginActivity;
 import com.fengbeibei.shop.activity.OrderListActivity;
 import com.fengbeibei.shop.bean.User;
 import com.fengbeibei.shop.common.CircleImageDrawable;
@@ -20,6 +17,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -28,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,6 +50,11 @@ public class UcenterFragment extends Fragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View ucenterLayout = inflater.inflate(R.layout.ucenter, container, false);
+		Window window = getActivity().getWindow();
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+			window.setStatusBarColor(getResources().getColor(R.color.lightgrey));
+		}
+
 		 mApplication = MyApplication.getInstance();
 		 initView(ucenterLayout);
 		 String key = mApplication.getLoginKey();

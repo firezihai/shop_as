@@ -2,9 +2,11 @@ package com.fengbeibei.shop.common;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
+import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 
 public class IntentHelper {
@@ -21,7 +23,6 @@ public class IntentHelper {
 		intent.putExtra("goods_id", goods_id);
 		context.startActivity(intent);
 	}
-	
 	public static void subjectWeb(Context context,String url){
 		Intent intent  = new Intent(context,SubjectWebActivity.class);
 		intent.putExtra("data", url);
@@ -34,7 +35,15 @@ public class IntentHelper {
 		}else if(type.equals("special")){//专题编号
 			
 		} else if (type.equals("url")){
-			IntentHelper.subjectWeb(context, data);
+			Uri uri = Uri.parse(data);
+			if(uri.getQueryParameter("gc_id") != null){
+				String gcId = uri.getQueryParameter("gc_id");
+				Intent intent = new Intent(context,SearchActivity.class);
+				intent.putExtra("gcId", gcId);
+				context.startActivity(intent);
+			}else {
+				IntentHelper.subjectWeb(context, data);
+			}
 		} else if (type.equals("goods")){
 			IntentHelper.goodsDetail(context,data);
 		}

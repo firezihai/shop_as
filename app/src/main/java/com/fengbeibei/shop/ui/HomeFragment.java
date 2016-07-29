@@ -44,6 +44,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -59,6 +60,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,7 +110,10 @@ public class HomeFragment extends Fragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		homeLayout = inflater.inflate(R.layout.home,parent, false);
-		
+		Window window = getActivity().getWindow();
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+			window.setStatusBarColor(getResources().getColor(R.color.green));
+		}
 		initView(homeLayout);
 		mFooterView = (LinearLayout)  getActivity().getLayoutInflater().inflate(R.layout.listview_footer, null);
 	    mHomeContainer.addView(mFooterView);

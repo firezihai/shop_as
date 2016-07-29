@@ -248,19 +248,19 @@ public class GoodsDetailFragment extends Fragment implements FragmentListener{
         mGoodsCommend.setAdapter(new GoodsCommendAdapter(goodsCommends, getActivity()));
 
     }
-    private void goodsImage(final String goodsImage){
+    private void goodsImage(final String goodsImage) {
 
-        if(goodsImage.equals("") && goodsImage.equals("null")){
+        if (goodsImage.equals("") && goodsImage.equals("null")) {
             return;
         }
         final String[] goodsImageArr = goodsImage.split(",");
-        if(goodsImageArr.length<=0){
-            return ;
+        if (goodsImageArr.length <= 0) {
+            return;
         }
 
         mImageViewPager.removeAllViews();
         goodsImageData.clear();
-        for(int i=0 ;i<goodsImageArr.length;i++){
+        for (int i = 0; i < goodsImageArr.length; i++) {
             final int position = i;
             String url = goodsImageArr[i];
             ImageView imageView = new ImageView(getActivity());
@@ -272,14 +272,13 @@ public class GoodsDetailFragment extends Fragment implements FragmentListener{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), PhotoActivity.class);
-                    intent.putExtra("position",position);
-                    intent.putExtra("images",goodsImageArr);
+                    intent.putExtra("position", position);
+                    intent.putExtra("images", goodsImageArr);
                     getActivity().startActivity(intent);
                 }
             });
             goodsImageData.add(imageView);
         }
-        //	mHandler.sendEmptyMessageAtTime(SHOW_NEXT,3000);
 
 
         GoodsImagePagerAdapter adapter = new GoodsImagePagerAdapter(goodsImageData);
@@ -289,84 +288,7 @@ public class GoodsDetailFragment extends Fragment implements FragmentListener{
         mPointViewPager.setCurrentItem(0);
 
 
-      /*  mImageViewPager.setOnTouchListener(new RegOnTouchListener());
-        mImageViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                // TODO Auto-generated method stub
-                //ViewPager.SCROLL_STATE_IDLE　暂停状态
-                mIsMoving = state != ViewPager.SCROLL_STATE_IDLE;
-                mIsScroll = state != ViewPager.SCROLL_STATE_IDLE;
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // TODO Auto-generated method stub
-                mIsMoving = position != mCurrentIndex;
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                // TODO Auto-generated method stub
-                mIsMoving = false;
-                mCurrentIndex = position;
-                mIsScroll = false;
-            }
-
-        });*/
-
-	/*	mHandler = new Handler(){
-
-			@Override
-			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
-				switch(msg.what){
-					case SHOW_NEXT:
-						showNext();
-						mImageViewPager.setCurrentItem(mCurrentIndex);
-						mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
-						break;
-					default:
-						break;
-				}
-				super.handleMessage(msg);
-			}
-
-		};
-        if(goodsImage.length>0){
-            mHandler.sendEmptyMessageDelayed(SHOW_NEXT,3000);
-        }*/
     }
-
-	/*private void showNext(){
-		if(!mIsMoving && !mIsScroll){
-			mCurrentIndex = (mCurrentIndex +1) % goodsImageData.size();
-		}
-	}*/
-
-
-   /* private class RegOnTouchListener implements View.OnTouchListener{
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            // TODO Auto-generated method stub
-            switch(event.getAction()){
-                case MotionEvent.ACTION_UP:
-                    mIsMoving = false;
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                    mIsMoving = false;
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    mIsMoving = true;
-                    break;
-            }
-            return false;
-        }
-
-    }*/
-
     @Override
     public void OnUpdateUI(String data) {
         System.out.println("GoodsFragment onUpdateUI "+data);

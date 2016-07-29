@@ -17,6 +17,9 @@
         <item name="colorPrimaryDark">@color/green</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+	<style name="AppGoodsPhotoTheme" parent="AppBaseTheme">
+		<item name="colorPrimaryDark">@color/goods_photo_bg</item>
+	</style>
     <style name="app"></style>
 	<style name="MainMenuBtn">
 	    <item name="android:layout_width">0dp</item>

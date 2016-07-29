@@ -2,6 +2,7 @@ package com.fengbeibei.shop.activity;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -14,6 +15,7 @@ import com.fengbeibei.shop.bean.Spec;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
+import com.fengbeibei.shop.interf.FragmentListener;
 import com.fengbeibei.shop.ui.GoodsDetailFragment;
 import com.fengbeibei.shop.ui.GoodsEvaluateFragment;
 import com.fengbeibei.shop.ui.GoodsGraphDetailFragment;
@@ -35,6 +37,7 @@ import android.view.Gravity;
 
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -49,7 +52,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,GoodsDetailFragment.OnPopWindow {
+public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,FragmentListener ,GoodsDetailFragment.OnPopWindow{
 
     /*控件*/
     @BindView(R.id.rootView) RelativeLayout mRootView;
@@ -98,6 +101,8 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private boolean mIsNowBuy = true;
     private PopupWindow mPop;
     private View mPopupWindowView;
+
+    private FragmentListener mFragmentListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -105,8 +110,8 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         setContentView(R.layout.goods_detail);
         ButterKnife.bind(this);
 
-
-        GoodsDetailFragment goodsDetailFragment = new GoodsDetailFragment();
+        String goodsId = getIntent().getStringExtra("goods_id");
+        GoodsDetailFragment goodsDetailFragment = GoodsDetailFragment.newInstance(goodsId);
         GoodsGraphDetailFragment goodsGraphDetailFragment = new GoodsGraphDetailFragment();
         GoodsEvaluateFragment goodsEvaluateFragment = new GoodsEvaluateFragment();
         mFragments.add(goodsDetailFragment);
@@ -149,11 +154,14 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     }
 
 
-    public void setCallBack(String goodsDetail) {
+    public void initData(String goodsDetail) {
         try{
             JSONObject goodsObj = new JSONObject(goodsDetail);
             String goods_info = goodsObj.getString("goods_info");
             mSpecListJson = goodsObj.getString("spec_list");
+            mSpecList.removeAllViews();
+            mSpecViews.clear();
+            mGoodsSpecSelected.clear();
             JSONObject obj = new JSONObject(goods_info);
             if(obj.length()>0){
 
@@ -231,9 +239,6 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                         mSpecList.addView(specListView);
                     }
 
-
-                    System.out.println(mSelectedSpec);
-
                 }
             }
         } catch (JSONException e) {
@@ -262,6 +267,8 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
             return mFragments.get(position);
         }
 
+
+
         @Override
         public int getCount() {
             return mFragments.size();
@@ -287,7 +294,6 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        System.out.println("onClick");
         switch (v.getId()){
             case R.id.storeBtn:
                // IntentHelper.home(GoodsDetailActivity.this);
@@ -343,29 +349,56 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         public void onClick(View v) {
             Iterator iterator = mSpecViews.keySet().iterator();
             mSelectedSpec.put(specId, curSpecValueId);
-            System.out.println(mSelectedSpec);
+            int[] curKeySort = new int[mSelectedSpec.size()];
             while(iterator.hasNext()) {
                 String  specValueId = iterator.next().toString();
                 CheckBox checkBox = (CheckBox) mSpecViews.get(specValueId);
                 checkBox.setChecked(false);
                 Iterator it = mSelectedSpec.keySet().iterator();
+                int i=0;
                 while (it.hasNext()){
                     String selectedSpecId = it.next().toString();
                     String selectedSpecValueId = mSelectedSpec.get(selectedSpecId);
                     if(selectedSpecValueId.equals(specValueId)){
                         checkBox.setChecked(true);
-                        curKey += "|"+specValueId;
+                        curKeySort[i] = Integer.parseInt(specValueId);
+                        //curKey += "|"+specValueId;
                     }
+                    i++;
                 }
             }
+            Arrays.sort(curKeySort);
+            for(int k =0;k<curKeySort.length;k++){
+                curKey += "|"+curKeySort[k];
+            }
             curKey = curKey.replaceFirst("\\|","");
+            System.out.println(mSpecListJson);
             try{
                 JSONObject obj = new JSONObject(mSpecListJson);
 
-                String goods_id = obj.getString(curKey);
+                String goodsId = obj.getString(curKey);
+                System.out.println(goodsId+" regSpec");
+                mFragmentListener.OnUpdateUI(goodsId);
             }catch (JSONException e){
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void OnUpdateUI(String data) {
+        initData(data);
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        try{
+            if(fragment instanceof FragmentListener){
+                mFragmentListener = (FragmentListener) fragment;
+            }
+        }catch (Exception e){
+
+        }
+        super.onAttachFragment(fragment);
     }
 }
