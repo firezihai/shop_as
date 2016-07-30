@@ -9,6 +9,7 @@ import com.fengbeibei.shop.common.CircleImageDrawable;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.MyApplication;
 
 import android.content.BroadcastReceiver;
@@ -17,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
@@ -27,12 +29,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class UcenterFragment extends Fragment{
+public class UcenterFragment extends Fragment implements OnClickListener{
 	private User mUser;
 	private MyApplication mApplication;
+    private ImageButton mSetting;
 	private TextView mUsername;
 	private TextView mFollowGoods;
 	private TextView mFollowStore;
@@ -44,16 +49,15 @@ public class UcenterFragment extends Fragment{
 	private TextView mPoint;
 	private TextView mVoucher;
 	private TextView mSeeAllOrder;
+    private Button mLoginBtn;
 	private static final  String REQUEST_CODE = "0011";
+    private Boolean isLogin = false;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View ucenterLayout = inflater.inflate(R.layout.ucenter, container, false);
-		Window window = getActivity().getWindow();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			window.setStatusBarColor(getResources().getColor(R.color.lightgrey));
-		}
+
 
 		 mApplication = MyApplication.getInstance();
 		 initView(ucenterLayout);
@@ -61,20 +65,14 @@ public class UcenterFragment extends Fragment{
 		if(key != null && !"".equals(key)){
 			initData();
 		}
-		mSeeAllOrder.setOnClickListener(new OnClickListener(){
+        isLogin = mApplication.isLogin();
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(getActivity(),OrderListActivity.class);
-				startActivity(intent);
-			}
-			
-		});
+
 		return ucenterLayout;
 	}
 	
 	public void initView(View v){
+        mSetting = (ImageButton) v.findViewById(R.id.setting);
 		mUsername = (TextView) v.findViewById(R.id.username);
 		ImageView mImageView = (ImageView) v.findViewById(R.id.user_avatar);
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_user_avatar); 
@@ -89,6 +87,7 @@ public class UcenterFragment extends Fragment{
 		mPoint = (TextView) v.findViewById(R.id.point);
 		mVoucher = (TextView) v.findViewById(R.id.voucher);
 		mSeeAllOrder = (TextView) v.findViewById(R.id.seeAllOrder);
+        mLoginBtn = (Button) v.findViewById(R.id.loginBtn);
 	}
 	
 	public void initData(){
@@ -127,10 +126,30 @@ public class UcenterFragment extends Fragment{
 			
 		});
 	}
-	
-	
 
-	@Override
+    @Override
+    public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.loginBtn:
+                    IntentHelper.login(getActivity());
+                    break;
+                case R.id.seeAllOrder:
+                    mSeeAllOrder.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            // TODO Auto-generated method stub
+                            Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                            startActivity(intent);
+                        }
+
+                    });
+                    break;
+
+            }
+    }
+
+    @Override
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();

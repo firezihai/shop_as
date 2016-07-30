@@ -26,7 +26,7 @@ public class SubjectWebActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.subject_activity);
-		mWebView = (WebView) findViewById(R.id.webviewID);
+		mWebView = (WebView) findViewById(R.id.webView);
 		mPorgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		WebSettings setting = mWebView.getSettings();
 
@@ -91,10 +91,10 @@ public class SubjectWebActivity extends Activity{
 		@Override
 		public void onProgressChanged(WebView view, int newProgress) {
 			// TODO Auto-generated method stub
-			mPorgressBar .setProgress(newProgress);  
+			mPorgressBar .setProgress(newProgress);
 	        if(newProgress==100){  
 	        	mPorgressBar.setVisibility(View.GONE);  
-	        }  
+	        }
 	        super.onProgressChanged(view, newProgress);  
 		}
 		

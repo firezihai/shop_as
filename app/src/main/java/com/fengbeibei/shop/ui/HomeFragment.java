@@ -11,9 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.GoodsDetailActivity;
-import com.fengbeibei.shop.activity.HomeActivity;
-import com.fengbeibei.shop.activity.SubjectWebActivity;
 import com.fengbeibei.shop.adapter.AdViewPagerAdapter;
 import com.fengbeibei.shop.adapter.Home3GridViewAdapter;
 import com.fengbeibei.shop.adapter.HomeGoodsGridViewAdapter;
@@ -31,11 +28,9 @@ import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.MyPullScrollView;
-import com.fengbeibei.shop.utils.DensityUtils;
 import com.fengbeibei.shop.widget.MyGridView;
 import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
 import com.fengbeibei.shop.zxing.activity.CaptureActivity;
@@ -44,14 +39,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -111,9 +104,6 @@ public class HomeFragment extends Fragment{
 		// TODO Auto-generated method stub
 		homeLayout = inflater.inflate(R.layout.home,parent, false);
 		Window window = getActivity().getWindow();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-			window.setStatusBarColor(getResources().getColor(R.color.green));
-		}
 		initView(homeLayout);
 		mFooterView = (LinearLayout)  getActivity().getLayoutInflater().inflate(R.layout.listview_footer, null);
 	    mHomeContainer.addView(mFooterView);

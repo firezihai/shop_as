@@ -5,27 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.PhotoActivity;
 import com.fengbeibei.shop.adapter.GoodsCommendAdapter;
 import com.fengbeibei.shop.adapter.GoodsImagePagerAdapter;
@@ -35,7 +25,7 @@ import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.SystemHelper;
-import com.fengbeibei.shop.interf.FragmentListener;
+import com.fengbeibei.shop.interf.GoodsFragmentListener;
 import com.fengbeibei.shop.utils.ScreenUtil;
 import com.fengbeibei.shop.widget.MyGridView;
 import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
@@ -58,7 +48,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/7/26.
  */
-public class GoodsDetailFragment extends Fragment implements FragmentListener{
+public class GoodsDetailFragment extends Fragment implements GoodsFragmentListener {
 
     @BindView(R.id.viewPagerWrapper) RelativeLayout mViewPagerWrapper;
     @BindView(R.id.goodsImageViewPager) ViewPager mImageViewPager;
@@ -98,7 +88,7 @@ public class GoodsDetailFragment extends Fragment implements FragmentListener{
     private ImageLoadingListener mAnimateListener = new AnimateFirstDisplayListener();
 
     private String mGoodsId;
-    private FragmentListener mFragmentListener;
+    private GoodsFragmentListener mFragmentListener;
     public interface OnPopWindow{
         void setOnPopWindow();
     }
@@ -172,7 +162,7 @@ public class GoodsDetailFragment extends Fragment implements FragmentListener{
                         goodsStoreInfo(store_info);
                         goodsCommend(goods_commend_list);
 
-                        mFragmentListener.OnUpdateUI(json);
+                        mFragmentListener.onUpdateUI(json);
                     //    GoodsDetailActivity goodsDetailActivity = (GoodsDetailActivity) getActivity();
                     //    goodsDetailActivity.setCallBack(json);
 
@@ -290,15 +280,15 @@ public class GoodsDetailFragment extends Fragment implements FragmentListener{
 
     }
     @Override
-    public void OnUpdateUI(String data) {
+    public void onUpdateUI(String data) {
         System.out.println("GoodsFragment onUpdateUI "+data);
         initData(data);
     }
 
     @Override
     public void onAttach(Context context) {
-        if(context instanceof FragmentListener){
-            mFragmentListener = (FragmentListener) context;
+        if(context instanceof GoodsFragmentListener){
+            mFragmentListener = (GoodsFragmentListener) context;
         }
         super.onAttach(context);
     }

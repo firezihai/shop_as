@@ -27,7 +27,7 @@ import org.apache.http.HttpStatus;
  */
 public class GoodsGraphDetailFragment extends Fragment {
     private WebView mWebView;
-
+    @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.goods_graphdetail_fragment, container, false);
@@ -35,7 +35,7 @@ public class GoodsGraphDetailFragment extends Fragment {
         String goods_id = getActivity().getIntent().getStringExtra("goods_id");
         String requestUrl = Constants.GOODS_DETIAL_GRAPH_URL+"&goods_id="+goods_id;
 
-        mWebView.loadUrl(requestUrl);
+
         WebSettings settings = mWebView.getSettings();
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setUseWideViewPort(true);
@@ -51,7 +51,7 @@ public class GoodsGraphDetailFragment extends Fragment {
         } else {
             settings.setLoadsImagesAutomatically(false);
         }
-
+        mWebView.loadUrl(requestUrl);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {

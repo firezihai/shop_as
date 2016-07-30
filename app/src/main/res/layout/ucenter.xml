@@ -77,10 +77,23 @@
       		            android:scaleType="centerCrop"
       		             />
       		        </LinearLayout>
+					<Button
+                        android:id="@+id/loginBtn"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+                        android:minHeight="12dp"
+						android:layout_marginBottom="10dp"
+                        android:background="@color/transparent"
+                        android:includeFontPadding="false"
+
+						android:text="点击登陆"
+						android:textColor="@color/white"
+						android:textSize="12sp"/>
  		            <TextView
       		                android:id="@+id/username"
       		                android:layout_width="wrap_content"
       		                android:layout_height="wrap_content"
+							android:visibility="gone"
       		                android:layout_marginBottom="10dp"
       		                android:text="@string/ucenter"
       		                android:textColor="@color/white"

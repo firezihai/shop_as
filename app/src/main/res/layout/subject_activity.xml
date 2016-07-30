@@ -6,19 +6,28 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
-        <WebView
-            android:id="@+id/webviewID"
+        <TextView
+            android:id="@+id/headTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/lightgrey"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="12sp"/>
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/headTitle"
+            />
         <ProgressBar
             android:id="@+id/progressBar1"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:minHeight="5dp"
+            android:layout_below="@id/headTitle"
             />
-      
     </RelativeLayout>
 </LinearLayout>

@@ -15,7 +15,7 @@ import com.fengbeibei.shop.bean.Spec;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
-import com.fengbeibei.shop.interf.FragmentListener;
+import com.fengbeibei.shop.interf.GoodsFragmentListener;
 import com.fengbeibei.shop.ui.GoodsDetailFragment;
 import com.fengbeibei.shop.ui.GoodsEvaluateFragment;
 import com.fengbeibei.shop.ui.GoodsGraphDetailFragment;
@@ -26,7 +26,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,12 +36,10 @@ import android.view.Gravity;
 
 
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -52,7 +49,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,FragmentListener ,GoodsDetailFragment.OnPopWindow{
+public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,GoodsFragmentListener,GoodsDetailFragment.OnPopWindow{
 
     /*控件*/
     @BindView(R.id.rootView) RelativeLayout mRootView;
@@ -102,7 +99,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private PopupWindow mPop;
     private View mPopupWindowView;
 
-    private FragmentListener mFragmentListener;
+    private GoodsFragmentListener mFragmentListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -378,7 +375,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
                 String goodsId = obj.getString(curKey);
                 System.out.println(goodsId+" regSpec");
-                mFragmentListener.OnUpdateUI(goodsId);
+                mFragmentListener.onUpdateUI(goodsId);
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -386,15 +383,15 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     }
 
     @Override
-    public void OnUpdateUI(String data) {
+    public void onUpdateUI(String data) {
         initData(data);
     }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
         try{
-            if(fragment instanceof FragmentListener){
-                mFragmentListener = (FragmentListener) fragment;
+            if(fragment instanceof GoodsFragmentListener){
+                mFragmentListener = (GoodsFragmentListener) fragment;
             }
         }catch (Exception e){
 

@@ -75,7 +75,7 @@ public class CategoryFragment extends Fragment{
 								int itemPosition = mCategoryAdapter.getSelectedPosition();
 								Category category =(Category) mParentCategoryLayout.getItemAtPosition(arg2);
 								mCategoryAdapter.setSelectedPosition(arg2);
-						     //  mCategoryAdapter.notifyDataSetInvalidated();
+						        mCategoryAdapter.notifyDataSetInvalidated();
 								if(category != null && !(itemPosition == arg2) ){
 									getChildCategory(category.getGcId());
 								}

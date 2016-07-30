@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
+import com.fengbeibei.shop.activity.LoginActivity;
 import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 
@@ -17,7 +18,10 @@ public class IntentHelper {
         intent.putExtra("type",position);
 		context.startActivity(intent);
 	}
-
+	public static void login(Context context){
+		Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+	}
 	public static void goodsDetail(Context context,String goods_id){
 		Intent intent  = new Intent(context,GoodsDetailActivity.class);
 		intent.putExtra("goods_id", goods_id);
@@ -33,7 +37,7 @@ public class IntentHelper {
 		if(type.equals("keyword")){
 			
 		}else if(type.equals("special")){//专题编号
-			
+            IntentHelper.subjectWeb(context, data);
 		} else if (type.equals("url")){
 			Uri uri = Uri.parse(data);
 			if(uri.getQueryParameter("gc_id") != null){
