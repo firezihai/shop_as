@@ -103,11 +103,11 @@
 	</style>
 
     <style name="goods_list_rating_bar" parent="@android:style/Widget.RatingBar">
-        <item name="android:maxHeight">15.0dip</item>
+        <item name="android:maxHeight">15.0dp</item>
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:indeterminateDrawable">@drawable/goods_detial_rating_bar</item>
-
-        <item name="android:minHeight">15.0dip</item>
+        <item name="android:indeterminateDrawable">@drawable/goods_detail_rating_bar</item>
+        <item name="android:progressDrawable">@drawable/list_ratingbar</item>
+        <item name="android:minHeight">15.0dp</item>
         <item name="android:thumb">@null</item>
         <item name="android:isIndicator">true</item>
     </style>

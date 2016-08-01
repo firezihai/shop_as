@@ -43,11 +43,11 @@ import android.os.Message;
 
 @SuppressWarnings("deprecation")
 public class HttpClientHelper {
-	private static final String HASMORE = "hasmore";
+	public static final String HASMORE = "hasmore";
 	private static final String CODE = "code";
 	private static final String RESULT = "RESULT";
 	private static final String DATAS = "datas";
-	private static final String COUNT  = "count";
+    public static final String COUNT  = "count";
 	private static HttpClient mHttpClient = null;
 	public interface CallBack{
 		public void onFinish(Message response);
