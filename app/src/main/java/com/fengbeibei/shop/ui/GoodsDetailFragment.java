@@ -94,7 +94,7 @@ public class GoodsDetailFragment extends Fragment implements GoodsFragmentListen
     }
 
 
-   public static GoodsDetailFragment newInstance( String goodsId){
+    public static GoodsDetailFragment newInstance( String goodsId){
        GoodsDetailFragment goodsDetailFragment = new GoodsDetailFragment();
         Bundle args = new Bundle();
         args.putString("goodsId",goodsId);
@@ -107,12 +107,7 @@ public class GoodsDetailFragment extends Fragment implements GoodsFragmentListen
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            mGoodsId = bundle.getString("goodsId");
-        }
-
-
+        mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0" ;
     }
 
     @Override

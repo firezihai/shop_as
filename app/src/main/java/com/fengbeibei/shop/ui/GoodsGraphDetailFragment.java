@@ -3,13 +3,10 @@ package com.fengbeibei.shop.ui;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -18,22 +15,34 @@ import android.webkit.WebViewClient;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.common.Constants;
-import com.fengbeibei.shop.common.HttpClientHelper;
-
-import org.apache.http.HttpStatus;
 
 /**
  * Created by Administrator on 2016/7/26.
  */
 public class GoodsGraphDetailFragment extends Fragment {
     private WebView mWebView;
+    private String mGoodsId;
+
+    public static GoodsGraphDetailFragment newInstance(String goodsId){
+        GoodsGraphDetailFragment goodsGraphDetailFragment = new GoodsGraphDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("goodsId",goodsId);
+        goodsGraphDetailFragment.setArguments(bundle);
+        return goodsGraphDetailFragment;
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0" ;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.goods_graphdetail_fragment, container, false);
         mWebView = (WebView) layout.findViewById(R.id.webView);
-        String goods_id = getActivity().getIntent().getStringExtra("goods_id");
-        String requestUrl = Constants.GOODS_DETIAL_GRAPH_URL+"&goods_id="+goods_id;
+
+        String requestUrl = Constants.GOODS_DETIAL_GRAPH_URL+"&goods_id="+ mGoodsId;
 
 
         WebSettings settings = mWebView.getSettings();

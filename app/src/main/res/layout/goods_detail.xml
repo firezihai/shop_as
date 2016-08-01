@@ -38,7 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/goodsHeader"
-        android:layout_above="@+id/btmLine">
+        android:layout_above="@+id/btmLine"
+        android:persistentDrawingCache="animation" >
 
     </android.support.v4.view.ViewPager>
 	<LinearLayout 

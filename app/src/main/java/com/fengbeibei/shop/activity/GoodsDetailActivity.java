@@ -1,16 +1,25 @@
 package com.fengbeibei.shop.activity;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
-
 import com.fengbeibei.shop.bean.Spec;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.IntentHelper;
@@ -25,26 +34,13 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-
-
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,14 +105,14 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
         String goodsId = getIntent().getStringExtra("goods_id");
         GoodsDetailFragment goodsDetailFragment = GoodsDetailFragment.newInstance(goodsId);
-        GoodsGraphDetailFragment goodsGraphDetailFragment = new GoodsGraphDetailFragment();
-        GoodsEvaluateFragment goodsEvaluateFragment = new GoodsEvaluateFragment();
+        GoodsGraphDetailFragment goodsGraphDetailFragment = GoodsGraphDetailFragment.newInstance(goodsId);
+        GoodsEvaluateFragment goodsEvaluateFragment = GoodsEvaluateFragment.newInstance(goodsId);
         mFragments.add(goodsDetailFragment);
         mFragments.add(goodsGraphDetailFragment);
         mFragments.add(goodsEvaluateFragment);
         GoodsFragmentViewPagerAdapter fragmentViewPagerAdapter = new GoodsFragmentViewPagerAdapter(getSupportFragmentManager());
         mFragmentViewPager.setAdapter(fragmentViewPagerAdapter);
-
+       // mFragmentViewPager.setOffscreenPageLimit(2);
         mGoodsTab.setViewPager(mFragmentViewPager);
 
 

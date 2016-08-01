@@ -4,8 +4,8 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:text="1110"
-                android:textSize="12sp"
-                android:textColor="@color/darkgrey"
+                android:textSize="14sp"
+                android:textColor="@color/black"
                 />
 </LinearLayout>
