@@ -53,7 +53,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -103,7 +102,6 @@ public class HomeFragment extends Fragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		homeLayout = inflater.inflate(R.layout.home,parent, false);
-		Window window = getActivity().getWindow();
 		initView(homeLayout);
 		mFooterView = (LinearLayout)  getActivity().getLayoutInflater().inflate(R.layout.listview_footer, null);
 	    mHomeContainer.addView(mFooterView);

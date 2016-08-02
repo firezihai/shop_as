@@ -3,16 +3,15 @@ package com.fengbeibei.shop.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.adapter.GoodsEvaluateFragmentPagerAdapter;
 import com.fengbeibei.shop.interf.GoodsFragmentListener;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/7/26.
  */
-public class GoodsEvaluateFragment extends Fragment implements GoodsFragmentListener{
+public class GoodsEvaluateFragment extends Fragment implements GoodsFragmentListener,GoodsEvaluateFragmentPagerAdapter.OnReloadListener{
 
     private String mGoodsId;
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
@@ -48,13 +47,13 @@ public class GoodsEvaluateFragment extends Fragment implements GoodsFragmentList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.goods_evaluate_fragment, container, false);
         ButterKnife.bind(this, layout);
-
-        mGoodsId = "9597";
         GoodsAllEvaluateFragment goodsAllEvaluateFragment = GoodsAllEvaluateFragment.newInstance(mGoodsId);
         GoodsGoodEvaluateFragment goodsGoodEvaluateFragment = GoodsGoodEvaluateFragment.newInstance(mGoodsId);
         mFragments.add(goodsAllEvaluateFragment);
         mFragments.add(goodsGoodEvaluateFragment);
-        mEvalViewPager.setAdapter(new EvaluateFragmentPagerAdapter(getChildFragmentManager()));
+        GoodsEvaluateFragmentPagerAdapter adapter = new GoodsEvaluateFragmentPagerAdapter(getChildFragmentManager());
+
+        mEvalViewPager.setAdapter(adapter);
         mEvalViewPager.setCurrentItem(0);
        // initData();
         return layout;
@@ -68,20 +67,8 @@ public class GoodsEvaluateFragment extends Fragment implements GoodsFragmentList
         //initData();
     }
 
-    class EvaluateFragmentPagerAdapter extends FragmentPagerAdapter{
-        public EvaluateFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    @Override
+    public void onReload() {
 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
     }
-
 }

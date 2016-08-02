@@ -19,7 +19,8 @@
         android:textSize="15sp"/>
 	<LinearLayout 
 	    android:layout_width="match_parent"
-	    android:layout_height="@dimen/home2_height1"
+	    android:layout_height="146dp"
+        android:minHeight="130dp"
 	    android:weightSum="2"
 	    android:orientation="horizontal">
 	    <ImageView
@@ -28,7 +29,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_weight="1"
 	        android:adjustViewBounds="true"
-	        android:scaleType="centerCrop"/>
+	        android:scaleType="fitXY"/>
 	    <LinearLayout 
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
@@ -37,15 +38,17 @@
 	        <ImageView 
 	            android:id="@+id/home2Image2"
 	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:scaleType="centerCrop"
+	            android:layout_height="match_parent"
+                android:layout_weight="1"
+	            android:scaleType="fitXY"
 	            android:adjustViewBounds="true"
 	            />
 	        <ImageView 
 	            android:id="@+id/home2Image3"
 	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:scaleType="centerCrop"
+	            android:layout_height="match_parent"
+                android:layout_weight="1"
+	            android:scaleType="fitXY"
 	            android:adjustViewBounds="true"/>
 	    </LinearLayout>
 	</LinearLayout>
