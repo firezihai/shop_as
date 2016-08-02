@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,7 @@ import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.interf.GoodsFragmentListener;
+import com.fengbeibei.shop.ui.BaseFragment.GoodsBaseFragment;
 import com.fengbeibei.shop.utils.ScreenUtil;
 import com.fengbeibei.shop.widget.MyGridView;
 import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
@@ -48,7 +48,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/7/26.
  */
-public class GoodsDetailFragment extends Fragment implements GoodsFragmentListener {
+public class GoodsDetailFragment extends GoodsBaseFragment  {
 
     @BindView(R.id.viewPagerWrapper) RelativeLayout mViewPagerWrapper;
     @BindView(R.id.goodsImageViewPager) ViewPager mImageViewPager;
@@ -93,11 +93,15 @@ public class GoodsDetailFragment extends Fragment implements GoodsFragmentListen
         void setOnPopWindow();
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.goods_detail_fragment;
+    }
 
     public static GoodsDetailFragment newInstance( String goodsId){
        GoodsDetailFragment goodsDetailFragment = new GoodsDetailFragment();
         Bundle args = new Bundle();
-        args.putString("goodsId",goodsId);
+        args.putString("goodsId", goodsId);
 
         goodsDetailFragment.setArguments(args);
 
@@ -112,70 +116,19 @@ public class GoodsDetailFragment extends Fragment implements GoodsFragmentListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.goods_detail_fragment,container,false);
-        ButterKnife.bind(this, layout);
-
+        View layout = inflater.inflate(getLayoutId(),container,false);
         mScreenWidth = ScreenUtil.getScreenWidth(getActivity());
-
-        mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
-        initData(mGoodsId);
-        mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getActivity() instanceof OnPopWindow){
-                    ((OnPopWindow) getActivity()).setOnPopWindow();;
-                }
-            }
-        });
         return layout;
     }
 
-    public void initData(String goodsId){
-
-        String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + goodsId;
-        HttpClientHelper.asynGet(request_url, new HttpClientHelper.CallBack() {
-
-            @Override
-            public void onFinish(Message response) {
-                // TODO Auto-generated method stub
-                if (response.what == HttpStatus.SC_OK) {
-                    try {
-                        String json = (String) response.obj;
-
-                        JSONObject obj = new JSONObject(json);
-                        String goods_info = obj.getString("goods_info");
-                        String goods_commend_list = obj.getString("goods_commend_list");
-                        String goods_image = obj.getString("goods_image");
-                        String gift_array = obj.getString("gift_array");
-                        String mansong_info = obj.getString("mansong_info");
-                        String spec_image = obj.getString("spec_image");
-                        String spec_list = obj.getString("spec_list");
-                        String store_info = obj.getString("store_info");
-
-                        goodsInfo(goods_info);
-                        goodsImage(goods_image);
-                        goodsStoreInfo(store_info);
-                        goodsCommend(goods_commend_list);
-
-                        mFragmentListener.onUpdateUI(json);
-                    //    GoodsDetailActivity goodsDetailActivity = (GoodsDetailActivity) getActivity();
-                    //    goodsDetailActivity.setCallBack(json);
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                // TODO Auto-generated method stub
-
-            }
-
-        });
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        initView(view);
     }
+
+
     private void goodsInfo(String goodsInfo){
 
         try{
@@ -274,11 +227,69 @@ public class GoodsDetailFragment extends Fragment implements GoodsFragmentListen
 
 
     }
+
     @Override
-    public void onUpdateUI(String data) {
-        System.out.println("GoodsFragment onUpdateUI "+data);
-        initData(data);
+    public void initData() {
+        String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + mGoodsId;
+        HttpClientHelper.asynGet(request_url, new HttpClientHelper.CallBack() {
+
+            @Override
+            public void onFinish(Message response) {
+                // TODO Auto-generated method stub
+                if (response.what == HttpStatus.SC_OK) {
+                    try {
+                        String json = (String) response.obj;
+
+                        JSONObject obj = new JSONObject(json);
+                        String goods_info = obj.getString("goods_info");
+                        String goods_commend_list = obj.getString("goods_commend_list");
+                        String goods_image = obj.getString("goods_image");
+                        String gift_array = obj.getString("gift_array");
+                        String mansong_info = obj.getString("mansong_info");
+                        String spec_image = obj.getString("spec_image");
+                        String spec_list = obj.getString("spec_list");
+                        String store_info = obj.getString("store_info");
+
+                        goodsInfo(goods_info);
+                        goodsImage(goods_image);
+                        goodsStoreInfo(store_info);
+                        goodsCommend(goods_commend_list);
+
+                        mFragmentListener.onUpdateUI(json);
+                        //    GoodsDetailActivity goodsDetailActivity = (GoodsDetailActivity) getActivity();
+                        //    goodsDetailActivity.setCallBack(json);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
     }
+
+    @Override
+    public void initView(View view) {
+        mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
+        initData();
+        mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getActivity() instanceof OnPopWindow){
+                    ((OnPopWindow) getActivity()).setOnPopWindow();;
+                }
+            }
+        });
+    }
+
+
 
     @Override
     public void onAttach(Context context) {

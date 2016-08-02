@@ -94,7 +94,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private boolean mIsNowBuy = true;
     private PopupWindow mPop;
     private View mPopupWindowView;
-
+    private String mGoodsId;
     private GoodsFragmentListener mFragmentListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,15 +104,16 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         ButterKnife.bind(this);
 
         String goodsId = getIntent().getStringExtra("goods_id");
-        GoodsDetailFragment goodsDetailFragment = GoodsDetailFragment.newInstance(goodsId);
-        GoodsGraphDetailFragment goodsGraphDetailFragment = GoodsGraphDetailFragment.newInstance(goodsId);
-        GoodsEvaluateFragment goodsEvaluateFragment = GoodsEvaluateFragment.newInstance(goodsId);
+        mGoodsId = "10955";
+        GoodsDetailFragment goodsDetailFragment = GoodsDetailFragment.newInstance(mGoodsId);
+        GoodsGraphDetailFragment goodsGraphDetailFragment = GoodsGraphDetailFragment.newInstance(mGoodsId);
+        GoodsEvaluateFragment goodsEvaluateFragment = GoodsEvaluateFragment.newInstance(mGoodsId);
         mFragments.add(goodsDetailFragment);
         mFragments.add(goodsGraphDetailFragment);
         mFragments.add(goodsEvaluateFragment);
         GoodsFragmentViewPagerAdapter fragmentViewPagerAdapter = new GoodsFragmentViewPagerAdapter(getSupportFragmentManager());
         mFragmentViewPager.setAdapter(fragmentViewPagerAdapter);
-       // mFragmentViewPager.setOffscreenPageLimit(2);
+        mFragmentViewPager.setOffscreenPageLimit(1);
         mGoodsTab.setViewPager(mFragmentViewPager);
 
 
@@ -371,7 +372,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
                 String goodsId = obj.getString(curKey);
                 System.out.println(goodsId+" regSpec");
-                mFragmentListener.onUpdateUI(goodsId);
+               // mFragmentListener.onUpdateUI(goodsId);
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -383,15 +384,4 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         initData(data);
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        try{
-            if(fragment instanceof GoodsFragmentListener){
-                mFragmentListener = (GoodsFragmentListener) fragment;
-            }
-        }catch (Exception e){
-
-        }
-        super.onAttachFragment(fragment);
-    }
 }

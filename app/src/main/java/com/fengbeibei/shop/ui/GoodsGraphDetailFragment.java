@@ -3,7 +3,6 @@ package com.fengbeibei.shop.ui;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +14,17 @@ import android.webkit.WebViewClient;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.common.Constants;
+import com.fengbeibei.shop.ui.BaseFragment.GoodsBaseFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2016/7/26.
  */
-public class GoodsGraphDetailFragment extends Fragment {
-    private WebView mWebView;
+public class GoodsGraphDetailFragment extends GoodsBaseFragment {
+    @BindView(R.id.webView)
+    WebView mWebView;
     private String mGoodsId;
 
     public static GoodsGraphDetailFragment newInstance(String goodsId){
@@ -36,30 +40,28 @@ public class GoodsGraphDetailFragment extends Fragment {
         mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0" ;
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.goods_graphdetail_fragment;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.goods_graphdetail_fragment, container, false);
-        mWebView = (WebView) layout.findViewById(R.id.webView);
+        View layout = inflater.inflate(getLayoutId(), container, false);
+        return layout;
+    }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        initView(view);
+    }
+
+    @Override
+    public void initData() {
         String requestUrl = Constants.GOODS_DETIAL_GRAPH_URL+"&goods_id="+ mGoodsId;
-
-
-        WebSettings settings = mWebView.getSettings();
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
-        settings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-        settings.setSupportZoom(false);
-        settings.setBuiltInZoomControls(false);
-        settings.setJavaScriptEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        settings.setAppCacheEnabled(false);
-        if(Build.VERSION.SDK_INT >= 19) {
-            settings.setLoadsImagesAutomatically(true);
-        } else {
-            settings.setLoadsImagesAutomatically(false);
-        }
         mWebView.loadUrl(requestUrl);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -93,8 +95,25 @@ public class GoodsGraphDetailFragment extends Fragment {
             }
 
         });
-        return layout;
     }
 
-
+    @Override
+    public void initView(View view) {
+        WebSettings settings = mWebView.getSettings();
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        settings.setSupportZoom(false);
+        settings.setBuiltInZoomControls(false);
+        settings.setJavaScriptEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setAppCacheEnabled(false);
+        if(Build.VERSION.SDK_INT >= 19) {
+            settings.setLoadsImagesAutomatically(true);
+        } else {
+            settings.setLoadsImagesAutomatically(false);
+        }
+        initData();
+    }
 }
