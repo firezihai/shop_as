@@ -59,7 +59,7 @@
 	    <item name="android:windowBackground">@drawable/loading_bg</item>
 	    <item name="android:windowIsFloating">true</item>
 	</style>
-    <!-- 加载滚动条样式 -->
+    <!-- 滚动加载样式 -->
     <style name="loading">
         <item name="android:indeterminate">true</item>
         <item name="android:indeterminateDrawable">@drawable/progressloading</item>
@@ -111,4 +111,10 @@
         <item name="android:thumb">@null</item>
         <item name="android:isIndicator">true</item>
     </style>
+
+	<style name="myProgressBarLoading">
+		<item name="android:indeterminateDrawable">@drawable/progress_loading</item>
+		<item name="android:height">22dp</item>
+		<item name="android:width">22dp</item>
+	</style>
 </resources>

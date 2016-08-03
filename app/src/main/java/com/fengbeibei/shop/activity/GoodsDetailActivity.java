@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.activity;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,6 +30,7 @@ import com.fengbeibei.shop.ui.BaseFragment.GoodsBaseFragment;
 import com.fengbeibei.shop.ui.GoodsDetailFragment;
 import com.fengbeibei.shop.ui.GoodsEvaluateFragment;
 import com.fengbeibei.shop.ui.GoodsGraphDetailFragment;
+import com.fengbeibei.shop.utils.DialogHelper;
 import com.fengbeibei.shop.widget.FlowLayout;
 import com.fengbeibei.shop.widget.indicator.TabPageIndicator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -101,6 +103,9 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private GoodsDetailFragment mGoodsDetailFragment;
     private GoodsGraphDetailFragment mGoodsGraphDetailFragment;
     private GoodsEvaluateFragment mGoodsEvaluateFragment;
+
+    private ProgressDialog _waitDialog;
+    private boolean _isVisible;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -147,13 +152,14 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         mBackBtn.setOnClickListener(this);
         mAddCartBtn.setOnClickListener(this);
         mBuyBtn.setOnClickListener(this);
-
-
+        _isVisible = true;
+        showWaitDialog();
 
     }
 
 
     public void initData(String goodsDetail) {
+        hideWaitDialog();
         try{
             JSONObject goodsObj = new JSONObject(goodsDetail);
             String goods_info = goodsObj.getString("goods_info");
@@ -397,6 +403,34 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
     @Override
     public void onUpdateUI(String data) {
+        showWaitDialog();
         initData(data);
+    }
+
+
+    private ProgressDialog showWaitDialog(){
+        if(_isVisible){
+            if(_waitDialog == null){
+                _waitDialog = DialogHelper.getWaitDialog(this,"加载中");
+            }
+            if(_waitDialog != null){
+                _waitDialog.setMessage("加载中");
+                _waitDialog.show();
+            }
+            return _waitDialog;
+        }
+        return null;
+    }
+
+    private void hideWaitDialog(){
+        if(_isVisible && _waitDialog != null){
+            try{
+                _waitDialog.dismiss();
+                _waitDialog = null;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
     }
 }
