@@ -88,4 +88,14 @@ public class GoodsEvaluateFragment extends GoodsBaseFragment implements GoodsEva
         mEvalViewPager.setAdapter(adapter);
         mEvalViewPager.setCurrentItem(0);
     }
+
+    @Override
+    public void setGoodsId(String goodsId) {
+        mGoodsId = goodsId;
+    }
+
+    @Override
+    public void onUpdateUI() {
+        onReload();
+    }
 }

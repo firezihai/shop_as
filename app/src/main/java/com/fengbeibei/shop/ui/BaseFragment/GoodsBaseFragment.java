@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.ui.BaseFragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fengbeibei.shop.interf.BaseFragmentInterface;
+import com.fengbeibei.shop.interf.GoodsFragmentListener;
 
 /**
  * Created by zihai on 2016-08-02.
@@ -51,6 +53,8 @@ public class GoodsBaseFragment extends Fragment implements BaseFragmentInterface
         super.onDestroy();
     }
 
+
+
     protected View inflaterView(int resId){
         return mInflater.inflate(resId,null);
     }
@@ -64,4 +68,10 @@ public class GoodsBaseFragment extends Fragment implements BaseFragmentInterface
     public void initView(View view) {
 
     }
+
+    public void setGoodsId(String goodsId){
+
+    }
+
+    public void onUpdateUI(){}
 }

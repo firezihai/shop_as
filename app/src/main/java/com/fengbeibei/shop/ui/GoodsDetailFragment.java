@@ -1,11 +1,13 @@
 package com.fengbeibei.shop.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +50,8 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/7/26.
  */
-public class GoodsDetailFragment extends GoodsBaseFragment  {
-
+public class GoodsDetailFragment extends GoodsBaseFragment {
+    private String TAG = "GoodsDEtailFragment";
     @BindView(R.id.viewPagerWrapper) RelativeLayout mViewPagerWrapper;
     @BindView(R.id.goodsImageViewPager) ViewPager mImageViewPager;
     @BindView(R.id.goodsImagePoint) CirclePageIndicator mPointViewPager;
@@ -172,7 +174,7 @@ public class GoodsDetailFragment extends GoodsBaseFragment  {
         mDescCreditPercent.setText(goodsStoreInfo.getStoreCredit().getStoreDesccredit().getPercentText());
         mServiceCredit.setText(goodsStoreInfo.getStoreCredit().getStoreServicecredit().getCredit()+"");
         mServiceCreditPercent.setText(goodsStoreInfo.getStoreCredit().getStoreServicecredit().getPercentText());
-        mShipCredit.setText(goodsStoreInfo.getStoreCredit().getStoreDeliverycredit().getCredit()+"");
+        mShipCredit.setText(goodsStoreInfo.getStoreCredit().getStoreDeliverycredit().getCredit() + "");
         mShipCreditPercent.setText(goodsStoreInfo.getStoreCredit().getStoreDeliverycredit().getPercentText());
         ;
     }
@@ -282,8 +284,9 @@ public class GoodsDetailFragment extends GoodsBaseFragment  {
         mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getActivity() instanceof OnPopWindow){
-                    ((OnPopWindow) getActivity()).setOnPopWindow();;
+                if (getActivity() instanceof OnPopWindow) {
+                    ((OnPopWindow) getActivity()).setOnPopWindow();
+                    ;
                 }
             }
         });
@@ -297,5 +300,16 @@ public class GoodsDetailFragment extends GoodsBaseFragment  {
             mFragmentListener = (GoodsFragmentListener) context;
         }
         super.onAttach(context);
+    }
+
+
+    @Override
+    public void setGoodsId(String goodsId) {
+        mGoodsId = goodsId;
+    }
+
+    @Override
+    public void onUpdateUI() {
+       initData();
     }
 }

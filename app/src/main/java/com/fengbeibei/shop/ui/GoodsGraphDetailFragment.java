@@ -116,4 +116,15 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
         }
         initData();
     }
+
+    public void onUpdateUI(){
+        initData();
+    }
+
+    @Override
+    public void setGoodsId(String goodsId) {
+       mGoodsId = goodsId;
+    }
+
+
 }

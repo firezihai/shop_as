@@ -25,6 +25,7 @@ import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.interf.GoodsFragmentListener;
+import com.fengbeibei.shop.ui.BaseFragment.GoodsBaseFragment;
 import com.fengbeibei.shop.ui.GoodsDetailFragment;
 import com.fengbeibei.shop.ui.GoodsEvaluateFragment;
 import com.fengbeibei.shop.ui.GoodsGraphDetailFragment;
@@ -45,7 +46,7 @@ import java.util.Iterator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,GoodsFragmentListener,GoodsDetailFragment.OnPopWindow{
+public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,GoodsDetailFragment.OnPopWindow,GoodsFragmentListener{
 
     /*控件*/
     @BindView(R.id.rootView) RelativeLayout mRootView;
@@ -82,7 +83,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener mAnimateListener = new AnimateFirstDisplayListener();
 
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private ArrayList<GoodsBaseFragment> mFragments = new ArrayList<>();
     private String[] mHeadTitle = {"商品","详情","评价"};
     /**
      * 是否可购买,库存不为零时可以购买和加入购物车
@@ -96,6 +97,10 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private View mPopupWindowView;
     private String mGoodsId;
     private GoodsFragmentListener mFragmentListener;
+
+    private GoodsDetailFragment mGoodsDetailFragment;
+    private GoodsGraphDetailFragment mGoodsGraphDetailFragment;
+    private GoodsEvaluateFragment mGoodsEvaluateFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -105,15 +110,15 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
         String goodsId = getIntent().getStringExtra("goods_id");
         mGoodsId = "10955";
-        GoodsDetailFragment goodsDetailFragment = GoodsDetailFragment.newInstance(mGoodsId);
-        GoodsGraphDetailFragment goodsGraphDetailFragment = GoodsGraphDetailFragment.newInstance(mGoodsId);
-        GoodsEvaluateFragment goodsEvaluateFragment = GoodsEvaluateFragment.newInstance(mGoodsId);
-        mFragments.add(goodsDetailFragment);
-        mFragments.add(goodsGraphDetailFragment);
-        mFragments.add(goodsEvaluateFragment);
+        mGoodsDetailFragment = GoodsDetailFragment.newInstance(mGoodsId);
+        mGoodsGraphDetailFragment = GoodsGraphDetailFragment.newInstance(mGoodsId);
+        mGoodsEvaluateFragment = GoodsEvaluateFragment.newInstance(mGoodsId);
+        mFragments.add(mGoodsDetailFragment);
+        mFragments.add(mGoodsGraphDetailFragment);
+        mFragments.add(mGoodsEvaluateFragment );
         GoodsFragmentViewPagerAdapter fragmentViewPagerAdapter = new GoodsFragmentViewPagerAdapter(getSupportFragmentManager());
         mFragmentViewPager.setAdapter(fragmentViewPagerAdapter);
-        mFragmentViewPager.setOffscreenPageLimit(1);
+        mFragmentViewPager.setOffscreenPageLimit(0);
         mGoodsTab.setViewPager(mFragmentViewPager);
 
 
@@ -127,7 +132,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         mAddBtn = (ImageView) mPopupWindowView.findViewById(R.id.addBtn);
         mMinusBtn = (ImageView) mPopupWindowView.findViewById(R.id.minusBtn);
         mBuyNum = (EditText) mPopupWindowView.findViewById(R.id.buyNum);
-        mPop = new PopupWindow(mPopupWindowView, LayoutParams.MATCH_PARENT,
+              mPop = new PopupWindow(mPopupWindowView, LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT, true);
         mPop.setAnimationStyle(R.style.animationFade);
         mGoodsShadow.setOnClickListener(new View.OnClickListener() {
@@ -371,17 +376,27 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                 JSONObject obj = new JSONObject(mSpecListJson);
 
                 String goodsId = obj.getString(curKey);
-                System.out.println(goodsId+" regSpec");
-               // mFragmentListener.onUpdateUI(goodsId);
+                mGoodsId = goodsId;
+                updateGoodsId();
+             //   mFragmentListener.(goodsId);
+
+                mGoodsDetailFragment.onUpdateUI();
             }catch (JSONException e){
                 e.printStackTrace();
             }
         }
     }
 
+
+
+    public void updateGoodsId(){
+        mGoodsDetailFragment.setGoodsId(mGoodsId);
+        mGoodsGraphDetailFragment.setGoodsId(mGoodsId);
+        mGoodsEvaluateFragment.setGoodsId(mGoodsId);
+    }
+
     @Override
     public void onUpdateUI(String data) {
         initData(data);
     }
-
 }
