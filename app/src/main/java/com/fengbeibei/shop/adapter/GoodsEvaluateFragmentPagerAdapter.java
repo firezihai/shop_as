@@ -3,6 +3,7 @@ package com.fengbeibei.shop.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 public class GoodsEvaluateFragmentPagerAdapter extends FragmentPagerAdapter{
     private ArrayList<Fragment> mFragments = null;
     private FragmentManager mFragmentManager;
+    private Fragment mCurrentPrimaryItem = null;
     public void setData(ArrayList<Fragment> fragments){
         if(fragments != null) {
             for(int i=0;i<mFragments.size();i++){
@@ -35,8 +37,21 @@ public class GoodsEvaluateFragmentPagerAdapter extends FragmentPagerAdapter{
     public int getCount() {
         return mFragments.size();
     }
-    public interface OnReloadListener
-    {
-        public void onReload();
+
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        Fragment fragment = (Fragment)object;
+        if (fragment != mCurrentPrimaryItem) {
+            if (mCurrentPrimaryItem != null) {
+                mCurrentPrimaryItem.setMenuVisibility(false);
+                mCurrentPrimaryItem.setUserVisibleHint(false);
+            }
+            if (fragment != null) {
+                fragment.setMenuVisibility(true);
+                fragment.setUserVisibleHint(true);
+            }
+            mCurrentPrimaryItem = fragment;
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.fengbeibei.shop.ui;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/7/26.
  */
 public class GoodsGraphDetailFragment extends GoodsBaseFragment {
+    private static final String TAG = "GoodsGraphFragment";
     @BindView(R.id.webView)
     WebView mWebView;
     private String mGoodsId;
@@ -30,7 +32,7 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
     public static GoodsGraphDetailFragment newInstance(String goodsId){
         GoodsGraphDetailFragment goodsGraphDetailFragment = new GoodsGraphDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("goodsId",goodsId);
+        bundle.putString("goodsId", goodsId);
         goodsGraphDetailFragment.setArguments(bundle);
         return goodsGraphDetailFragment;
     }
@@ -49,6 +51,7 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(getLayoutId(), container, false);
+        mDelayLoad = true;
         return layout;
     }
 
@@ -70,6 +73,7 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
                 if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
                     mWebView.getSettings().setLoadsImagesAutomatically(true);
                 }
+                mDelayLoad = false;
                 //	super.onPageFinished(view, url);
             }
 
@@ -114,17 +118,21 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
         } else {
             settings.setLoadsImagesAutomatically(false);
         }
-        initData();
-    }
-
-    public void onUpdateUI(){
-        initData();
+      //  initData();
     }
 
     @Override
-    public void setGoodsId(String goodsId) {
-       mGoodsId = goodsId;
+    public void setUpdate(String data) {
+        mGoodsId = data;
+        mDelayLoad = true;
     }
 
-
+    @Override
+    protected void lazyLoad() {
+        if(!mVisible || !mDelayLoad){
+            return;
+        }
+        initData();
+        Log.i(TAG, "lazyLoad");
+    }
 }

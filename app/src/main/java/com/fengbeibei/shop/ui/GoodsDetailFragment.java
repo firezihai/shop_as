@@ -51,7 +51,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/7/26.
  */
 public class GoodsDetailFragment extends GoodsBaseFragment {
-    private String TAG = "GoodsDEtailFragment";
+    private String TAG = "GoodsDetailFragment";
     @BindView(R.id.viewPagerWrapper) RelativeLayout mViewPagerWrapper;
     @BindView(R.id.goodsImageViewPager) ViewPager mImageViewPager;
     @BindView(R.id.goodsImagePoint) CirclePageIndicator mPointViewPager;
@@ -304,12 +304,16 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
 
 
     @Override
-    public void setGoodsId(String goodsId) {
-        mGoodsId = goodsId;
+    public void setUpdate(String data) {
+        mGoodsId = data;
     }
 
     @Override
-    public void onUpdateUI() {
-       initData();
+    protected void lazyLoad() {
+
+    }
+
+    public void upData(){
+        initData();
     }
 }

@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.activity;
 
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -104,7 +105,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private GoodsGraphDetailFragment mGoodsGraphDetailFragment;
     private GoodsEvaluateFragment mGoodsEvaluateFragment;
 
-    private ProgressDialog _waitDialog;
+    private Dialog _waitDialog;
     private boolean _isVisible;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +124,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         mFragments.add(mGoodsEvaluateFragment );
         GoodsFragmentViewPagerAdapter fragmentViewPagerAdapter = new GoodsFragmentViewPagerAdapter(getSupportFragmentManager());
         mFragmentViewPager.setAdapter(fragmentViewPagerAdapter);
-        mFragmentViewPager.setOffscreenPageLimit(0);
+        mFragmentViewPager.setOffscreenPageLimit(2);
         mGoodsTab.setViewPager(mFragmentViewPager);
 
 
@@ -383,10 +384,10 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
                 String goodsId = obj.getString(curKey);
                 mGoodsId = goodsId;
-                updateGoodsId();
+                updateFragment();
              //   mFragmentListener.(goodsId);
-
-                mGoodsDetailFragment.onUpdateUI();
+                showWaitDialog();
+                mGoodsDetailFragment.upData();
             }catch (JSONException e){
                 e.printStackTrace();
             }
@@ -395,10 +396,10 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
 
 
 
-    public void updateGoodsId(){
-        mGoodsDetailFragment.setGoodsId(mGoodsId);
-        mGoodsGraphDetailFragment.setGoodsId(mGoodsId);
-        mGoodsEvaluateFragment.setGoodsId(mGoodsId);
+    public void updateFragment(){
+        mGoodsDetailFragment.setUpdate(mGoodsId);
+        mGoodsGraphDetailFragment.setUpdate(mGoodsId);
+        mGoodsEvaluateFragment.setUpdate(mGoodsId);
     }
 
     @Override
@@ -408,13 +409,13 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     }
 
 
-    private ProgressDialog showWaitDialog(){
+    private Dialog showWaitDialog(){
         if(_isVisible){
             if(_waitDialog == null){
-                _waitDialog = DialogHelper.getWaitDialog(this,"加载中");
+                _waitDialog = DialogHelper.getDialog(this,"",R.layout.view_dialog_loading,R.style.Dialog);
             }
             if(_waitDialog != null){
-                _waitDialog.setMessage("加载中");
+             //   _waitDialog.setMessage("加载中");
                 _waitDialog.show();
             }
             return _waitDialog;

@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.ui.BaseFragment.ViewPagerFragment;
 
 /**
  * Created by thinkpad on 2016-08-01.
  */
-public class GoodsGoodEvaluateFragment extends Fragment {
+public class GoodsGoodEvaluateFragment extends ViewPagerFragment {
     private String mGoodsId;
+    private View mRootView;
     public static GoodsGoodEvaluateFragment newInstance(String goodsId){
         GoodsGoodEvaluateFragment goodsGoodEvaluateFragment = new GoodsGoodEvaluateFragment();
         Bundle bundle = new Bundle();
@@ -21,12 +23,20 @@ public class GoodsGoodEvaluateFragment extends Fragment {
         goodsGoodEvaluateFragment.setArguments(bundle);
         return goodsGoodEvaluateFragment;
     }
-    @Nullable
+    /*@Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.goods_evaluate_all_fragment,container,false);
+        if(mRootView == null){
+            mRootView = inflater.inflate(R.layout.goods_evaluate_all_fragment,container,false);
+        }
 
-        return layout;
+
+        return mRootView;
+    }*/
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.goods_evaluate_all_fragment;
     }
 
     @Override
@@ -34,4 +44,19 @@ public class GoodsGoodEvaluateFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0";
     }
+
+    @Override
+    public void initData() {
+        super.initData();
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if(!mVisible || mDelayLoad){
+            return;
+        }
+        initData();
+    }
+
+
 }
