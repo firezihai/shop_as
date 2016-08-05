@@ -1,12 +1,9 @@
-package com.fengbeibei.shop.ui;
+package com.fengbeibei.shop.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -15,10 +12,9 @@ import android.webkit.WebViewClient;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.common.Constants;
-import com.fengbeibei.shop.ui.BaseFragment.GoodsBaseFragment;
+import com.fengbeibei.shop.fragment.Base.GoodsBaseFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2016/7/26.
@@ -47,20 +43,7 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
         return R.layout.goods_graphdetail_fragment;
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(getLayoutId(), container, false);
-        mDelayLoad = true;
-        return layout;
-    }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        initView(view);
-    }
 
     @Override
     public void initData() {
@@ -118,6 +101,7 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
         } else {
             settings.setLoadsImagesAutomatically(false);
         }
+        mDelayLoad = true;
       //  initData();
     }
 
@@ -133,6 +117,5 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
             return;
         }
         initData();
-        Log.i(TAG, "lazyLoad");
     }
 }

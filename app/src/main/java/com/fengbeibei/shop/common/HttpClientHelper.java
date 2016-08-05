@@ -1,15 +1,7 @@
 package com.fengbeibei.shop.common;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-
+import android.os.Handler;
+import android.os.Message;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -38,8 +30,14 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Handler;
-import android.os.Message;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("deprecation")
 public class HttpClientHelper {
@@ -47,7 +45,7 @@ public class HttpClientHelper {
 	private static final String CODE = "code";
 	private static final String RESULT = "RESULT";
 	private static final String DATAS = "datas";
-    public static final String COUNT  = "count";
+    public static final String COUNT  = "page_total";
 	private static HttpClient mHttpClient = null;
 	public interface CallBack{
 		public void onFinish(Message response);

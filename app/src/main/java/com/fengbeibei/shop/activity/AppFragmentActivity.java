@@ -1,13 +1,11 @@
 package com.fengbeibei.shop.activity;
 
-import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.ui.HomeFragment;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+
+import com.fengbeibei.shop.R;
 
 public  abstract class AppFragmentActivity extends FragmentActivity{
 	private FragmentManager mFragmentManager;

@@ -1,13 +1,5 @@
-package com.fengbeibei.shop.ui;
+package com.fengbeibei.shop.fragment;
 
-import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.LoginActivity;
-import com.fengbeibei.shop.common.Constants;
-import com.fengbeibei.shop.common.HttpClientHelper;
-import com.fengbeibei.shop.common.MyApplication;
-import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -15,6 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.common.Constants;
+import com.fengbeibei.shop.common.HttpClientHelper;
+import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
+import com.fengbeibei.shop.common.MyApplication;
 
 public class CartFragment extends Fragment{
 	private MyApplication mApplication;

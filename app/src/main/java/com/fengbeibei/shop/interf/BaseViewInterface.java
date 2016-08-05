@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * Created by zihai on 2016-08-02.
  */
-public interface BaseFragmentInterface {
+public interface BaseViewInterface {
     void initData();
     void initView(View view);
 }

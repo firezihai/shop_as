@@ -1,42 +1,4 @@
-package com.fengbeibei.shop.ui;
-
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.http.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.adapter.AdViewPagerAdapter;
-import com.fengbeibei.shop.adapter.Home3GridViewAdapter;
-import com.fengbeibei.shop.adapter.HomeGoodsGridViewAdapter;
-import com.fengbeibei.shop.adapter.HomeGoodsListGridViewAdapter;
-import com.fengbeibei.shop.bean.AdList;
-import com.fengbeibei.shop.bean.Home2Data;
-import com.fengbeibei.shop.bean.Home3Data;
-import com.fengbeibei.shop.bean.HomeGoods;
-import com.fengbeibei.shop.bean.HomeGoodsList;
-import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
-import com.fengbeibei.shop.common.Constants;
-import com.fengbeibei.shop.common.HttpClientHelper;
-import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
-import com.fengbeibei.shop.common.IntentHelper;
-import com.fengbeibei.shop.common.SystemHelper;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.MyPullScrollView;
-import com.fengbeibei.shop.widget.MyGridView;
-import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
-import com.fengbeibei.shop.zxing.activity.CaptureActivity;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+package com.fengbeibei.shop.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,10 +17,48 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+
+import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.adapter.AdViewPagerAdapter;
+import com.fengbeibei.shop.adapter.Home3GridViewAdapter;
+import com.fengbeibei.shop.adapter.HomeGoodsGridViewAdapter;
+import com.fengbeibei.shop.adapter.HomeGoodsListGridViewAdapter;
+import com.fengbeibei.shop.bean.AdList;
+import com.fengbeibei.shop.bean.Home2Data;
+import com.fengbeibei.shop.bean.Home3Data;
+import com.fengbeibei.shop.bean.HomeGoods;
+import com.fengbeibei.shop.bean.HomeGoodsList;
+import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.Constants;
+import com.fengbeibei.shop.common.HttpClientHelper;
+import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
+import com.fengbeibei.shop.common.IntentHelper;
+import com.fengbeibei.shop.common.SystemHelper;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.MyPullScrollView;
+import com.fengbeibei.shop.widget.MyGridView;
+import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
+import com.fengbeibei.shop.zxing.activity.CaptureActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment{
 	

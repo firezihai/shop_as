@@ -1,16 +1,15 @@
-package com.fengbeibei.shop.ui.BaseFragment;
+package com.fengbeibei.shop.fragment.Base;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.interf.BaseFragmentInterface;
+import com.fengbeibei.shop.interf.BaseViewInterface;
 import com.fengbeibei.shop.utils.DialogHelper;
 
 /**
@@ -19,7 +18,7 @@ import com.fengbeibei.shop.utils.DialogHelper;
  * @author zihai(https://github.com/firezihai)
  * @created 2016-08-5 12:09
  */
-public abstract class BaseFragment extends Fragment implements BaseFragmentInterface {
+public abstract class BaseFragment extends Fragment implements BaseViewInterface {
     private static final String TAG = "BaseFragment";
     protected Dialog mWaitDialog;
     protected LayoutInflater mInflater;
@@ -54,13 +53,13 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentInter
     public void initView(View view) { }
 
     protected Dialog showWaitDialog(){
-            if(mWaitDialog == null){
-                mWaitDialog = DialogHelper.getDialog(getActivity(), "", R.layout.view_dialog_loading, R.style.Dialog);
-            }
-            if(mWaitDialog != null){
-                mWaitDialog.show();
-            }
-            return mWaitDialog;
+        if(mWaitDialog == null){
+            mWaitDialog = DialogHelper.getDialog(getActivity(), "", R.layout.view_dialog_loading, R.style.Dialog);
+        }
+        if(mWaitDialog != null){
+            mWaitDialog.show();
+        }
+        return mWaitDialog;
     }
 
     protected void hideWaitDialog(){

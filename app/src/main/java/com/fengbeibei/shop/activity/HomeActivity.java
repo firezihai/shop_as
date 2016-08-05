@@ -1,25 +1,19 @@
 package com.fengbeibei.shop.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.common.MyApplication;
-import com.fengbeibei.shop.ui.CartFragment;
-import com.fengbeibei.shop.ui.CategoryFragment;
-import com.fengbeibei.shop.ui.HomeFragment;
-import com.fengbeibei.shop.ui.UcenterFragment;
-import com.fengbeibei.shop.utils.DensityUtils;
-import com.fengbeibei.shop.utils.ScreenUtil;
+import com.fengbeibei.shop.fragment.CartFragment;
+import com.fengbeibei.shop.fragment.CategoryFragment;
+import com.fengbeibei.shop.fragment.HomeFragment;
+import com.fengbeibei.shop.fragment.UcenterFragment;
 
 public class HomeActivity extends FragmentActivity{
 	private RadioButton mHomeBtn;

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fengbeibei.shop.widget.MyListView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/listView"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:divider="@color/lightgrey"
+	android:dividerHeight="15dp"
+	android:scrollbars="none"
+	android:footerDividersEnabled="false"
+	android:listSelector="@color/transparent">
+
+</com.fengbeibei.shop.widget.MyListView>

@@ -1,4 +1,4 @@
-package com.fengbeibei.shop.ui.BaseFragment;
+package com.fengbeibei.shop.fragment.Base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -65,8 +65,22 @@ public abstract class ViewPagerFragment extends BaseFragment{
                     for (Fragment childFragment : childFragments){
                         if(childFragment instanceof ViewPagerFragment){
                             ViewPagerFragment fragment = (ViewPagerFragment) childFragment;
-                            fragment.setWaitUserVisible(false);
-                            fragment.setUserVisibleHint(true);
+                            if(fragment.isWaitUserVisible()) {
+                                fragment.setWaitUserVisible(false);
+                                fragment.setUserVisibleHint(true);
+                            }
+                        }
+                    }
+                }
+            }else{
+                if(childFragments != null && childFragments.size()>0){
+                    for (Fragment childFragment : childFragments){
+                        if(childFragment instanceof ViewPagerFragment){
+                            ViewPagerFragment fragment = (ViewPagerFragment) childFragment;
+                            if(fragment.getUserVisibleHint()) {
+                                fragment.setWaitUserVisible(true);
+                                fragment.setUserVisibleHint(false);
+                            }
                         }
                     }
                 }
@@ -94,7 +108,7 @@ public abstract class ViewPagerFragment extends BaseFragment{
     protected void setWaitUserVisible(boolean isWaitUserVisible){
         mWaitUserVisible = isWaitUserVisible;
     }
-    protected boolean getWaitUserVisible(){
+    protected boolean isWaitUserVisible(){
         return mWaitUserVisible;
     }
 }

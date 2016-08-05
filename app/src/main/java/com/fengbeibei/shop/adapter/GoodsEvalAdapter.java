@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.GoodsEval;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,15 +21,22 @@ import java.util.List;
 public class GoodsEvalAdapter extends BaseAdapter{
     private Context mContext;
     private List<GoodsEval> mGoodsEvalList;
-
-    public GoodsEvalAdapter(Context context, List<GoodsEval> goodsEvalList) {
+    private LayoutInflater mInflater;
+    public GoodsEvalAdapter(Context context) {
         mContext = context;
-        mGoodsEvalList = goodsEvalList;
-    }
+        mInflater = LayoutInflater.from(context);
 
+    }
+    public void setData(List<GoodsEval> goodsEvalList){
+        if(mGoodsEvalList != null && !goodsEvalList.isEmpty()){
+            mGoodsEvalList.addAll(goodsEvalList);
+        }else{
+            mGoodsEvalList = goodsEvalList;
+        }
+    }
     @Override
     public int getCount() {
-        return mGoodsEvalList.size();
+        return mGoodsEvalList == null ? 0 : mGoodsEvalList.size();
     }
 
     @Override
@@ -48,7 +53,7 @@ public class GoodsEvalAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if(convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.goods_eval_list_item,parent,false);
+            convertView = mInflater.inflate(R.layout.goods_eval_list_item,null);
             viewHolder = new ViewHolder();
             viewHolder.evalUserName = (TextView) convertView.findViewById(R.id.evalUserName);
             viewHolder.evalContent = (TextView) convertView.findViewById(R.id.evalContent);

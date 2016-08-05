@@ -1,17 +1,13 @@
-package com.fengbeibei.shop.ui;
+package com.fengbeibei.shop.fragment;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
@@ -19,7 +15,7 @@ import com.fengbeibei.shop.adapter.GoodsEvalAdapter;
 import com.fengbeibei.shop.bean.GoodsEval;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
-import com.fengbeibei.shop.ui.BaseFragment.ViewPagerFragment;
+import com.fengbeibei.shop.fragment.Base.GoodsBaseFragment;
 import com.fengbeibei.shop.widget.MyListView;
 
 import org.apache.http.HttpStatus;
@@ -29,21 +25,19 @@ import org.json.JSONObject;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by thinkpad on 2016-08-01.
  */
-public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsListView.OnScrollListener{
-    private static final String TAG = "GoodsAllEValFragment";
+public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListView.OnScrollListener {
+    private String TAG = "GoodsAllEvalFragment";
     private String mGoodsId;
     private int mPage =1;
     private LinearLayout mFooterView;
     private List<GoodsEval> mGoodsEval;
     private GoodsEvalAdapter mGoodsEvalAdapter;
-    private Boolean mHasmore = true;
-    private long mPageCount = 1;
-    private View mRootView;
+    private Boolean mHasmore;
+    private long mPageCount;
     @BindView(R.id.listView)
     MyListView mListView;
 
@@ -58,87 +52,20 @@ public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
         mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0" ;
     }
 
-  /*  @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(mRootView == null) {
-            mDelayLoad = true;
-            mRootView = inflater.inflate(R.layout.goods_evaluate_all_fragment, container, false);
-            ButterKnife.bind(this, mRootView);
 
-            // initData();
-        }
-        return mRootView;
-    }*/
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view  = super.onCreateView(inflater,container,savedInstanceState);
-        Log.i(TAG, "onCreateView");
-        return view;
-
-     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
-    }
-
-    @Override
-    public void onStop() {
-
-        super.onStop();
-        Log.i(TAG, "onStop");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i(TAG, "onDestroyView");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mDelayLoad = true;
-        System.out.println(TAG+" onViewCreated");
-    }
 
     @Override
     public void initView(View view) {
-        super.initView(view);
+        //super.initView(view);
+        mGoodsEvalAdapter = new GoodsEvalAdapter(getActivity());
+        mListView.setAdapter(mGoodsEvalAdapter);
+        mListView.setOnScrollListener(this);
+
+        mDelayLoad = true;
         mFooterView = (LinearLayout) View.inflate(getActivity(), R.layout.listview_footer, null);
         mListView.addFooterView(mFooterView);
         mFooterView.setVisibility(View.GONE);
@@ -146,10 +73,9 @@ public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsLi
     }
     @Override
     public void initData(){
-        showWaitDialog();
-        Log.i(TAG,"initData");
+
         String url = Constants.APP_URL;
-        url = url + "c=goods&a=goods_evaluate&goods_id="+mGoodsId+"&curpage="+mPage+"&page="+Constants.PAGESIZE;
+        url = url + "c=goods&a=goods_evaluate&goods_id="+mGoodsId+"&curpage="+mPage+"&page=10";
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
@@ -157,15 +83,17 @@ public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsLi
                 mDelayLoad = false;
                 if (response.what == HttpStatus.SC_OK) {
                     Bundle bundle = response.getData();
+                    System.out.println(bundle);
                     mHasmore = bundle.getBoolean(HttpClientHelper.HASMORE);
+
                     mPageCount = bundle.getLong(HttpClientHelper.COUNT);
                     String json = (String) response.obj;
                     try {
                         JSONObject obj = new JSONObject(json);
                         String goodsEvalJson = obj.getString("goods_eval_list");
                         List<GoodsEval> goodsEval = GoodsEval.arrayGoodsEvalFromData(goodsEvalJson);
-                        mGoodsEvalAdapter = new GoodsEvalAdapter(getActivity(), goodsEval);
-                        mListView.setAdapter(mGoodsEvalAdapter);
+                        mGoodsEvalAdapter.setData(goodsEval);
+                        mGoodsEvalAdapter.notifyDataSetChanged();
                         mFooterView.setVisibility(View.GONE);
 
                     } catch (JSONException e) {
@@ -189,6 +117,7 @@ public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsLi
             return;
         }
         boolean footerEnd = true;
+        Log.i(TAG,"onScrollStateChanged footerEnd:" + footerEnd+ " mHasmore:"+mHasmore+" mPageCount:"+mPageCount);
         try {
             if(view.getPositionForView(mFooterView) == view.getLastVisiblePosition()){
                 footerEnd = true;
@@ -200,12 +129,13 @@ public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsLi
         }
         if(footerEnd){
             mFooterView.setVisibility(View.VISIBLE);
-            mPage++;
-            if(!mHasmore && mPageCount > mPage){
+
+            if(mHasmore && mPageCount > mPage){
+                mPage++;
                 initData();
             }else{
                 ((TextView)mFooterView.findViewById(R.id.upToLoadText)).setText("到底了");
-                ((ProgressBar)mFooterView.findViewById(R.id.progressbar)).setVisibility(View.GONE);
+                (mFooterView.findViewById(R.id.progressbar)).setVisibility(View.GONE);
             }
 
         }
@@ -223,11 +153,16 @@ public class GoodsAllEvaluateFragment extends ViewPagerFragment implements AbsLi
 
     @Override
     protected void lazyLoad() {
-        Log.i(TAG,"lazyLoad"+mDelayLoad);
         if(!mVisible || !mDelayLoad){
             return;
         }
-
+        showWaitDialog();
         initData();
+    }
+
+    @Override
+    public void setUpdate(String data) {
+        mGoodsId = data;
+        mDelayLoad = true;
     }
 }

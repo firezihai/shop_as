@@ -1,16 +1,12 @@
-package com.fengbeibei.shop.ui;
+package com.fengbeibei.shop.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,8 +22,8 @@ import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.SystemHelper;
+import com.fengbeibei.shop.fragment.Base.GoodsBaseFragment;
 import com.fengbeibei.shop.interf.GoodsFragmentListener;
-import com.fengbeibei.shop.ui.BaseFragment.GoodsBaseFragment;
 import com.fengbeibei.shop.utils.ScreenUtil;
 import com.fengbeibei.shop.widget.MyGridView;
 import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
@@ -45,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2016/7/26.
@@ -116,19 +111,7 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
         mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0" ;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(getLayoutId(),container,false);
-        mScreenWidth = ScreenUtil.getScreenWidth(getActivity());
-        return layout;
-    }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        initView(view);
-    }
 
 
     private void goodsInfo(String goodsInfo){
@@ -232,11 +215,13 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
 
     @Override
     public void initData() {
+        showWaitDialog();
         String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + mGoodsId;
         HttpClientHelper.asynGet(request_url, new HttpClientHelper.CallBack() {
 
             @Override
             public void onFinish(Message response) {
+                hideWaitDialog();
                 // TODO Auto-generated method stub
                 if (response.what == HttpStatus.SC_OK) {
                     try {
@@ -279,6 +264,7 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
 
     @Override
     public void initView(View view) {
+        mScreenWidth = ScreenUtil.getScreenWidth(getActivity());
         mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
         initData();
         mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
