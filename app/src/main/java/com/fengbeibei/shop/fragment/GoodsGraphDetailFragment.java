@@ -85,7 +85,7 @@ public class GoodsGraphDetailFragment extends GoodsBaseFragment {
     }
 
     @Override
-    public void initView(View view) {
+    public void initView() {
         WebSettings settings = mWebView.getSettings();
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setUseWideViewPort(true);

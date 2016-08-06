@@ -37,7 +37,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * Created by Administrator on 2016/7/28.
  */
-public class PhotoActivity extends Activity{
+public class PhotoActivity extends BaseActivity{
     @BindView(R.id.goodsImageViewPager) ViewPager mViewPager;
     @BindView(R.id.textIndex) TextView mTextView;
     /*图片缓存*/
@@ -45,18 +45,20 @@ public class PhotoActivity extends Activity{
     static DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
     static ImageLoadingListener mAnimateListener = new AnimateFirstDisplayListener();
 
-    private PhotoViewAttacher mPhotoViewAttacher;
-
-    private ArrayList<ImageView> mGoodsImageData = new ArrayList<ImageView>();
     private int mImageSize;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_photo);
-        ButterKnife.bind(this);
+    protected int getLayoutId() {
+        return R.layout.activity_goods_photo;
+    }
 
+    @Override
+    public void initData() {
+        super.initData();
+    }
 
+    @Override
+    public void initView() {
         Intent intent = getIntent();
         String[] goodsImages = intent.getStringArrayExtra("images");
         int position = intent.getIntExtra("position", 0);
@@ -67,21 +69,6 @@ public class PhotoActivity extends Activity{
             finish();
         }
 
-
-
-
-    /*    for(int i=0 ;i<goodsImages.length;i++){
-
-            String url = goodsImages[i];
-            ImageView imageView = new ImageView(this);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            mImageLoader.displayImage(url, imageView, mOptions, );
-
-            mGoodsImageData.add(imageView);
-        }
-
-        mImageSize = mGoodsImageData.size();*/
         mImageSize = goodsImages.length;
         GoodsImagePagerAdapter adapter = new GoodsImagePagerAdapter(goodsImages);
         mViewPager.setAdapter(adapter);
@@ -103,36 +90,10 @@ public class PhotoActivity extends Activity{
 
             }
         });
-
-      //  mPhotoViewAttacher = new PhotoViewAttacher(mGoodsImageData.get(position));
-    ///    mPhotoViewAttacher.update();
-
         position = position+1;
         String text = position+"/"+ mImageSize;
         mTextView.setText(text);
-
     }
-
-    /*private static class MyImageLoadingListener extends SimpleImageLoadingListener{
-
-        private
-        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-        @Override
-        public void onLoadingComplete(String imageUri, View arg1, Bitmap loadedImage) {
-            // TODO Auto-generated method stub
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) arg1;
-                // 是否第一次显示
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    // 图片淡入效果
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
-            }
-        }
-
-    }*/
 
     static class GoodsImagePagerAdapter extends PagerAdapter {
 

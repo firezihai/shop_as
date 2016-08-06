@@ -59,7 +59,7 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
 
 
     @Override
-    public void initView(View view) {
+    public void initView() {
         //super.initView(view);
         mGoodsEvalAdapter = new GoodsEvalAdapter(getActivity());
         mListView.setAdapter(mGoodsEvalAdapter);
@@ -79,7 +79,7 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
-                hideWaitDialog();
+                hideLoadingDialog();
                 mDelayLoad = false;
                 if (response.what == HttpStatus.SC_OK) {
                     Bundle bundle = response.getData();
@@ -156,7 +156,7 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
         if(!mVisible || !mDelayLoad){
             return;
         }
-        showWaitDialog();
+        showLoadingDialog();
         initData();
     }
 

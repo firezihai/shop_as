@@ -38,6 +38,7 @@ import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
+import com.fengbeibei.shop.fragment.Base.BaseFragment;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -60,34 +61,54 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class HomeFragment extends Fragment{
-	
-	private PullToRefreshScrollView mPullToRefresh;
-	private MyPullScrollView mScrollView;
-	/*主布局*/
-	private View homeLayout;
-	private LinearLayout mHomeContainer;
+import butterknife.BindView;
+
+public class HomeFragment extends BaseFragment implements OnRefreshListener<ScrollView>{
+	@BindView(R.id.homePullToRefresh)
+	PullToRefreshScrollView mPullToRefresh;
+
+    @BindView(R.id.homeContainer)
+	LinearLayout mHomeContainer;
+    @BindView(R.id.homeHead)
+    LinearLayout mHomeHead;
+    @BindView(R.id.scanBtn)
+    Button mScanBtn;
+    @BindView(R.id.messageBtn)
+    Button mMessageBtn;
+    @BindView(R.id.searchBtn)
+    TextView mSearchBtn;
+    @BindView(R.id.adViewPager)
+    ViewPager mAdViewPager;
+    @BindView(R.id.adPoint)
+    CirclePageIndicator mAdPoint;
+    @BindView(R.id.categoryMenu)
+    Button mMenuCategoryBtn;
+    @BindView(R.id.orderMenu)
+    Button mMenuOrderBtn;
+    @BindView(R.id.homeData)
+    LinearLayout mHomeData;
+    /*菜单*/
+    @BindView(R.id.collectMenu)
+    Button mMenuCollectBtn;
+    @BindView(R.id.ucenterMenu)
+    Button mMenuUcenterBtn;
+    private MyPullScrollView mScrollView;
+
+
+    /*主布局*/
+    private View mRootView;
 	/**
 	 * 记录按下时的位置
 	 */
 	private float downLocation;
-	private LinearLayout mHomeHead;
-	private Button mScanBtn;
-	private Button mMessageBtn;
+
 	/*轮播广告*/
-	private ViewPager mAdViewPager;
 	private ArrayList<ImageView> mAdData = new ArrayList<ImageView>();
-	private CirclePageIndicator mAdPoint;
 	private boolean isMoving = false;
 	private boolean isScroll = false;
 	private int mCurrentIndex = 0;
 	private Handler mHandler;
-	/*菜单*/
-	private Button mMenuCategoryBtn;
-	private Button mMenuUcenterBtn;
-	private Button mMenuOrderBtn;
-	private Button mMenuCollectBtn;
-	private LinearLayout mHomeData;
+
 	
 	/*加载更多*/
 	private int curpage = 1;
@@ -101,68 +122,11 @@ public class HomeFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		homeLayout = inflater.inflate(R.layout.home,parent, false);
-		initView(homeLayout);
-		mFooterView = (LinearLayout)  getActivity().getLayoutInflater().inflate(R.layout.listview_footer, null);
-	    mHomeContainer.addView(mFooterView);
-	    mFooterView.setVisibility(View.GONE);
+        mRootView = inflater.inflate(R.layout.home,parent, false);
+	//	initView(homeLayout);
+        mInflater = inflater;
 
-		//mHomeHead.bringToFront();
-		mPullToRefresh = (PullToRefreshScrollView)homeLayout.findViewById(R.id.homePullToRefresh);
-		mPullToRefresh.setMode(Mode.PULL_FROM_START);
-		mPullToRefresh.getLoadingLayoutProxy().setPullLabel("下拉刷新");
-		mPullToRefresh.getLoadingLayoutProxy().setRefreshingLabel("正在刷新"); 
-		mPullToRefresh.getLoadingLayoutProxy().setReleaseLabel("释放立即刷新");  
-		mPullToRefresh.setOnRefreshListener(new OnRefreshListener<ScrollView>(){
-
-			@Override
-			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-				// TODO Auto-generated method stub
-				initData();
-			}
-			
-		});
-
-	    
-		mScrollView =(MyPullScrollView)mPullToRefresh.getRefreshableView();
-		mScrollView.setScrollViewListener(new PullToRefreshScrollView.ScrollViewListener(){
-			@Override
-			public void onOverScrolled(MyPullScrollView scrollView,
-					int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-				// TODO Auto-generated method stub
-				System.out.println("scrollY="+scrollY);
-				if(clampedY && scrollY>0){
-					mFooterView.setVisibility(View.VISIBLE);
-					Log.d("OverScrolled","showFooterView");
-				}
-				if(clampedY  && !mLoading){
-					mLoading = true;
-					curpage++;
-					initGoodsList();
-				}
-			}
-
-			@Override
-			public void onScrollChanged(MyPullScrollView scrollView, int x,
-					int y, int oldx, int oldy) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
-		mScanBtn = (Button) homeLayout .findViewById(R.id.scanBtn);
-		mScanBtn.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new  Intent(getActivity(),CaptureActivity.class);
-				startActivity(intent);
-			}
-			
-		});
-		initData();
-		return homeLayout;
+		return mRootView;
 	}
 	
 	public void OnViewClick(View view,final String type ,final String data){
@@ -185,18 +149,69 @@ public class HomeFragment extends Fragment{
 			
 		});;
 	}
-	/**
-	 * 初始化所有控件
-	 * @param homeLayout
-	 */
-	public void initView(View homeLayout){
-		mHomeHead  = (LinearLayout) homeLayout.findViewById(R.id.homeHead);
-		mAdViewPager = (ViewPager)homeLayout.findViewById(R.id.adViewPager);
-		mAdPoint = (CirclePageIndicator) homeLayout.findViewById(R.id.adPoint);
-		mHomeContainer = (LinearLayout) homeLayout.findViewById(R.id.homeContainer);
-		mHomeData = (LinearLayout)homeLayout.findViewById(R.id.homeData);
-	}
-	public void initData(){
+
+    @Override
+    public void initView() {
+        mFooterView = (LinearLayout)inflaterView(R.layout.listview_footer);
+        mHomeContainer.addView(mFooterView);
+        mFooterView.setVisibility(View.GONE);
+
+        //mHomeHead.bringToFront();
+        mPullToRefresh = (PullToRefreshScrollView)mRootView.findViewById(R.id.homePullToRefresh);
+        mPullToRefresh.setMode(Mode.PULL_FROM_START);
+        mPullToRefresh.getLoadingLayoutProxy().setPullLabel("下拉刷新");
+        mPullToRefresh.getLoadingLayoutProxy().setRefreshingLabel("正在刷新");
+        mPullToRefresh.getLoadingLayoutProxy().setReleaseLabel("释放立即刷新");
+        mPullToRefresh.setOnRefreshListener(this);
+
+
+        mScrollView =(MyPullScrollView)mPullToRefresh.getRefreshableView();
+        mScrollView.setScrollViewListener(new PullToRefreshScrollView.ScrollViewListener(){
+            @Override
+            public void onOverScrolled(MyPullScrollView scrollView,
+                                       int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+                // TODO Auto-generated method stub
+                System.out.println("scrollY="+scrollY);
+                if(clampedY && scrollY>0){
+                    mFooterView.setVisibility(View.VISIBLE);
+                    Log.d("OverScrolled","showFooterView");
+                }
+                if(clampedY  && !mLoading){
+                    mLoading = true;
+                    curpage++;
+                    initGoodsList();
+                }
+            }
+
+            @Override
+            public void onScrollChanged(MyPullScrollView scrollView, int x,
+                                        int y, int oldx, int oldy) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        mScanBtn = (Button) mRootView .findViewById(R.id.scanBtn);
+        mScanBtn.setOnClickListener(new OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new  Intent(getActivity(),CaptureActivity.class);
+                startActivity(intent);
+            }
+
+        });
+        initData();
+    }
+
+    @Override
+    public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+        initData();
+    }
+
+    @Override
+    public void initData(){
 		HttpClientHelper.asynGet(Constants.HOME_URL, new CallBack(){
 
 			@Override
@@ -229,7 +244,7 @@ public class HomeFragment extends Fragment{
 								initHomeGoods( jsonObj.getString("goods") );
 							}
 						}
-						View homGoodsListHead = getActivity().getLayoutInflater().inflate(R.layout.home_goods_list_head, null);
+						View homGoodsListHead = inflaterView(R.layout.home_goods_list_head);
 						mHomeData.addView(homGoodsListHead);
 					} catch(JSONException e){
 						e.printStackTrace();
@@ -261,7 +276,7 @@ public class HomeFragment extends Fragment{
 						String goodsListJson = obj.getString("list");
 						ArrayList<HomeGoodsList> goodsList = HomeGoodsList.newInstance(goodsListJson);
 						HomeGoodsListGridViewAdapter goodsGridViewAdapter = new HomeGoodsListGridViewAdapter(HomeFragment.this.getContext());
-						View homGoodsView  = getActivity().getLayoutInflater().inflate(R.layout.home_goods_list, null, false);
+						View homGoodsView  = inflaterView(R.layout.home_goods_list);
 						MyGridView goodsGridView = (MyGridView) homGoodsView.findViewById(R.id.homeGoodsListGridView);
 					    goodsGridViewAdapter.setHomeGoodsData(goodsList);
 						goodsGridView.setAdapter(goodsGridViewAdapter);
@@ -334,7 +349,7 @@ public class HomeFragment extends Fragment{
 			String title = itemObj.getString("title");
 			if ( !item.equals("[]")){
 				ArrayList<HomeGoods> homeGoods = HomeGoods.newInstance(item);
-				View homeGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods, null);
+				View homeGoodsView = inflaterView(R.layout.home_goods);
 				MyGridView homeGoodsGridView = (MyGridView)homeGoodsView.findViewById(R.id.homeGoodsGridView);
 				HomeGoodsGridViewAdapter homeGoodsGridViewAdapter = new HomeGoodsGridViewAdapter(HomeFragment.this.getContext());
 				homeGoodsGridViewAdapter.setHomeGoods(homeGoods);
@@ -442,6 +457,7 @@ public class HomeFragment extends Fragment{
 		}, 2, 4, TimeUnit.SECONDS);
 		
 	}
+
 
 	private class RegOnTouchListener implements View.OnTouchListener{
 

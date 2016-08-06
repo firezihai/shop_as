@@ -56,7 +56,7 @@ public class GoodsMediumEvaluateFragment extends GoodsBaseFragment {
     }
 
     @Override
-    public void initView(View view) {
+    public void initView() {
         mDelayLoad = true;
         mGoodsEvalAdapter = new GoodsEvalAdapter(getActivity());
         mListView.setAdapter(mGoodsEvalAdapter);
@@ -67,13 +67,13 @@ public class GoodsMediumEvaluateFragment extends GoodsBaseFragment {
 
     @Override
     public void initData(){
-        showWaitDialog();
+        showLoadingDialog();
         String url = Constants.APP_URL;
         url = url + "c=goods&a=goods_evaluate&goods_id="+mGoodsId+"&type=1&curpage="+mPage+"&page="+Constants.PAGESIZE;
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
-                hideWaitDialog();
+                hideLoadingDialog();
                 mDelayLoad = false;
                 if (response.what == HttpStatus.SC_OK) {
                     Bundle bundle = response.getData();

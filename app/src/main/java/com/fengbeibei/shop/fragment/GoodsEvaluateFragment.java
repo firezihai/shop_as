@@ -55,7 +55,7 @@ public class GoodsEvaluateFragment extends GoodsBaseFragment {
     }
 
     @Override
-    public void initView(View view) {
+    public void initView() {
 
         mAllEvaluateFragment = GoodsAllEvaluateFragment.newInstance(mGoodsId);
         mGoodEvaluateFragment = GoodsGoodEvaluateFragment.newInstance(mGoodsId);

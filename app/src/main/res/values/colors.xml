@@ -19,5 +19,6 @@
     <color name="transparent">#00000000</color>
     <color name="pub_color_fourteen">#fff8f8f8</color>
     <color name="pub_color_one">#BDBDBD</color>
+    <color name="pub_color_two">#fff2f2f2</color>
     <color name="goods_photo_bg">#4f4f4f</color>
 </resources>

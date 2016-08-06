@@ -14,26 +14,18 @@ import com.fengbeibei.shop.R;
 /**
  * Created by zihai on 2016-08-03.
  */
-public class DialogHelper {
-    /***
-     * 获取一个耗时等待对话框
-     * @param context
-     * @param message
-     * @return
+public class DialogUtil {
+
+
+    /**
+     * 获取一个加载提示框
+     * @param context         上下文
+     * @param message       提示信息
+     * @param layout           布局文件
+     * @param style             提示框样式
+     * @return  Dialog          返回一个Dialog对象
      */
-    public static ProgressDialog getWaitDialog(Context context, String message) {
-        ProgressDialog waitDialog = new ProgressDialog(context);
-        if (!TextUtils.isEmpty(message)) {
-            waitDialog.setMessage(message);
-        }
-        return waitDialog;
-    }
-
-    public static Dialog gettDialog(Context context,String message,int layout){
-        return getDialog(context, message, layout, R.style.myProgressBarLoading);
-    }
-
-    public static Dialog getDialog(Context context,String message,int layout,int style){
+    public static Dialog getLoadingDialog(Context context,String message,int layout,int style){
         View view = LayoutInflater.from(context).inflate(layout,null);
         TextView textView = (TextView) view.findViewById(R.id.loadingText);
         if(!message.isEmpty()) {

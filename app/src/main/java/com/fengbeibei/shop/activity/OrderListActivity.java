@@ -23,7 +23,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ListView;
 
-public class OrderListActivity extends Activity{
+public class OrderListActivity extends BaseActivity{
 	private ListView mOrderListView;
 	private Dialog mDialog;
 	@Override
@@ -32,8 +32,7 @@ public class OrderListActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.order_list);
 		mOrderListView = (ListView) findViewById(R.id.orderListView);
-		mDialog = MyApplication.createLoadingDialog(OrderListActivity.this,"正在加载中");
-		mDialog.show();
+
 		loadData();
 	}
 	

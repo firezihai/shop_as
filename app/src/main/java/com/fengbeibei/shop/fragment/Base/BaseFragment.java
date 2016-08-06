@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.interf.BaseViewInterface;
-import com.fengbeibei.shop.utils.DialogHelper;
+import com.fengbeibei.shop.utils.DialogUtil;
+
+import butterknife.ButterKnife;
 
 /**
  * BaseFragment
@@ -22,6 +24,14 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
     private static final String TAG = "BaseFragment";
     protected Dialog mWaitDialog;
     protected LayoutInflater mInflater;
+    /**
+     * 加载提示布局
+     */
+    protected int mLoadingLayout = R.layout.view_dialog_loading;
+    /**
+     * 加载提示样式
+     */
+    protected int mLoadingStyle = R.style.ContentOverlay;
     /**
      * 获取当前布局
      * @return
@@ -37,6 +47,12 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        initView();
+    }
 
     /**
      * 扩展布局
@@ -50,11 +66,18 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
     @Override
     public void initData() {}
     @Override
-    public void initView(View view) { }
+    public void initView() { }
 
-    protected Dialog showWaitDialog(){
+    protected void showLoadingDialog(){
+        getLoadingDialog(getString(R.string.loading), mLoadingLayout, mLoadingStyle);
+    }
+    protected void showLoadingDialog(String message){
+        getLoadingDialog(message, mLoadingLayout, mLoadingStyle);
+    }
+
+    private Dialog getLoadingDialog(String message,int resLayout,int resStyle){
         if(mWaitDialog == null){
-            mWaitDialog = DialogHelper.getDialog(getActivity(), "", R.layout.view_dialog_loading, R.style.Dialog);
+            mWaitDialog = DialogUtil.getLoadingDialog(getActivity(), message, resLayout, resStyle);
         }
         if(mWaitDialog != null){
             mWaitDialog.show();
@@ -62,7 +85,7 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
         return mWaitDialog;
     }
 
-    protected void hideWaitDialog(){
+    protected void hideLoadingDialog(){
         if(mWaitDialog != null){
             try{
                 mWaitDialog.dismiss();

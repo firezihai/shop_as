@@ -7,7 +7,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,7 +48,7 @@ import java.util.Iterator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsDetailActivity extends FragmentActivity implements View.OnClickListener,GoodsDetailFragment.OnPopWindow,GoodsFragmentListener{
+public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFragment.OnPopWindow,GoodsFragmentListener{
 
     /*控件*/
     @BindView(R.id.rootView) RelativeLayout mRootView;
@@ -103,14 +105,24 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
     private GoodsEvaluateFragment mGoodsEvaluateFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.goods_detail);
-        ButterKnife.bind(this);
+    protected int getLayoutId() {
+        return R.layout.goods_detail;
+    }
 
-        String goodsId = getIntent().getStringExtra("goods_id");
-        mGoodsId = "9597";
+
+    @Override
+    public void initData() {
+        super.initData();
+    }
+
+    @Override
+    public void init(Bundle savedInstancedState) {
+        super.init(savedInstancedState);
+    }
+
+    @Override
+    public void initView() {
+        mGoodsId = getIntent().getStringExtra("goods_id");
         mGoodsDetailFragment = GoodsDetailFragment.newInstance(mGoodsId);
         mGoodsGraphDetailFragment = GoodsGraphDetailFragment.newInstance(mGoodsId);
         mGoodsEvaluateFragment = GoodsEvaluateFragment.newInstance(mGoodsId);
@@ -123,7 +135,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         mGoodsTab.setViewPager(mFragmentViewPager);
 
 
-        mPopupWindowView = getLayoutInflater().inflate(R.layout.goods_detail_common, null);
+        mPopupWindowView = inflaterView(R.layout.goods_detail_common);
         mGoodsShadow = (TextView) mPopupWindowView.findViewById(R.id.goodsShadow);
         mGoodsImage = (ImageView) mPopupWindowView.findViewById(R.id.goodsImage);
         mGoodsName = (TextView) mPopupWindowView.findViewById(R.id.goodsName2);
@@ -133,7 +145,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         mAddBtn = (ImageView) mPopupWindowView.findViewById(R.id.addBtn);
         mMinusBtn = (ImageView) mPopupWindowView.findViewById(R.id.minusBtn);
         mBuyNum = (EditText) mPopupWindowView.findViewById(R.id.buyNum);
-              mPop = new PopupWindow(mPopupWindowView, LayoutParams.MATCH_PARENT,
+        mPop = new PopupWindow(mPopupWindowView, LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT, true);
         mPop.setAnimationStyle(R.style.animationFade);
         mGoodsShadow.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +161,6 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         mAddCartBtn.setOnClickListener(this);
         mBuyBtn.setOnClickListener(this);
     }
-
 
     public void initData(String goodsDetail) {
         try{
@@ -203,7 +214,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                         String specValue = objSpecValue.getString(specId);
                         JSONObject jsonObj = new JSONObject(specValue);
 
-                        LinearLayout specListView = (LinearLayout) getLayoutInflater().inflate(R.layout.goods_spec, null);
+                        LinearLayout specListView = (LinearLayout) inflaterView(R.layout.goods_spec);
                         TextView specNameView = (TextView)specListView.findViewById(R.id.specName);
                         specNameView.setText(specName);
 
@@ -217,7 +228,7 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
                             list.add(spec);
 
 
-                            CheckBox specValueItemView = (CheckBox) getLayoutInflater().inflate(R.layout.goods_spec_item,null);
+                            CheckBox specValueItemView = (CheckBox) inflaterView(R.layout.goods_spec_item);
                             specValueItemView.setText(specValueName);
                             if (mGoodsSpecSelected.contains(specValueId)) {
                                 mSelectedSpec.put(specId,specValueId);
@@ -397,6 +408,21 @@ public class GoodsDetailActivity extends FragmentActivity implements View.OnClic
         initData(data);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            return onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
+    public boolean onBack(){
+       if(mFragments.size() > 0 && mFragmentViewPager.getCurrentItem() !=0){
+           mFragmentViewPager.setCurrentItem(0);
+       }else{
+           finish();
+       }
+        return false;
+    }
 }

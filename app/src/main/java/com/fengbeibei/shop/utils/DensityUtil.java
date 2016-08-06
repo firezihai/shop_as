@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
-public class DensityUtils {
-	private DensityUtils(){
+public class DensityUtil {
+	private DensityUtil(){
 		throw new UnsupportedOperationException("connot be instantiated");
 	}
 	public static float getDmDensitydpi(Context context){

@@ -111,8 +111,24 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
         mGoodsId = getArguments() != null ? getArguments().getString("goodsId") : "0" ;
     }
 
+    @Override
+    public void initView() {
+        mLoadingLayout = R.layout.view_dialog_loading;
+        mLoadingStyle = R.style.Dialog;
+        mScreenWidth = ScreenUtil.getScreenWidth(getActivity());
+        mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
 
-
+        initData();
+        mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() instanceof OnPopWindow) {
+                    ((OnPopWindow) getActivity()).setOnPopWindow();
+                    ;
+                }
+            }
+        });
+    }
 
     private void goodsInfo(String goodsInfo){
 
@@ -215,13 +231,14 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
 
     @Override
     public void initData() {
-        showWaitDialog();
+        showLoadingDialog("");
         String request_url = Constants.GOODS_DETAIL_URL+"&goods_id=" + mGoodsId;
         HttpClientHelper.asynGet(request_url, new HttpClientHelper.CallBack() {
 
             @Override
             public void onFinish(Message response) {
-                hideWaitDialog();
+                hideLoadingDialog();
+                ;
                 // TODO Auto-generated method stub
                 if (response.what == HttpStatus.SC_OK) {
                     try {
@@ -262,21 +279,7 @@ public class GoodsDetailFragment extends GoodsBaseFragment {
         });
     }
 
-    @Override
-    public void initView(View view) {
-        mScreenWidth = ScreenUtil.getScreenWidth(getActivity());
-        mViewPagerWrapper.setLayoutParams(new LinearLayout.LayoutParams(mScreenWidth, mScreenWidth));
-        initData();
-        mGoodsSpecWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() instanceof OnPopWindow) {
-                    ((OnPopWindow) getActivity()).setOnPopWindow();
-                    ;
-                }
-            }
-        });
-    }
+
 
 
 

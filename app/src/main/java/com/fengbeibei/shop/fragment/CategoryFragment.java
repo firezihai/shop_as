@@ -14,6 +14,7 @@ import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
+import com.fengbeibei.shop.fragment.Base.BaseFragment;
 import com.fengbeibei.shop.widget.MyGridView;
 
 import android.os.Bundle;
@@ -28,24 +29,40 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class CategoryFragment extends Fragment{
-	private ListView mParentCategoryLayout;
-	private LinearLayout mChildCategoryLayout;
+import butterknife.BindView;
+
+public class CategoryFragment extends BaseFragment {
+    @BindView(R.id.parentCategory)
+	ListView mParentCategoryLayout;
+    @BindView(R.id.childCategory)
+	LinearLayout mChildCategoryLayout;
 	private CategoryAdapter mCategoryAdapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View categoryLayout = inflater.inflate(R.layout.category,container, false);
-		 mParentCategoryLayout = (ListView)categoryLayout.findViewById(R.id.parentCategory);
-		mChildCategoryLayout = (LinearLayout) categoryLayout.findViewById(R.id.childCategory);
-		initParentCategory();
-		getChildCategory("1");
+		View categoryLayout = inflater.inflate(getLayoutId(),container, false);
+        mInflater = inflater;
 		return categoryLayout;
 	}
-	
-	
-	public void initParentCategory(){
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.category;
+    }
+
+    @Override
+    public void initData() {
+        initParentCategory();
+        getChildCategory("1");
+    }
+
+    @Override
+    public void initView() {
+      //  super.initView();
+    }
+
+    public void initParentCategory(){
 		HttpClientHelper.asynGet(Constants.PARENT_CATEGORY_URL, new CallBack(){
 
 			@Override

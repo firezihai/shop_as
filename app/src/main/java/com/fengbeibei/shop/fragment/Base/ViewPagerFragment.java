@@ -36,12 +36,7 @@ public abstract class ViewPagerFragment extends BaseFragment{
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        initView(view);
-    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

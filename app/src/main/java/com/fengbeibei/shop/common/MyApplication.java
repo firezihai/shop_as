@@ -33,6 +33,7 @@ public class MyApplication extends Application{
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
+        super.onCreate();
 		mContext = getApplicationContext();
 		mIntance = this;
 		initImageLoader(this);
@@ -167,20 +168,5 @@ public class MyApplication extends Application{
 		}
 	}
 	
-	public static Dialog createLoadingDialog(Context context,String msg){
-		LayoutInflater inflater = LayoutInflater.from(context);
-		View v = inflater.inflate(R.layout.view_toast, null);
-		LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.dialog_view);
-		ImageView imageView = (ImageView) v.findViewById(R.id.toastIcon);
-	   TextView textMsg = (TextView) v.findViewById(R.id.toastMessage);
-		Animation loadingAnimation = AnimationUtils.loadAnimation(mContext, R.anim.loading_animation);
-		imageView.startAnimation(loadingAnimation);
-		textMsg.setText(msg);
-		imageView.setImageResource(R.drawable.loading_circle);
-		imageView.setVisibility(View.VISIBLE);
-		Dialog loadingDialog = new Dialog(context,R.style.loadingDialog);
-		loadingDialog.setCancelable(false);
-		loadingDialog.setContentView(linearLayout, new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-		return loadingDialog;
-	}
+
 }
