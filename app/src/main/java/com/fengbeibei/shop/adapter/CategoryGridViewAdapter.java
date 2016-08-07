@@ -1,7 +1,14 @@
 package com.fengbeibei.shop.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.SearchActivity;
@@ -12,18 +19,10 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.util.List;
 
-public class CategoryGridViewAdapter extends ArrayAdapter<Category>{
-	private int mLayout;
+public class CategoryGridViewAdapter extends BaseAdapter {
+	private List<Category> mCategoryList;
 	private Context mContext;
 	private ImageLoader mImageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
@@ -32,23 +31,36 @@ public class CategoryGridViewAdapter extends ArrayAdapter<Category>{
 		TextView gcName;
 		ImageView gcImage;
 	}
-	public CategoryGridViewAdapter(Context context, int resource,
-			List<Category> objects) {
-		super(context, resource, objects);
+
+	public CategoryGridViewAdapter(Context context,List<Category> categoryList) {
+
 		mContext = context;
-		mLayout = resource;
+		mCategoryList = categoryList;
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public int getCount() {
+		return mCategoryList.size();
+	}
 
-	
+	@Override
+	public Object getItem(int position) {
+		return mCategoryList.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		Category category = getItem(position);
+
 		ViewHolder holder;
 		if ( convertView == null){
-			convertView = LayoutInflater.from(mContext).inflate(mLayout, null);
+			convertView = LayoutInflater.from(mContext).inflate(R.layout.child_category_grid, null);
 			holder = new ViewHolder();
 			holder.gcName = (TextView)convertView.findViewById(R.id.gcName);
 			holder.gcImage = (ImageView)convertView.findViewById(R.id.gcImage);
@@ -56,6 +68,7 @@ public class CategoryGridViewAdapter extends ArrayAdapter<Category>{
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
+		Category category = mCategoryList.get(position);
 		holder.gcName.setText(category.getGcName());
 		mImageLoader.displayImage(category.getGcImage(), holder.gcImage, mOptions,  mAnimateFirstListener );
 		setOnClickListener(convertView,category.getGcId());

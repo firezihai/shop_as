@@ -3,10 +3,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/lightgrey">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:padding="10dp"
         android:background="@color/white"
         android:weightSum="4"
@@ -48,6 +49,9 @@
             android:textColor="@color/darkgrey"
             android:textSize="12sp"/>
     </LinearLayout>
+    <View
+        style="@style/h_line"
+        android:layout_height="1dp" />
     <android.support.v4.view.ViewPager
         android:id="@+id/evalViewPager"
         android:layout_width="match_parent"

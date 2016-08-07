@@ -1,14 +1,18 @@
 package com.fengbeibei.shop.fragment;
 
-import java.util.ArrayList;
-
-import org.apache.http.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.os.Bundle;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.CategoryAdapter;
+import com.fengbeibei.shop.adapter.CategoryExpandableListAdapter;
 import com.fengbeibei.shop.adapter.CategoryGridViewAdapter;
 import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.Constants;
@@ -17,17 +21,13 @@ import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
 import com.fengbeibei.shop.widget.MyGridView;
 
-import android.os.Bundle;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -35,8 +35,11 @@ public class CategoryFragment extends BaseFragment {
     @BindView(R.id.parentCategory)
 	ListView mParentCategoryLayout;
     @BindView(R.id.childCategory)
-	LinearLayout mChildCategoryLayout;
+	ExpandableListView mChildCategoryLayout;
 	private CategoryAdapter mCategoryAdapter;
+
+	private CategoryExpandableListAdapter mExpandableListAdapter;
+	private List<List<Category>> mChildCategory = new ArrayList<List<Category>>();
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     public void initView() {
-      //  super.initView();
+     	initData();
     }
 
     public void initParentCategory(){
@@ -120,7 +123,7 @@ public class CategoryFragment extends BaseFragment {
 			public void onFinish(Message response) {
 				// TODO Auto-generated method stub
 				if(response.what == HttpStatus.SC_OK){
-					mChildCategoryLayout.removeAllViews();
+
 					String json = (String)response.obj;
 					try{
 						JSONObject obj = new JSONObject(json);
@@ -132,16 +135,17 @@ public class CategoryFragment extends BaseFragment {
 								JSONObject cateJsonObj = new JSONObject(cateObj.toString());
 								String parentId = cateJsonObj.getString("gc_id");
 								String parentName = cateJsonObj.getString("gc_name");
-								View childCategoryView =	getActivity().getLayoutInflater().inflate(R.layout.child_category_item, null);
-								TextView childCategoryTitle = (TextView) childCategoryView.findViewById(R.id.categoryName);
-								childCategoryTitle.setText(parentName);
-							
+
+							//	View childCategoryView =	getActivity().getLayoutInflater().inflate(R.layout.child_category_item, null);
+							//	TextView childCategoryTitle = (TextView) childCategoryView.findViewById(R.id.categoryName);
+							//	childCategoryTitle.setText(parentName);
+
 						
 								if(!cateJsonObj .isNull("child")){
 										String childJson = cateJsonObj.optString("child");
 										MyGridView categoryGridView = (MyGridView)childCategoryView.findViewById(R.id.categoryGridView);
-										ArrayList<Category> childCategoryData = Category.newIntance(childJson);
-										CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(CategoryFragment.this.getContext(),R.layout.child_category_grid,childCategoryData);
+										List<Category> childCategoryData = Category.newIntance(childJson);
+										CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(CategoryFragment.this.getContext(),childCategoryData);
 										categoryGridView.setAdapter(categoryGridViewAdapter);
 								}
 								mChildCategoryLayout.addView(childCategoryView);

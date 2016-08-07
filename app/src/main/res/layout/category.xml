@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightgrey"
-    android:orientation="vertical"
-    tools:context=".activity.HomeActivity" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,40 +24,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:baselineAligned="true"
-        android:weightSum="1"
         android:orientation="horizontal" >
         <ListView
             android:id="@+id/parentCategory"
             android:layout_width="0dp"
-            android:layout_weight="0.25"
             android:layout_height="wrap_content"
             android:listSelector="@android:color/transparent"
-            android:divider= "#b5b5b5"   
+            android:background="@color/white"
             android:choiceMode="singleChoice"
-            android:dividerHeight= "1dp"  >
-        </ListView>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/grey" />
-
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.75"
-            android:background="@color/lightgrey"
+            android:cacheColorHint="@color/white"
             android:fadingEdge="none"
-            android:overScrollMode="never"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/childCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-            </LinearLayout>
-        </ScrollView>
+            android:divider="@null"
+            android:dividerHeight="1.0px"
+            android:layout_weight="1.0">
+        </ListView>
+        <ExpandableListView
+            android:id="@+id/childCategory"
+            android:layout_width="0.0px"
+            android:layout_height="match_parent"
+            android:paddingTop="5.0dip"
+            android:cacheColorHint="@android:color/transparent"
+            android:groupIndicator="@null"
+            android:fadingEdge="none"
+            android:layout_weight="3.0"
+            android:headerDividersEnabled="true"
+            android:dividerHeight="0.0dip"></ExpandableListView>
     </LinearLayout>
 
 </LinearLayout>

@@ -1,10 +1,15 @@
 package com.fengbeibei.shop.adapter;
 
-import java.util.ArrayList;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.R.color;
-import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.SystemHelper;
@@ -12,17 +17,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import java.util.ArrayList;
 
 public class CategoryAdapter extends BaseAdapter{
 	private int selectedPosition = -1;
@@ -37,13 +32,13 @@ public class CategoryAdapter extends BaseAdapter{
 		ImageView gcImage;
 		LinearLayout gcItem;
 	}
-	
+
 	public CategoryAdapter(Context context) {
 		super();
 		mContext = context;
 		mInflater = LayoutInflater.from(mContext);
 	}
-	
+
 	public void setCategoryData(ArrayList<Category> categoryData){
 		mCategoryData = categoryData;
 	}
@@ -82,18 +77,18 @@ public class CategoryAdapter extends BaseAdapter{
 		Category categoryData = mCategoryData.get(position);
 		holder.gcName.setText(categoryData.getGcName());
 		mImageLoader.displayImage(categoryData.getGcImage(),holder.gcImage,mOptions, mAnimateFirstListener);
-	  if (selectedPosition == position) {  
+	  if (selectedPosition == position) {
 			holder.gcName.setTextColor( mContext.getResources().getColor(R.color.orange));
-        } else {   
+        } else {
         	holder.gcName.setTextColor( mContext.getResources().getColor(R.color.black));
-        }  
+        }
 		return convertView;
 	}
-	
-	public void setSelectedPosition(int position) {  
-        selectedPosition = position;  
-    } 
-	
+
+	public void setSelectedPosition(int position) {
+        selectedPosition = position;
+    }
+
 	public int getSelectedPosition(){
 		return  selectedPosition;
 	}
