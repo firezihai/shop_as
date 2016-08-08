@@ -24,13 +24,9 @@ public class CategoryAdapter extends BaseAdapter{
 	private ArrayList<Category> mCategoryData;
 	private LayoutInflater mInflater;
 	private Context mContext;
-	private ImageLoader mImageLoader = ImageLoader.getInstance();
-	private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
-	private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
 	class ViewHolder {
 		TextView gcName;
-		ImageView gcImage;
-		LinearLayout gcItem;
+		View gcImage;
 	}
 
 	public CategoryAdapter(Context context) {
@@ -67,16 +63,14 @@ public class CategoryAdapter extends BaseAdapter{
 		if(convertView == null){
 			convertView = mInflater.inflate(R.layout.parent_category_item, arg2,false);
 			holder = new ViewHolder();
-			holder.gcItem = (LinearLayout) convertView.findViewById(R.id.gcItem);
 			holder.gcName = (TextView)convertView.findViewById(R.id.gcName);
-			holder.gcImage = (ImageView)convertView.findViewById(R.id.gcImage);
+			holder.gcImage = (View)convertView.findViewById(R.id.gcImage);
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder)convertView.getTag();
 		}
 		Category categoryData = mCategoryData.get(position);
 		holder.gcName.setText(categoryData.getGcName());
-		mImageLoader.displayImage(categoryData.getGcImage(),holder.gcImage,mOptions, mAnimateFirstListener);
 	  if (selectedPosition == position) {
 			holder.gcName.setTextColor( mContext.getResources().getColor(R.color.orange));
         } else {

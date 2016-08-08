@@ -21,5 +21,10 @@
     <color name="pub_color_one">#BDBDBD</color>
     <color name="pub_color_two">#fff2f2f2</color>
     <color name="pub_color_three">#ff353d44</color>
+    <color name="pub_color_five">#ffdcdcdc</color>
+    <color name="color_f2f2f2">#fff2f2f2</color>
+    <color name="color_dcdcdc">#ffdcdcdc</color>
+    <color name="color_d9d9d9">#ffd9d9d9</color>
     <color name="goods_photo_bg">#4f4f4f</color>
+
 </resources>

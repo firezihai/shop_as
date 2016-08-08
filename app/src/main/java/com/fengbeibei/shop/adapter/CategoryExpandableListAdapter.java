@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
  * @created 2016-08-07 22:12
  */
 public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
+    private String TAG = "CateExpandableListAdapter";
     private List<Category> mParentCategory;
     private List<List<Category>> mChildCategory;
     private LayoutInflater mInflater;
@@ -27,6 +29,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         mParentCategory = parentCategory;
         mChildCategory = childCategory;
         mInflater = LayoutInflater.from(context);
+        mContext = context;
     }
 
     @Override
@@ -36,7 +39,9 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mChildCategory.size();
+      //  Log.i(TAG,"childrenCount:"+mChildCategory.size()+" groupPosition  "+groupPosition+" mParentCategory "+mParentCategory + " "+mChildCategory);
+   //     Log.i(TAG,"mChildCategory:"+mChildCategory);
+        return 1;
     }
 
     @Override
@@ -61,7 +66,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
@@ -74,20 +79,28 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         }
         Category category = mParentCategory.get(groupPosition);
         textView.setText(category.getGcName());
-        textView.setTextSize(30);
+        textView.setTextSize(12);
         textView.setPadding(36, 10, 0, 10);
         return textView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
         if(convertView == null){
+            viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.child_category_item,null);
+            viewHolder.myGridView = (MyGridView)convertView.findViewById(R.id.categoryGridView);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder)convertView.getTag();
         }
-        MyGridView  myGridView = (MyGridView)convertView.findViewById(R.id.categoryGridView);
+
         List<Category> categoryList = mChildCategory.get(groupPosition);
         CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(mContext,categoryList);
-        myGridView.setAdapter(categoryGridViewAdapter);
+        viewHolder.myGridView.setAdapter(categoryGridViewAdapter);
+        categoryGridViewAdapter.notifyDataSetChanged();
+        Log.i(TAG,"getChildView"+categoryList);
         return convertView;
     }
 
@@ -95,4 +108,9 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
+
+    class ViewHolder {
+        MyGridView myGridView;
+    }
+
 }

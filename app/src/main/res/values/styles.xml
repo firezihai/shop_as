@@ -19,6 +19,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="Theme.NoTitle" parent="@android:style/Theme.NoTitleBar">
+        <item name="android:windowBackground">@color/white</item>
+    </style>
 	<style name="AppGoodsPhotoTheme" parent="AppBaseTheme">
 		<item name="colorPrimaryDark">@color/goods_photo_bg</item>
 	</style>

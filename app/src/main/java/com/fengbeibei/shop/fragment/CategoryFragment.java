@@ -2,6 +2,7 @@ package com.fengbeibei.shop.fragment;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,11 @@ public class CategoryFragment extends BaseFragment {
     @BindView(R.id.parentCategory)
 	ListView mParentCategoryLayout;
     @BindView(R.id.childCategory)
-	ExpandableListView mChildCategoryLayout;
+	ExpandableListView mExpandableListView;
 	private CategoryAdapter mCategoryAdapter;
-
 	private CategoryExpandableListAdapter mExpandableListAdapter;
-	private List<List<Category>> mChildCategory = new ArrayList<List<Category>>();
+    private List<Category> mSecondCategory;
+	private List<List<Category>> mThirdCategory = new ArrayList<List<Category>>();
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -62,7 +63,12 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        mSecondCategory = new ArrayList<Category>();
+        mThirdCategory = new  ArrayList<List<Category>>();
+        mExpandableListAdapter = new CategoryExpandableListAdapter(getContext(),mSecondCategory,mThirdCategory);
+        mExpandableListView.setAdapter(mExpandableListAdapter);
      	initData();
+
     }
 
     public void initParentCategory(){
@@ -123,7 +129,8 @@ public class CategoryFragment extends BaseFragment {
 			public void onFinish(Message response) {
 				// TODO Auto-generated method stub
 				if(response.what == HttpStatus.SC_OK){
-
+                    mSecondCategory.clear();
+                    mThirdCategory.clear();
 					String json = (String)response.obj;
 					try{
 						JSONObject obj = new JSONObject(json);
@@ -133,23 +140,22 @@ public class CategoryFragment extends BaseFragment {
 							for( int i = 0 ; i < size ; i ++){
 								JSONObject cateObj = arr.getJSONObject(i);
 								JSONObject cateJsonObj = new JSONObject(cateObj.toString());
-								String parentId = cateJsonObj.getString("gc_id");
-								String parentName = cateJsonObj.getString("gc_name");
+                                Category category = new Category(cateJsonObj.getString("gc_id"),cateJsonObj.getString("gc_name"),"");
 
-							//	View childCategoryView =	getActivity().getLayoutInflater().inflate(R.layout.child_category_item, null);
-							//	TextView childCategoryTitle = (TextView) childCategoryView.findViewById(R.id.categoryName);
-							//	childCategoryTitle.setText(parentName);
+                                mSecondCategory.add(category);
 
-						
+                                List<Category> childCategoryData = new  ArrayList<Category>();
+
 								if(!cateJsonObj .isNull("child")){
-										String childJson = cateJsonObj.optString("child");
-										MyGridView categoryGridView = (MyGridView)childCategoryView.findViewById(R.id.categoryGridView);
-										List<Category> childCategoryData = Category.newIntance(childJson);
-										CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(CategoryFragment.this.getContext(),childCategoryData);
-										categoryGridView.setAdapter(categoryGridViewAdapter);
+                                    String childJson = cateJsonObj.optString("child");
+                                    childCategoryData = Category.newIntance(childJson);
 								}
-								mChildCategoryLayout.addView(childCategoryView);
+                                mThirdCategory.add(childCategoryData);
+                                mExpandableListView.expandGroup(i);
+							//	mChildCategoryLayout.addView(childCategoryView);
 							}
+                            Log.i("CateFragment","mThirdCategory:"+mThirdCategory);
+                            mExpandableListAdapter.notifyDataSetChanged();
 						}
 						
 					} catch (JSONException e){
