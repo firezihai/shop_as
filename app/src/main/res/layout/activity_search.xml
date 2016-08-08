@@ -21,6 +21,11 @@
         <com.fengbeibei.shop.widget.SearchNoResult
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="90dp"></com.fengbeibei.shop.widget.SearchNoResult>
+            android:layout_marginTop="90dp"
+            android:visibility="gone"></com.fengbeibei.shop.widget.SearchNoResult>
+        <com.fengbeibei.shop.widget.SearchNetErrorView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="93.0dip" ></com.fengbeibei.shop.widget.SearchNetErrorView>
     </RelativeLayout>
 </RelativeLayout>
