@@ -1,31 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include
-        android:id="@+id/searchBar" layout="@layout/view_search_title"/>
-    <View
-        android:id="@+id/line"
-        style="@style/h_line"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/searchBar"
-        android:background="@color/pub_color_five"/>
     <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_f2f2f2"
-        android:layout_below="@+id/line">
+        android:background="@color/color_f2f2f2">
         <com.fengbeibei.shop.widget.SearchNoResult
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="90dp"
-            android:visibility="gone"></com.fengbeibei.shop.widget.SearchNoResult>
+            android:visibility="gone"/>
         <com.fengbeibei.shop.widget.SearchNetErrorView
+            android:id="@+id/netErrorView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="93.0dip" ></com.fengbeibei.shop.widget.SearchNetErrorView>
+            android:visibility="gone"
+            android:layout_marginTop="93.0dip" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.fengbeibei.shop.widget.SearchHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <com.fengbeibei.shop.widget.SearchTab
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>

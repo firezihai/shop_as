@@ -17,7 +17,8 @@ import com.fengbeibei.shop.interf.ViewInterface;
  * @created 2016-08-08 17:28
  */
 public class SearchNetErrorView extends FrameLayout{
-    private ViewInterface mViewInterface;
+    private  ViewInterface mViewInterface;
+    private Context mContext;
     public SearchNetErrorView(Context context) {
         super(context);
         initView(context);
@@ -25,6 +26,7 @@ public class SearchNetErrorView extends FrameLayout{
 
     public SearchNetErrorView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
         initView(context);
     }
 
@@ -44,7 +46,16 @@ public class SearchNetErrorView extends FrameLayout{
         ((Button)findViewById(R.id.retry)).setOnClickListener(new Test(this));
     }
 
+    public Context getCurrentContext(){
+        return mContext;
+    }
+
+
     public void setViewInterface(ViewInterface viewInterface){
         mViewInterface = viewInterface;
+    }
+
+    public   ViewInterface getViewInterface(){
+        return mViewInterface;
     }
 }
