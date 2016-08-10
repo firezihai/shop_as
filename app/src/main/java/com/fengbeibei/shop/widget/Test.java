@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.fengbeibei.shop.common.MyApplication;
-import com.fengbeibei.shop.interf.ViewInterface;
+import com.fengbeibei.shop.interf.SearchNetErrorListener;
 import com.fengbeibei.shop.utils.NetUtil;
 
 /**
@@ -26,7 +26,7 @@ public class Test implements View.OnClickListener{
         if(!networkInfo.isConnected() && !networkInfo.isAvailable()){
             Toast.makeText(MyApplication.getContext(),"当前网络连接异常，请检查网络后再试吧",Toast.LENGTH_SHORT).show();
         }
-        ViewInterface viewInterface = mSearchNetErrorView.getViewInterface();
+        SearchNetErrorListener viewInterface = mSearchNetErrorView.getSearchNetErrorListener();
         viewInterface.a();
     }
 }

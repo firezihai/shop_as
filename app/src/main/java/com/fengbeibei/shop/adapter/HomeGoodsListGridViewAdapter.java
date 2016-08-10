@@ -3,7 +3,6 @@ package com.fengbeibei.shop.adapter;
 import java.util.ArrayList;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.bean.HomeGoodsList;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.IntentHelper;
@@ -13,7 +12,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;

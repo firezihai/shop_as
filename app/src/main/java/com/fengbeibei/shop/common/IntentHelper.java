@@ -8,6 +8,7 @@ import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.LoginActivity;
 import com.fengbeibei.shop.activity.SearchActivity;
+import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 
 public class IntentHelper {
@@ -42,7 +43,7 @@ public class IntentHelper {
 			Uri uri = Uri.parse(data);
 			if(uri.getQueryParameter("gc_id") != null){
 				String gcId = uri.getQueryParameter("gc_id");
-				Intent intent = new Intent(context,SearchActivity.class);
+				Intent intent = new Intent(context,SearchResultActivity.class);
 				intent.putExtra("gcId", gcId);
 				context.startActivity(intent);
 			}else {
@@ -52,4 +53,9 @@ public class IntentHelper {
 			IntentHelper.goodsDetail(context,data);
 		}
 	}
+
+    public static void search(Context context){
+        Intent intent = new Intent(context, SearchActivity.class);
+        context.startActivity(intent);
+    }
 }

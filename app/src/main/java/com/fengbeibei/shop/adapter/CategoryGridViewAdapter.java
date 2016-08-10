@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.SearchActivity;
+import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.SystemHelper;
@@ -81,7 +81,7 @@ public class CategoryGridViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(mContext,SearchActivity.class);
+				Intent intent = new Intent(mContext,SearchResultActivity.class);
 				intent.putExtra("gc_id", data);
 				mContext.startActivity(intent);
 			}

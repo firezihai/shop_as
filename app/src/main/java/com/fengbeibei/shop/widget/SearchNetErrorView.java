@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.interf.ViewInterface;
+import com.fengbeibei.shop.interf.SearchNetErrorListener;
 
 /**
  * SearchNetErrorLayout
@@ -17,7 +17,7 @@ import com.fengbeibei.shop.interf.ViewInterface;
  * @created 2016-08-08 17:28
  */
 public class SearchNetErrorView extends FrameLayout{
-    private  ViewInterface mViewInterface;
+    private SearchNetErrorListener mSearchNetErrorListener;
     private Context mContext;
     public SearchNetErrorView(Context context) {
         super(context);
@@ -51,11 +51,11 @@ public class SearchNetErrorView extends FrameLayout{
     }
 
 
-    public void setViewInterface(ViewInterface viewInterface){
-        mViewInterface = viewInterface;
+    public void setSearchNetErrorListener(SearchNetErrorListener SearchNetErrorListener){
+        mSearchNetErrorListener = SearchNetErrorListener;
     }
 
-    public   ViewInterface getViewInterface(){
-        return mViewInterface;
+    public SearchNetErrorListener getSearchNetErrorListener(){
+        return mSearchNetErrorListener;
     }
 }

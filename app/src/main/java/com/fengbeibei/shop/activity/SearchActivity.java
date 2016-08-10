@@ -1,24 +1,23 @@
 package com.fengbeibei.shop.activity;
 
-import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.common.Constants;
-import com.fengbeibei.shop.common.HttpClientHelper;
-import com.fengbeibei.shop.interf.ViewInterface;
-import com.fengbeibei.shop.utils.NetUtil;
-import com.fengbeibei.shop.widget.SearchNetErrorView;
-
-import android.app.Activity;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+
+import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.interf.SearchTabInterface;
 
 import butterknife.BindView;
 
-public class SearchActivity extends BaseActivity{
-    @BindView(R.id.netErrorView)
-    SearchNetErrorView mSearchNetErrorView;
+/**
+ * SearchActivity
+ *
+ * @author zihai(https://github.com/firezihai)
+ * @created 2016-08-10 15:24
+ */
+public class SearchActivity extends BaseActivity implements SearchTabInterface{
+    @BindView(R.id.back)
+    ImageView backBtn;
 
     @Override
     protected int getLayoutId() {
@@ -32,33 +31,60 @@ public class SearchActivity extends BaseActivity{
 
     @Override
     public void initData() {
-        HttpClientHelper.asynGet(Constants.SEARCH_GOODS_LIST_URL, new HttpClientHelper.CallBack() {
-            @Override
-            public void onFinish(Message response) {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
+        super.initData();
     }
 
     @Override
     public void initView() {
-        NetworkInfo networkInfo = NetUtil.getActiveNetwork(this);
-        if(!networkInfo.isConnected() && !networkInfo.isAvailable()){
-            mSearchNetErrorView.setVisibility(View.VISIBLE);
-            mSearchNetErrorView.setViewInterface(new ViewInterface() {
-                @Override
-                public void a() {
-                    Toast.makeText(getApplicationContext(),"刷新成功",Toast.LENGTH_LONG).show();
-                }
-            });
-        }else{
-            mSearchNetErrorView.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back:
+                finish();
+                break;
         }
+    }
+
+    @Override
+    public void mixSort() {
+
+    }
+
+    @Override
+    public void priceDown() {
+
+    }
+
+    @Override
+    public void evalUp() {
+
+    }
+
+    @Override
+    public void evalDown() {
+
+    }
+
+    @Override
+    public void dateSort() {
+
+    }
+
+    @Override
+    public void isSelfShop() {
+
+    }
+
+    @Override
+    public void isPromotion() {
+
+    }
+
+    @Override
+    public void SalesSort() {
 
     }
 }
