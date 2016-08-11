@@ -15,7 +15,7 @@ public abstract interface SearchTabInterface {
     /**
      * 商品价格升序
      */
-
+    public abstract void priceUp();
     /**
      * 商品价格降序
       */
@@ -38,7 +38,7 @@ public abstract interface SearchTabInterface {
     /**
      * 是否为自营商品
      */
-    public abstract void isSelfShop();
+    public abstract void isOwnShop();
 
     /**
      * 是否为促销商品

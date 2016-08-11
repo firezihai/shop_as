@@ -42,14 +42,14 @@
             android:textCursorDrawable="@null"/>
     </RelativeLayout>
     <TextView
-        android:id="@+id/filter"
+        android:id="@+id/tv_search"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:gravity="center"
-        android:text="@string/filter"
+        android:text="搜索"
         android:textSize="16sp"
         android:textColor="@color/darkgrey"/>
 </LinearLayout>

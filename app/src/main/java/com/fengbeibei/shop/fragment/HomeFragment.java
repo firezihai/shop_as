@@ -202,6 +202,12 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
             }
 
         });
+        mSearchBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentHelper.search(getContext());
+            }
+        });
         initData();
     }
 

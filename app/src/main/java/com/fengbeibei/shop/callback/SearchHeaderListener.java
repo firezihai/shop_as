@@ -31,4 +31,6 @@ public class SearchHeaderListener implements SearchHeaderInterface {
     public void onSearch() {
         IntentHelper.search(mSearchResultActivity);
     }
+
+
 }

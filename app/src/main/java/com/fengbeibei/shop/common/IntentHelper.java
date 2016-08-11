@@ -58,4 +58,9 @@ public class IntentHelper {
         Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
     }
+    public static void searchResult(Context context,String keyword){
+        Intent intent = new Intent(context, SearchResultActivity.class);
+        intent.putExtra("keyword",keyword);
+        context.startActivity(intent);
+    }
 }
