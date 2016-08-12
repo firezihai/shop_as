@@ -1,11 +1,16 @@
 package com.fengbeibei.shop.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.common.IntentHelper;
@@ -26,6 +31,7 @@ public class SearchActivity extends BaseActivity {
     EditText mSearchEdit;
     @BindView(R.id.tv_search)
     TextView mSearchBtn;
+    private String mSearchKeyword;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_search;
@@ -45,6 +51,11 @@ public class SearchActivity extends BaseActivity {
     public void initView() {
         mBackBtn.setOnClickListener(this);
         mSearchBtn.setOnClickListener(this);
+        mSearchKeyword = getIntent().getStringExtra("keyword");
+        if(!TextUtils.isEmpty(mSearchKeyword)) {
+            mSearchEdit.setText(mSearchKeyword);
+            mSearchEdit.setSelection(mSearchKeyword.length());
+        }
     }
 
     @Override
@@ -55,9 +66,12 @@ public class SearchActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_search:
-                System.out.println("tv_search");
                 String keyword = mSearchEdit.getText().toString();
-                IntentHelper.searchResult(this,keyword);
+                if(TextUtils.isEmpty(keyword)) {
+                    Toast.makeText(this,"请输入你在搜索的关键词！",Toast.LENGTH_SHORT).show();
+                }else{
+                    IntentHelper.searchResult(this, keyword);
+                }
                 break;
         }
     }
@@ -71,6 +85,15 @@ public class SearchActivity extends BaseActivity {
     }
 
     public void onBack(){
-      //  if(mSearchEdit.)
+        hideInputMethod();
+        if(TextUtils.isEmpty(mSearchKeyword)){
+            finish();
+            return;
+        }
+        IntentHelper.home(this,0);
+    }
+
+    public void hideInputMethod(){
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mSearchEdit.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 }

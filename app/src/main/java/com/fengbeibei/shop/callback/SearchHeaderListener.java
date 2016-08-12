@@ -29,7 +29,8 @@ public class SearchHeaderListener implements SearchHeaderInterface {
 
     @Override
     public void onSearch() {
-        IntentHelper.search(mSearchResultActivity);
+      SearchResultActivity.onSearch(mSearchResultActivity);
+
     }
 
 

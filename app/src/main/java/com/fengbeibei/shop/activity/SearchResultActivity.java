@@ -4,6 +4,7 @@ import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.callback.SearchHeaderListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.interf.SearchHeaderInterface;
 import com.fengbeibei.shop.interf.SearchNetErrorListener;
 import com.fengbeibei.shop.interf.SearchTabInterface;
@@ -12,10 +13,14 @@ import com.fengbeibei.shop.widget.SearchHeaderView;
 import com.fengbeibei.shop.widget.SearchNetErrorView;
 import com.fengbeibei.shop.widget.SearchTab;
 
+import android.content.Context;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -114,6 +119,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         }
         mSearchHeaderListener = new SearchHeaderListener(this);
         mSearchHeaderView.setSearchHeaderListener(mSearchHeaderListener);
+        mSearchHeaderView.setSearchKeyword(mSearchKeyword);
         mSearchTab.setSearchTabListener(this);
     }
 
@@ -174,5 +180,31 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     @Override
     public void SalesSort() {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            onBack();
+        }
+        //return super.onKeyDown(keyCode, event);
+        return true;
+    }
+
+    public void onBack(){
+        if(mSearchTab.isSortLayoutVisibility()){
+            mSearchTab.hideSortLayout();
+            return;
+        }
+        finish();
+    }
+
+    public static void onSearch(SearchResultActivity that){
+        that.search();
+    }
+
+    private  void search(){
+        String keyword = mSearchHeaderView.getSearchKeyword();
+        IntentHelper.search(this,keyword);
     }
 }

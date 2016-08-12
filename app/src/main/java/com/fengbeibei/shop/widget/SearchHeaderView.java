@@ -2,6 +2,7 @@ package com.fengbeibei.shop.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,9 @@ import com.fengbeibei.shop.interf.SearchHeaderInterface;
  * @created 2016-08-09 16:51
  */
 public class SearchHeaderView extends FrameLayout implements View.OnClickListener{
+    private ImageView mBack;
+    private TextView mSearchKeyword;
+    private TextView mFilter;
     private Context mContext;
     private SearchHeaderListener mSearchHeaderListener;
     public SearchHeaderView(Context context) {
@@ -46,12 +50,12 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
     public void initView(Context context){
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.view_search_result_title, this);
-        ImageView imageView = (ImageView)findViewById(R.id.back);
-        TextView searchInput = (TextView) findViewById(R.id.searchEdit);
-        TextView textView = (TextView) findViewById(R.id.filter);
-        imageView.setOnClickListener(this);
-        searchInput.setOnClickListener(this);
-        textView.setOnClickListener(this);
+        mBack= (ImageView)findViewById(R.id.back);
+        mSearchKeyword = (TextView) findViewById(R.id.searchEdit);
+        mFilter = (TextView) findViewById(R.id.filter);
+        mBack.setOnClickListener(this);
+        mSearchKeyword.setOnClickListener(this);
+        mFilter.setOnClickListener(this);
     }
 
     public void setSearchHeaderListener(SearchHeaderListener searchHeaderListener) {
@@ -71,5 +75,19 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
                 mSearchHeaderListener.onFilter();
                 break;
         }
+    }
+
+    public void setSearchKeyword(String keyword){
+        if(!TextUtils.isEmpty(keyword)) {
+            mSearchKeyword.setText(keyword);
+        }
+    }
+
+    public String getSearchKeyword(){
+        String keyword = mSearchKeyword.getText().toString();
+        if(!TextUtils.isEmpty(keyword)){
+            return keyword;
+        }
+        return keyword;
     }
 }

@@ -252,4 +252,11 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
         mOpenSort.setVisibility(View.GONE);
         mSearchSortMask.setVisibility(View.GONE);
     }
+
+    public void hideSortLayout(){
+        if(mOpenSort.getVisibility() == View.VISIBLE){
+            mOpenSort.setVisibility(View.GONE);
+            mSearchSortMask.setVisibility(View.GONE);
+        }
+    }
 }
