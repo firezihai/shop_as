@@ -23,10 +23,11 @@ public class Test implements View.OnClickListener{
     public void onClick(View v) {
         Context context = mSearchNetErrorView.getCurrentContext();
         NetworkInfo networkInfo = NetUtil.getActiveNetwork(context);
-        if(!networkInfo.isConnected() && !networkInfo.isAvailable()){
+        if( networkInfo == null || !networkInfo.isConnected() || !networkInfo.isAvailable()){
             Toast.makeText(MyApplication.getContext(),"当前网络连接异常，请检查网络后再试吧",Toast.LENGTH_SHORT).show();
+        }else {
+            SearchNetErrorListener viewInterface = mSearchNetErrorView.getSearchNetErrorListener();
+            viewInterface.a();
         }
-        SearchNetErrorListener viewInterface = mSearchNetErrorView.getSearchNetErrorListener();
-        viewInterface.a();
     }
 }

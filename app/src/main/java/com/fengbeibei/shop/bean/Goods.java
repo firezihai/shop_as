@@ -17,22 +17,23 @@ import java.util.List;
 public class Goods {
 
     /**
-    * goods_id : 11404
-    * store_id : 6
-    * goods_name : 蜂贝贝家居 欧式客厅头层真皮沙发 MGZD-S102-SF 天使白 1+2+3
-    * goods_price : 29550.00
-    * goods_marketprice : 49250.00
-    * goods_image : 6_05127340043787338.jpg
-    * goods_salenum : 0
-    * evaluation_good_star : 5
-    * evaluation_count : 0
-    * is_virtual : 0
-    * is_presell : 0
-    * sole_flag : false
-    * group_flag : false
-    * xianshi_flag : false
-    * goods_image_url : http://www.fengbeibei.com/data/upload/shop/store/goods/6/6_05127340043787338_360.jpg
-    */
+     * goods_id : 9656
+     * store_id : 6
+     * goods_name : 蜂贝贝家居 欧式客厅地柜组合 HH-K039-DG 白色 柜体组合
+     * goods_price : 6705.00
+     * goods_marketprice : 11175.00
+     * goods_image : 6_05037722162524784.jpg
+     * goods_salenum : 0
+     * evaluation_good_star : 5
+     * evaluation_count : 0
+     * is_virtual : 0
+     * is_presell : 0
+     * sole_flag : false
+     * group_flag : false
+     * xianshi_flag : false
+     * goods_image_url : http://www.fengbeibei.com/data/upload/shop/store/goods/6/6_05037722162524784_360.jpg
+     */
+
     @SerializedName("goods_id")
     private String goodsId;
     @SerializedName("store_id")
@@ -57,14 +58,22 @@ public class Goods {
     private String isPresell;
     @SerializedName("sole_flag")
     private boolean soleFlag;
+    @SerializedName("group_flag")
+    private boolean groupFlag;
+    @SerializedName("xianshi_flag")
+    private boolean xianshiFlag;
+    @SerializedName("goods_image_url")
+    private String goodsImageUrl;
 
-    public static List<Goods> arrayGoodsFromData(String str) {
+
+    public static List<Goods> arrayListBeanFromData(String str) {
 
         Type listType = new TypeToken<ArrayList<Goods>>() {
         }.getType();
 
         return new Gson().fromJson(str, listType);
     }
+
     public String getGoodsId() {
         return goodsId;
     }
@@ -159,6 +168,30 @@ public class Goods {
 
     public void setSoleFlag(boolean soleFlag) {
         this.soleFlag = soleFlag;
+    }
+
+    public boolean isGroupFlag() {
+        return groupFlag;
+    }
+
+    public void setGroupFlag(boolean groupFlag) {
+        this.groupFlag = groupFlag;
+    }
+
+    public boolean isXianshiFlag() {
+        return xianshiFlag;
+    }
+
+    public void setXianshiFlag(boolean xianshiFlag) {
+        this.xianshiFlag = xianshiFlag;
+    }
+
+    public String getGoodsImageUrl() {
+        return goodsImageUrl;
+    }
+
+    public void setGoodsImageUrl(String goodsImageUrl) {
+        this.goodsImageUrl = goodsImageUrl;
     }
 }
 
