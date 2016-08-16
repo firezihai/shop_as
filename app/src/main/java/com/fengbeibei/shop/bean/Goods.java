@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Goods
+ *
  * @author zihai(https://github.com/firezihai)
- * @created 2016-08-14 18:19
+ * @created 2016-08-13 9:44
  */
 public class Goods {
 
@@ -159,3 +161,4 @@ public class Goods {
         this.soleFlag = soleFlag;
     }
 }
+
