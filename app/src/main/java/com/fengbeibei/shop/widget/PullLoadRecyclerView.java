@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.RecyclerViewAdapter;
 import com.fengbeibei.shop.callback.RecyclerViewOnScrollListener;
+import com.fengbeibei.shop.callback.PullLoadRecyclerViewOnScrollListener;
 
 /**
  * PullLoadRecyclerView
@@ -19,7 +20,7 @@ import com.fengbeibei.shop.callback.RecyclerViewOnScrollListener;
  * @created 2016-08-16 8:52
  */
 public class PullLoadRecyclerView extends RelativeLayout{
-    private RelativeLayout mLayout;
+    public PullLoadRecyclerViewOnScrollListener mOnScrollCallback;
     private StaggeredGridLayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerViewOnScrollListener(this);
@@ -79,5 +80,9 @@ public class PullLoadRecyclerView extends RelativeLayout{
         int bottom = mRecyclerView.getPaddingBottom();
         mRecyclerView.setPadding(left,paddingTop,right,bottom);
         mRecyclerView.scrollToPosition(0);
+    }
+
+    public void setOnScrollCallback(PullLoadRecyclerViewOnScrollListener onScrollCallback) {
+        mOnScrollCallback = onScrollCallback;
     }
 }

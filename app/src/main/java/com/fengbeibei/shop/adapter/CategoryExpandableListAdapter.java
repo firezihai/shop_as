@@ -100,7 +100,6 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(mContext,categoryList);
         viewHolder.myGridView.setAdapter(categoryGridViewAdapter);
         categoryGridViewAdapter.notifyDataSetChanged();
-        Log.i(TAG,"getChildView"+categoryList);
         return convertView;
     }
 

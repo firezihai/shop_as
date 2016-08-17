@@ -2,6 +2,7 @@ package com.fengbeibei.shop.callback;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.fengbeibei.shop.widget.PullLoadRecyclerView;
 
@@ -13,9 +14,17 @@ import com.fengbeibei.shop.widget.PullLoadRecyclerView;
  */
 public class RecyclerViewOnScrollListener extends RecyclerView.OnScrollListener{
     private PullLoadRecyclerView mPullLoadRecyclerView;
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onScrolled(recyclerView, dx, dy);
+      //  super.onScrolled(recyclerView, dx, dy);
+
+        final  int oldY = 0;
+        if(dy > oldY ){
+            mPullLoadRecyclerView.mOnScrollCallback.hideSearchTitle();
+        }else{
+            mPullLoadRecyclerView.mOnScrollCallback.showSearchTitle();
+        }
     }
 
     public RecyclerViewOnScrollListener(PullLoadRecyclerView pullLoadRecyclerView) {
@@ -25,6 +34,8 @@ public class RecyclerViewOnScrollListener extends RecyclerView.OnScrollListener{
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        super.onScrollStateChanged(recyclerView, newState);
+        //super.onScrollStateChanged(recyclerView, newState);
+      //  mPullLoadRecyclerView.mOnScrollCallback.showSearchTitle();
+        mPullLoadRecyclerView.mOnScrollCallback.showPage(recyclerView,newState);
     }
 }

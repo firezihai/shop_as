@@ -82,7 +82,7 @@ public class CategoryGridViewAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(mContext,SearchResultActivity.class);
-				intent.putExtra("gc_id", data);
+				intent.putExtra("gcId", data);
 				mContext.startActivity(intent);
 			}
 			

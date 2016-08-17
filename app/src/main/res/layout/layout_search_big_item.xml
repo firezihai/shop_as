@@ -23,7 +23,7 @@
                 android:paddingBottom="3dp"
                 android:background="@drawable/search_goods_flag"
                 android:text="手机专享"
-                android:textSize="14sp"
+                android:textSize="10sp"
                 android:textColor="@color/white"
                 android:ellipsize="end"
                 android:singleLine="true"/>

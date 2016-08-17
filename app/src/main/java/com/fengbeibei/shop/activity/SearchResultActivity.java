@@ -4,6 +4,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.RecyclerViewAdapter;
 import com.fengbeibei.shop.bean.Goods;
+import com.fengbeibei.shop.callback.PullLoadRecyclerViewOnScrollListener;
 import com.fengbeibei.shop.callback.SearchHeaderListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
@@ -23,6 +25,8 @@ import com.fengbeibei.shop.widget.PullLoadRecyclerView;
 import com.fengbeibei.shop.widget.RecyclerViewItemDecoration;
 import com.fengbeibei.shop.widget.SearchHeaderView;
 import com.fengbeibei.shop.widget.SearchNetErrorView;
+import com.fengbeibei.shop.widget.SearchNoResult;
+import com.fengbeibei.shop.widget.SearchPageView;
 import com.fengbeibei.shop.widget.SearchTab;
 
 import org.apache.http.HttpStatus;
@@ -31,26 +35,16 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 public class SearchResultActivity extends BaseActivity implements SearchTabInterface{
 
-    @BindView(R.id.pull_search_list)
-    PullLoadRecyclerView mPullLoadRecyclerView;
-    @BindView(R.id.netErrorView)
-    SearchNetErrorView mSearchNetErrorView;
-    @BindView(R.id.searchHeader)
-    SearchHeaderView mSearchHeaderView;
-    @BindView(R.id.searchTab)
-    SearchTab mSearchTab;
-    @BindView(R.id.LL_search_title)
-    LinearLayout mSearchTitle;
+    private ViewHolder mViewHolder;
     private String mCateId;
     private String mSearchKeyword;
     private int mPage = 0;
-    private long mPageCount;
+    private long mPageCount = 0;
     private boolean mHasMore;
     private RecyclerViewAdapter mRecyclerViewAdapter;
+    private PullLoadRecyclerViewOnScrollListener mScrollCallback = new PullLoadRecyclerViewOnScrollListener(this);
     /**
      * 排序类形
      * 1：综合排序；2：销量排序；3：价格排序；4；评价排序；5：时间排序
@@ -86,8 +80,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void initData() {
-        String url = Constants.SEARCH_GOODS_LIST_URL;
-        if(mCateId != null && mCateId.equals("")){
+        String url = Constants.SEARCH_GOODS_LIST_URL+"&page="+Constants.PAGESIZE+"&curpage="+mPage;
+        if(mCateId != null && !mCateId.equals("")){
             url = url + "&gc_id="+mCateId;
         }
         if(mSearchKeyword != null && mSearchKeyword.equals("")){
@@ -103,7 +97,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
             url +="is_promotion=1";
         }
         url +="&type="+mOrderType;
-
+        Log.i("RecyclerViewAdapter", url);
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
@@ -117,6 +111,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
                         String goodsListJson = obj.getString("list");
                         List<Goods> goodsList = Goods.arrayListBeanFromData(goodsListJson);
                         mRecyclerViewAdapter.addData(goodsList);
+                        mViewHolder.mSearchPageView.setText(mPage+"",mPageCount+"");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -133,32 +128,37 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void initView() {
+        mViewHolder = new ViewHolder(this);
         mCateId = getIntent().getStringExtra("gcId");
         mSearchKeyword = getIntent().getStringExtra("keyword");
         NetworkInfo networkInfo = NetUtil.getActiveNetwork(this);
         if(networkInfo == null || !networkInfo.isConnected() || !networkInfo.isAvailable()){
-            mSearchNetErrorView.setVisibility(View.VISIBLE);
-            mSearchNetErrorView.setSearchNetErrorListener( new SearchNetErrorListener() {
+            mViewHolder.mSearchNetErrorView.setVisibility(View.VISIBLE);
+            mViewHolder.mSearchNetErrorView.setSearchNetErrorListener( new SearchNetErrorListener() {
                 @Override
                 public void a() {
                     Toast.makeText(getApplicationContext(),"刷新成功",Toast.LENGTH_LONG).show();
                 }
             });
         }else{
-            mSearchNetErrorView.setVisibility(View.GONE);
+            mViewHolder. mSearchNetErrorView.setVisibility(View.GONE);
         }
         mSearchHeaderListener = new SearchHeaderListener(this);
-        mSearchHeaderView.setSearchHeaderListener(mSearchHeaderListener);
-        mSearchHeaderView.setSearchKeyword(mSearchKeyword);
-        mSearchTab.setSearchTabListener(this);
+        mViewHolder.mSearchHeaderView.setSearchHeaderListener(mSearchHeaderListener);
+        mViewHolder.mSearchHeaderView.setSearchKeyword(mSearchKeyword);
+        mViewHolder.mSearchTab.setSearchTabListener(this);
+
         mRecyclerViewAdapter = new RecyclerViewAdapter(this,this);
-        mPullLoadRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewAdapter.setHasMore(mHasMore);
+        mViewHolder.mPullLoadRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mViewHolder.mPullLoadRecyclerView.setOnScrollCallback(mScrollCallback);
         postSearchTitleHeight();
-        mPullLoadRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
+        mViewHolder.mPullLoadRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
                 StaggeredGridLayoutManager.VERTICAL));
-        mPullLoadRecyclerView.setSpanCount(2);
-        mPullLoadRecyclerView.setItemDecoration(new RecyclerViewItemDecoration());
+        mViewHolder.mPullLoadRecyclerView.setSpanCount(2);
+        mViewHolder.mPullLoadRecyclerView.setItemDecoration(new RecyclerViewItemDecoration());
         initData();
+      //  mViewHolder.mSearchPageView.setText(mPage,(int)mPageCount);
     }
 
 
@@ -205,13 +205,13 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void isOwnShop() {
-        mOwnShop = mSearchTab.isOwnShop();
+        mOwnShop = mViewHolder.mSearchTab.isOwnShop();
         initData();
     }
 
     @Override
     public void isPromotion() {
-        mIsPromotion = mSearchTab.isPromotion();
+        mIsPromotion = mViewHolder.mSearchTab.isPromotion();
         initData();
     }
 
@@ -230,8 +230,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     }
 
     public void onBack(){
-        if(mSearchTab.isSortLayoutVisibility()){
-            mSearchTab.hideSortLayout();
+        if(mViewHolder.mSearchTab.isSortLayoutVisibility()){
+            mViewHolder.mSearchTab.hideSortLayout();
             return;
         }
         finish();
@@ -249,16 +249,45 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
      * 点击搜索框时调用
      */
     private  void search(){
-        String keyword = mSearchHeaderView.getSearchKeyword();
-        IntentHelper.search(this,keyword);
+        String keyword = mViewHolder.mSearchHeaderView.getSearchKeyword();
+        IntentHelper.search(this, keyword);
     }
 
     private void postSearchTitleHeight(){
-        mSearchTitle.post(new Runnable() {
+        mViewHolder.mSearchTitle.post(new Runnable() {
             @Override
             public void run() {
-                mPullLoadRecyclerView.setPaddingTop(mSearchTitle.getHeight());
+                mViewHolder.mPullLoadRecyclerView.setPaddingTop(mViewHolder.mSearchTitle.getHeight());
             }
         });
+    }
+
+    public static ViewHolder getViewHolder(SearchResultActivity activity) {
+        return activity.mViewHolder;
+    }
+
+    public class ViewHolder{
+        private SearchResultActivity mSearchResultActivity;
+        public PullLoadRecyclerView mPullLoadRecyclerView;
+        public SearchNetErrorView mSearchNetErrorView;
+        public SearchNoResult mSearchNoResult;
+        public SearchPageView mSearchPageView;
+        public LinearLayout mSearchTitle;
+        public SearchTab mSearchTab;
+        SearchHeaderView mSearchHeaderView;
+        public ViewHolder(SearchResultActivity searchResultActivity) {
+            mSearchResultActivity = searchResultActivity;
+            initView();
+        }
+
+        public void initView(){
+            mPullLoadRecyclerView = (PullLoadRecyclerView)mSearchResultActivity.findViewById(R.id.pull_search_list);
+            mSearchNetErrorView = (SearchNetErrorView) mSearchResultActivity.findViewById(R.id.netErrorView);
+            mSearchPageView = (SearchPageView) mSearchResultActivity.findViewById(R.id.search_page_view);
+            mSearchNoResult = (SearchNoResult) mSearchResultActivity.findViewById(R.id.search_no_result_view);
+            mSearchTitle = (LinearLayout) mSearchResultActivity.findViewById(R.id.ll_search_title);
+            mSearchHeaderView = (SearchHeaderView) mSearchResultActivity.findViewById(R.id.searchHeader);
+            mSearchTab = (SearchTab) mSearchResultActivity.findViewById(R.id.searchTab);
+        }
     }
 }

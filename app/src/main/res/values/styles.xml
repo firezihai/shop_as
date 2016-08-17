@@ -158,4 +158,11 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowFrame">@null</item>
     </style>
+    <style name="pull_load_data">
+        <item name="android:maxWidth">18dp</item>
+        <item name="android:maxHeight">18dp</item>
+        <item name="android:indeterminateDrawable">@drawable/pull_progress_loading</item>
+        <item name="android:minWidth">18dp</item>
+        <item name="android:minHeight">18dp</item>
+    </style>
 </resources>

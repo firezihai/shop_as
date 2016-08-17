@@ -24,7 +24,6 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
     private ImageView mBack;
     private TextView mSearchKeyword;
     private TextView mFilter;
-    private Context mContext;
     private SearchHeaderListener mSearchHeaderListener;
     public SearchHeaderView(Context context) {
         super(context);
@@ -48,7 +47,6 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
     }
 
     public void initView(Context context){
-        mContext = context;
         LayoutInflater.from(context).inflate(R.layout.view_search_result_title, this);
         mBack= (ImageView)findViewById(R.id.back);
         mSearchKeyword = (TextView) findViewById(R.id.searchEdit);

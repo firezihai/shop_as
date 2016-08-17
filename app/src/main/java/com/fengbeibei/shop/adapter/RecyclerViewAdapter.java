@@ -6,12 +6,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.bean.Goods;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.common.SystemHelper;
+import com.fengbeibei.shop.utils.DensityUtil;
+import com.fengbeibei.shop.utils.ScreenUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -30,12 +35,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private static String TAG = "RecyclerViewAdapter";
     private Context mContext;
     private SearchResultActivity mSearchResultActivity;
+    private int mState = 101;
     public List<Goods> mGoodsList;
     private int mPage =0;
     /*ImageLoader*/
     protected ImageLoader mImageLoader = ImageLoader.getInstance();
     private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
+
+    private int VIEW_TYPE_BIG_ITEM = 1;
+    private int VIEW_TYPE_SMALL_ITEM = 2;
+    private int VIEW_TYPE_LOAD = 3;
+    private int VIEW_TYPE_FOOTER = 4;
+    private int VIEW_TYPE_NO_DATA = 5;
+    private boolean mHasMore = true;
+    private int mPageCount;
+    private int mViewType = 1;
     public RecyclerViewAdapter(Context context, SearchResultActivity searchResultActivity) {
         mContext = context;
         mSearchResultActivity = searchResultActivity;
@@ -61,9 +76,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         Log.i(TAG,"viewType:"+viewType);
         RecyclerViewHolder recyclerViewHolder = null;
         if(viewType == 1){
-            return getBigItemViewHolder(parent,viewType);
+            return new SearchBigItemViewHolder(viewType,inflateView(R.layout.layout_search_big_item));
+          //  return getBigItemViewHolder(parent,viewType);
         }else if(viewType == 2){
-            return getSmallItemViewHolder(parent,viewType);
+           //return getSmallItemViewHolder(parent,viewType);
+            return new SearchSmallItemViewHolder(viewType,inflateView(R.layout.layout_search_small_item));
+        }else if(viewType == 3){
+            return new SearchLoadMoreViewHolder(viewType,inflateView(R.layout.layout_search_load_more_footer));
         }
 
         return recyclerViewHolder;
@@ -72,20 +91,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         int type = getItemViewType(position);
-        if(type == 1){
+        if(type == VIEW_TYPE_BIG_ITEM){
             onBindBigItemViewHolder(holder,position);
+        }else if(type == VIEW_TYPE_SMALL_ITEM){
+            onBindSmallItemViewHolder(holder,position);
+        }else if(type == VIEW_TYPE_LOAD){
+            onBindLoadMoreViewHolder(holder,position);
         }
     }
 
-    public SearchBigItemViewHolder getBigItemViewHolder(ViewGroup parent,int viewType){
-        return new SearchBigItemViewHolder(viewType,InflateView(R.layout.layout_search_big_item));
-    }
-
-    public SearchSmallItemViewHolder getSmallItemViewHolder(ViewGroup parent,int viewType){
-        return new SearchSmallItemViewHolder(viewType,InflateView(R.layout.layout_search_small_item));
-    }
-
-    public View InflateView(int layoutRes){
+    public View inflateView(int layoutRes){
         return LayoutInflater.from(mContext).inflate(layoutRes,null);
     }
 
@@ -93,6 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         Goods goods= mGoodsList.get(position);
         SearchBigItemViewHolder bigItemViewHolder = (SearchBigItemViewHolder) holder;
         bigItemViewHolder.mGoodsPrice.setText(goods.getGoodsPrice());
+        setImageViewSize(bigItemViewHolder.mGoodsImage);
         mImageLoader.displayImage(goods.getGoodsImageUrl(), bigItemViewHolder.mGoodsImage, mOptions, mAnimateFirstListener);
         bigItemViewHolder.mGoodsName.setText(goods.getGoodsName());
        /* if(goods.getGoodsNUm > 0) {
@@ -143,19 +159,58 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         itemViewHolder.mPromotion3.setText("限时促销");
         itemViewHolder.mPromotion3.setVisibility(isXianShi);
     }
+
+    public void onBindLoadMoreViewHolder(RecyclerViewHolder holder,int position){
+        SearchLoadMoreViewHolder loadMoreViewHolder = (SearchLoadMoreViewHolder) holder;
+        if( mPageCount >0 && mHasMore){
+            loadMoreViewHolder.mProgressBarLayout.setVisibility(View.VISIBLE);
+            loadMoreViewHolder.mLoadError.setVisibility(View.GONE);
+            loadMoreViewHolder.mNoMore.setVisibility(View.GONE);
+        }else if(!mHasMore && mPageCount>0){
+            loadMoreViewHolder.mProgressBarLayout.setVisibility(View.GONE);
+            loadMoreViewHolder.mLoadError.setVisibility(View.GONE);
+            loadMoreViewHolder.mNoMore.setVisibility(View.VISIBLE);
+        }else if(mPageCount<=0){
+            loadMoreViewHolder.mProgressBarLayout.setVisibility(View.GONE);
+            loadMoreViewHolder.mLoadError.setVisibility(View.VISIBLE);
+            loadMoreViewHolder.mNoMore.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if(position == 1){
-            return 1;
-        }else if (position == 2){
-            return 2;
+        Log.i(TAG, "position:" + position);
+        if(position == getItemCount() -1 && isHasMore() ){
+            return VIEW_TYPE_LOAD;
+       /* }else if(mGoodsList.size() == position && isHasMore()){
+            return VIEW_TYPE_LOAD;*/
+        }else if(getItemCount() == position && !isHasMore()){
+          //  return VIEW_TYPE_FOOTER;
+        }else if(position == 0 ){
+        //    return VIEW_TYPE_NO_DATA;
         }
-        return 1;
+        return mViewType;
     }
 
-    public int getViewType(int position){
-       return 0;
+
+    public void setHasMore(boolean hasMore){
+        mHasMore = hasMore;
     }
 
+    public boolean isHasMore(){
+        return mHasMore;
+    }
+
+    public void setPageCount(int pageCount) {
+        mPageCount = pageCount;
+    }
+
+    private void setImageViewSize(ImageView imageView){
+        int width =  (ScreenUtil.getScreenWidth(mContext) - DensityUtil.dp2px(mContext,5.0f) ) /2;
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)imageView.getLayoutParams();
+        params.width = width;
+        params.height = width;
+
+    }
 
 }
