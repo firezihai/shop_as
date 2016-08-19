@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
  */
 public abstract  interface PullLoadRecyclerViewInterface {
     public abstract void showPage(RecyclerView recyclerView,int newState);
+    public abstract void pullLoadData(RecyclerView recyclerView,int dx,int dy);
     public abstract void showSearchTitle();
     public abstract void hideSearchTitle();
 }

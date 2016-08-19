@@ -20,6 +20,11 @@ import com.fengbeibei.shop.callback.PullLoadRecyclerViewOnScrollListener;
  * @created 2016-08-16 8:52
  */
 public class PullLoadRecyclerView extends RelativeLayout{
+    public final static int TYPE_GRID = 2;
+    public  final static int TYPE_LIST = 1;
+    private int[] mBigVisibleItem;
+    private int[] mSmallVisibleItem;
+    private int[] mLoadMoreVisibleItem;
     public PullLoadRecyclerViewOnScrollListener mOnScrollCallback;
     private StaggeredGridLayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
@@ -51,7 +56,9 @@ public class PullLoadRecyclerView extends RelativeLayout{
     public void setRecycleViewListener(){
 
     }
-
+    public StaggeredGridLayoutManager getLayoutManager(){
+        return mLayoutManager;
+    }
     public void setSpanCount(int spanCount){
         mLayoutManager.setSpanCount(spanCount);
     }
@@ -71,7 +78,12 @@ public class PullLoadRecyclerView extends RelativeLayout{
     }
 
     public void setAdapter(RecyclerViewAdapter adapter){
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerViewAdapter = adapter;
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+    }
+
+    public RecyclerViewAdapter getAdapter() {
+        return mRecyclerViewAdapter;
     }
 
     public void setPaddingTop(int paddingTop){
@@ -84,5 +96,29 @@ public class PullLoadRecyclerView extends RelativeLayout{
 
     public void setOnScrollCallback(PullLoadRecyclerViewOnScrollListener onScrollCallback) {
         mOnScrollCallback = onScrollCallback;
+    }
+
+    public int[] getBigVisibleItem() {
+        return mBigVisibleItem;
+    }
+
+    public int[] getSmallVisibleItem() {
+        return mSmallVisibleItem;
+    }
+
+    public int[] getLoadMoreVisibleItem() {
+        return mLoadMoreVisibleItem;
+    }
+
+    public void setBigVisibleItem(int[] bigVisibleItem) {
+        mBigVisibleItem = bigVisibleItem;
+    }
+
+    public void setSmallVisibleItem(int[] smallVisibleItem) {
+        mSmallVisibleItem = smallVisibleItem;
+    }
+
+    public void setLoadMoreVisibleItem(int[] loadMoreVisibleItem) {
+        mLoadMoreVisibleItem = loadMoreVisibleItem;
     }
 }

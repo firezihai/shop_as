@@ -3,6 +3,7 @@ package com.fengbeibei.shop.activity;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -42,7 +43,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     private String mSearchKeyword;
     private int mPage = 0;
     private long mPageCount = 0;
-    private boolean mHasMore;
+    private boolean mHasMore = true;
+    private boolean mLoadState = true;
     private RecyclerViewAdapter mRecyclerViewAdapter;
     private PullLoadRecyclerViewOnScrollListener mScrollCallback = new PullLoadRecyclerViewOnScrollListener(this);
     /**
@@ -80,6 +82,11 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void initData() {
+
+        if(mPage >= mPageCount && mPageCount != 0 && !mHasMore){
+            return ;
+        }
+        mPage = mPage +1;
         String url = Constants.SEARCH_GOODS_LIST_URL+"&page="+Constants.PAGESIZE+"&curpage="+mPage;
         if(mCateId != null && !mCateId.equals("")){
             url = url + "&gc_id="+mCateId;
@@ -98,20 +105,37 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         }
         url +="&type="+mOrderType;
         Log.i("RecyclerViewAdapter", url);
+        mLoadState = true;
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
+                mLoadState = false;
                 if (response.what == HttpStatus.SC_OK) {
                     Bundle bundle = response.getData();
-                    mHasMore = bundle.getBoolean(HttpClientHelper.HASMORE);
-                    mPageCount = bundle.getLong(HttpClientHelper.COUNT);
+                    //mHasMore = bundle.getBoolean(HttpClientHelper.HASMORE);
+                    //     mPageCount = bundle.getLong(HttpClientHelper.COUNT);
+
                     try {
                         String json = (String) response.obj;
                         JSONObject obj = new JSONObject(json);
                         String goodsListJson = obj.getString("list");
+
+
+                        mPageCount = obj.getLong(HttpClientHelper.COUNT);
+                        if ((mPageCount * Integer.parseInt(Constants.PAGESIZE ))> (Integer.parseInt(Constants.PAGESIZE ) * mPage)) {
+                            mHasMore = true;
+                        }else{
+                            mHasMore = false;
+                        }
                         List<Goods> goodsList = Goods.arrayListBeanFromData(goodsListJson);
                         mRecyclerViewAdapter.addData(goodsList);
-                        mViewHolder.mSearchPageView.setText(mPage+"",mPageCount+"");
+                        mRecyclerViewAdapter.setHasMore(mHasMore);
+                        mRecyclerViewAdapter.setScrollEnd(false);
+                        mRecyclerViewAdapter.setPageCount(mPageCount);
+                        mViewHolder.mSearchPageView.setText(mPage + "", mPageCount + "");
+                        Log.i("RecyclerOnScroll", "mPageCount=" + mPageCount + "-----mPage=" + mPage);
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -222,7 +246,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             onBack();
         }
         //return super.onKeyDown(keyCode, event);
@@ -289,5 +313,16 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
             mSearchHeaderView = (SearchHeaderView) mSearchResultActivity.findViewById(R.id.searchHeader);
             mSearchTab = (SearchTab) mSearchResultActivity.findViewById(R.id.searchTab);
         }
+    }
+
+    public static void updateData(SearchResultActivity activity,int scrollState){
+        if(scrollState != RecyclerView.SCROLL_STATE_IDLE && !activity.mLoadState) {
+            activity.initData();
+        }
+    }
+
+
+    public boolean isLoadState() {
+        return mLoadState;
     }
 }

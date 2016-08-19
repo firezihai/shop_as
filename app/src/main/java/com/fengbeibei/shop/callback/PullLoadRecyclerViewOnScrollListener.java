@@ -29,6 +29,11 @@ public class PullLoadRecyclerViewOnScrollListener implements PullLoadRecyclerVie
     }
 
     @Override
+    public void pullLoadData(RecyclerView recyclerView, int dx, int dy) {
+        SearchResultActivity.updateData(mSearchResultActivity,recyclerView.getScrollState());
+    }
+
+    @Override
     public void showPage(RecyclerView recyclerView,int newState) {
         if(newState == RecyclerView.SCROLL_STATE_IDLE){
             SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchPageView.setVisibility(View.GONE);

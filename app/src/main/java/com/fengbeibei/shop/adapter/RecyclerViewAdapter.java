@@ -2,6 +2,7 @@ package com.fengbeibei.shop.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private boolean mHasMore = true;
     private int mPageCount;
     private int mViewType = 1;
+    private int mItemCount = 0;
+    private boolean mScrollEnd = false;
     public RecyclerViewAdapter(Context context, SearchResultActivity searchResultActivity) {
         mContext = context;
         mSearchResultActivity = searchResultActivity;
@@ -64,16 +67,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         }
         mPage +=1;
         mGoodsList.addAll(data);
+        mItemCount = mGoodsList.size();
         notifyDataSetChanged();
     }
     @Override
     public int getItemCount() {
-        return mGoodsList != null ? mGoodsList.size() : 0;
+        int itemCount1 = 0;
+        int itemCount2 ;
+        if(mGoodsList != null){
+            itemCount1 = mGoodsList.size();
+            if(mScrollEnd){
+                itemCount2 =  itemCount1+1;
+            }else {
+                itemCount2 = itemCount1;
+            }
+        }else{
+            itemCount2 = itemCount1;
+        }
+        return itemCount2;
     }
+
+
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i(TAG,"viewType:"+viewType);
+        Log.i(TAG, "viewType:" + viewType);
         RecyclerViewHolder recyclerViewHolder = null;
         if(viewType == 1){
             return new SearchBigItemViewHolder(viewType,inflateView(R.layout.layout_search_big_item));
@@ -179,8 +197,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        Log.i(TAG, "position:" + position);
-        if(position == getItemCount() -1 && isHasMore() ){
+       Log.i(TAG, "position:" + position);
+        if(position == getItemCount() -1  && isHasMore() ){
             return VIEW_TYPE_LOAD;
        /* }else if(mGoodsList.size() == position && isHasMore()){
             return VIEW_TYPE_LOAD;*/
@@ -201,8 +219,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         return mHasMore;
     }
 
-    public void setPageCount(int pageCount) {
-        mPageCount = pageCount;
+    public void setPageCount(long pageCount) {
+        mPageCount = (int)pageCount;
     }
 
     private void setImageViewSize(ImageView imageView){
@@ -213,4 +231,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     }
 
+    public void setScrollEnd(boolean scrollEnd) {
+        mScrollEnd = scrollEnd;
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+        if(holder instanceof SearchLoadMoreViewHolder){
+            layoutParams.setFullSpan(true);
+        }
+    }
 }
