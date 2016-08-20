@@ -82,11 +82,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void initData() {
-
-        if(mPage >= mPageCount && mPageCount != 0 && !mHasMore){
-            return ;
-        }
-        mPage = mPage +1;
         String url = Constants.SEARCH_GOODS_LIST_URL+"&page="+Constants.PAGESIZE+"&curpage="+mPage;
         if(mCateId != null && !mCateId.equals("")){
             url = url + "&gc_id="+mCateId;
@@ -103,7 +98,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         if(mIsPromotion){
             url +="is_promotion=1";
         }
-        url +="&type="+mOrderType;
+        url +="&key="+mOrderType;
         Log.i("RecyclerViewAdapter", url);
         mLoadState = true;
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
@@ -121,7 +116,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
                         String goodsListJson = obj.getString("list");
 
 
-                        mPageCount = obj.getLong(HttpClientHelper.COUNT);
+                        mPageCount = obj.getLong("pagecount");
                         if ((mPageCount * Integer.parseInt(Constants.PAGESIZE ))> (Integer.parseInt(Constants.PAGESIZE ) * mPage)) {
                             mHasMore = true;
                         }else{
@@ -129,13 +124,11 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
                         }
                         List<Goods> goodsList = Goods.arrayListBeanFromData(goodsListJson);
                         mRecyclerViewAdapter.addData(goodsList);
+
                         mRecyclerViewAdapter.setHasMore(mHasMore);
                         mRecyclerViewAdapter.setScrollEnd(false);
                         mRecyclerViewAdapter.setPageCount(mPageCount);
                         mViewHolder.mSearchPageView.setText(mPage + "", mPageCount + "");
-                        Log.i("RecyclerOnScroll", "mPageCount=" + mPageCount + "-----mPage=" + mPage);
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -179,7 +172,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         postSearchTitleHeight();
         mViewHolder.mPullLoadRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
                 StaggeredGridLayoutManager.VERTICAL));
-        mViewHolder.mPullLoadRecyclerView.setSpanCount(2);
+        mViewHolder.mPullLoadRecyclerView.setSpanCount(PullLoadRecyclerView.TYPE_GRID);
         mViewHolder.mPullLoadRecyclerView.setItemDecoration(new RecyclerViewItemDecoration());
         initData();
       //  mViewHolder.mSearchPageView.setText(mPage,(int)mPageCount);
@@ -189,6 +182,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     @Override
     public void mixSort() {
         mOrderType = 2;
+        mPage = 0;
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
@@ -196,6 +191,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void priceUp() {
         mOrderType = 3;
         mOrder = "ASC";
+        mPage = 0;
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
@@ -203,6 +200,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void priceDown() {
         mOrderType = 3;
         mOrder = "DESC";
+        mPage = 0;
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
@@ -210,6 +209,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void evalUp() {
         mOrderType = 4;
         mOrder = "ASC";
+        mPage = 0;
         initData();
     }
 
@@ -217,6 +217,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void evalDown() {
         mOrderType = 4;
         mOrder = "DESC";
+        mPage = 0;
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
@@ -224,24 +226,33 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void dateSort() {
         mOrderType = 5;
         mOrder = "DESC";
+        mPage = 0;
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
     @Override
     public void isOwnShop() {
+        mPage = 0;
         mOwnShop = mViewHolder.mSearchTab.isOwnShop();
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
     @Override
     public void isPromotion() {
+        mPage = 0;
         mIsPromotion = mViewHolder.mSearchTab.isPromotion();
+        mRecyclerViewAdapter.clearData();
         initData();
     }
 
     @Override
     public void SalesSort() {
-
+        mPage = 0;
+        mRecyclerViewAdapter.clearData();
+        mOrderType = 1;
+        initData();
     }
 
     @Override
@@ -316,11 +327,15 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     }
 
     public static void updateData(SearchResultActivity activity,int scrollState){
-        if(scrollState != RecyclerView.SCROLL_STATE_IDLE && !activity.mLoadState) {
+     //   Log.i("RecyclerOnScroll","mState"+scrollState+" ");
+        if(scrollState != RecyclerView.SCROLL_STATE_IDLE && !activity.mLoadState && activity.mPage<activity.mPageCount) {
             activity.initData();
         }
     }
 
+    public void setPage(int page) {
+        mPage = page;
+    }
 
     public boolean isLoadState() {
         return mLoadState;

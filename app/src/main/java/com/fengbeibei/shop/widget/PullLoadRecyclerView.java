@@ -21,7 +21,7 @@ import com.fengbeibei.shop.callback.PullLoadRecyclerViewOnScrollListener;
  */
 public class PullLoadRecyclerView extends RelativeLayout{
     public final static int TYPE_GRID = 2;
-    public  final static int TYPE_LIST = 1;
+    public final static int TYPE_LIST = 1;
     private int[] mBigVisibleItem;
     private int[] mSmallVisibleItem;
     private int[] mLoadMoreVisibleItem;
@@ -53,14 +53,12 @@ public class PullLoadRecyclerView extends RelativeLayout{
         mRecyclerView.addOnScrollListener(mOnScrollListener);
     }
 
-    public void setRecycleViewListener(){
-
-    }
     public StaggeredGridLayoutManager getLayoutManager(){
         return mLayoutManager;
     }
     public void setSpanCount(int spanCount){
         mLayoutManager.setSpanCount(spanCount);
+        mRecyclerViewAdapter.setViewType(spanCount);
     }
 
     public int getSpanCount(){
@@ -121,4 +119,5 @@ public class PullLoadRecyclerView extends RelativeLayout{
     public void setLoadMoreVisibleItem(int[] loadMoreVisibleItem) {
         mLoadMoreVisibleItem = loadMoreVisibleItem;
     }
+
 }

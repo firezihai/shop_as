@@ -7,7 +7,18 @@ package com.fengbeibei.shop.interf;
  * @created 2016-08-10 12:10
  */
 public abstract interface SearchHeaderInterface {
+    /**
+     * 点击返回时调用
+     */
     public abstract void onBack();
-    public abstract void onFilter();
+
+    /**
+     * 网格视图和列表视图切换
+     */
+    public abstract void onSwitchView();
+
+    /**
+     * 点击搜索框时回调
+     */
     public abstract void onSearch();
 }

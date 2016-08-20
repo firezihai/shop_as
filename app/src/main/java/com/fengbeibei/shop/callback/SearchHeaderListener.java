@@ -1,8 +1,11 @@
 package com.fengbeibei.shop.callback;
 
+import android.support.v7.widget.RecyclerView;
+
 import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.interf.SearchHeaderInterface;
+import com.fengbeibei.shop.widget.PullLoadRecyclerView;
 
 /**
  * SearchHeaderListener
@@ -23,8 +26,14 @@ public class SearchHeaderListener implements SearchHeaderInterface {
     }
 
     @Override
-    public void onFilter() {
-
+    public void onSwitchView() {
+       // RecyclerView.LayoutManager layoutManager =  SearchResultActivity.getViewHolder(mSearchResultActivity).mPullLoadRecyclerView.getLayoutManager();
+       int spanCount =SearchResultActivity.getViewHolder(mSearchResultActivity).mPullLoadRecyclerView.getSpanCount();
+        if(spanCount == PullLoadRecyclerView.TYPE_LIST){
+            SearchResultActivity.getViewHolder(mSearchResultActivity).mPullLoadRecyclerView.setSpanCount(PullLoadRecyclerView.TYPE_GRID);
+        }else{
+            SearchResultActivity.getViewHolder(mSearchResultActivity).mPullLoadRecyclerView.setSpanCount(PullLoadRecyclerView.TYPE_LIST);
+        }
     }
 
     @Override

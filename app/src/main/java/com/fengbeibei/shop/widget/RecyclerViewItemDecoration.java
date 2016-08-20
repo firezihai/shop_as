@@ -24,7 +24,6 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration{
     @Override
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
         int spanCount = getSpanCount(parent);
-        Log.i(TAG,itemPosition+"  dd "+itemPosition%2);
         RecyclerViewAdapter adapter = (RecyclerViewAdapter)parent.getAdapter();
         if(spanCount == 2){
             int space = DensityUtil.dp2px(MyApplication.getContext(),5.0f);
@@ -49,7 +48,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration{
    public int getSpanCount(RecyclerView recyclerView){
        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
        if(layoutManager instanceof StaggeredGridLayoutManager){
-        return ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
+            return ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
        }
        return -1;
    }

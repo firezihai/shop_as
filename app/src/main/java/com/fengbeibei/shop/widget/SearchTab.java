@@ -206,8 +206,11 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
     }
 
     private void salesSort(){
-        setSelected(false,false,false,false,false,false,true);
-        setTickVisibility(View.GONE, View.GONE, View.GONE, View.GONE, View.GONE, View.GONE);
+        if(!mTvSales.isSelected()) {
+            setSelected(false, false, false, false, false, false, true);
+            setTickVisibility(View.GONE, View.GONE, View.GONE, View.GONE, View.GONE, View.GONE);
+            mSearchTabInterface.SalesSort();
+        }
     }
     public void setSearchTabListener(SearchTabInterface searchTabListener){
         mSearchTabInterface = searchTabListener;

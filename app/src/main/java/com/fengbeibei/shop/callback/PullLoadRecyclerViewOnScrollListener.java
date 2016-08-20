@@ -24,8 +24,6 @@ public class PullLoadRecyclerViewOnScrollListener implements PullLoadRecyclerVie
     @Override
     public void hideSearchTitle() {
         SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTitle.animate().translationY(-SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTab.getHeight()).setInterpolator(new DecelerateInterpolator(2.0f));
-
-
     }
 
     @Override

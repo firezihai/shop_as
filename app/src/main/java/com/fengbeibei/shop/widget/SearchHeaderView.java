@@ -50,7 +50,7 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
         LayoutInflater.from(context).inflate(R.layout.view_search_result_title, this);
         mBack= (ImageView)findViewById(R.id.back);
         mSearchKeyword = (TextView) findViewById(R.id.searchEdit);
-        mFilter = (TextView) findViewById(R.id.filter);
+        mFilter = (TextView) findViewById(R.id.tv_switch_view);
         mBack.setOnClickListener(this);
         mSearchKeyword.setOnClickListener(this);
         mFilter.setOnClickListener(this);
@@ -69,8 +69,8 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
             case R.id.searchEdit:
                     mSearchHeaderListener.onSearch();
                 break;
-            case R.id.filter:
-                mSearchHeaderListener.onFilter();
+            case R.id.tv_switch_view:
+                mSearchHeaderListener.onSwitchView();
                 break;
         }
     }

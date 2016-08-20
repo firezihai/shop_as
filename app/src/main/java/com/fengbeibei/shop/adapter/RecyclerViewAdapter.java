@@ -44,8 +44,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
     private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
 
-    private int VIEW_TYPE_BIG_ITEM = 1;
-    private int VIEW_TYPE_SMALL_ITEM = 2;
+    private int VIEW_TYPE_BIG_ITEM = 2;
+    private int VIEW_TYPE_SMALL_ITEM = 1;
     private int VIEW_TYPE_LOAD = 3;
     private int VIEW_TYPE_FOOTER = 4;
     private int VIEW_TYPE_NO_DATA = 5;
@@ -66,24 +66,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
             mGoodsList.clear();
         }
         mPage +=1;
+        mSearchResultActivity.setPage(mPage);
         mGoodsList.addAll(data);
         mItemCount = mGoodsList.size();
         notifyDataSetChanged();
     }
     @Override
     public int getItemCount() {
+        Log.i(TAG,"getItemCount");
         int itemCount1 = 0;
         int itemCount2 ;
         if(mGoodsList != null){
             itemCount1 = mGoodsList.size();
-            if(mScrollEnd){
+            if(isScrollEnd()){
                 itemCount2 =  itemCount1+1;
+                Log.i(TAG,"mScrollEnd "+itemCount2+"");
             }else {
                 itemCount2 = itemCount1;
             }
         }else{
             itemCount2 = itemCount1;
         }
+        Log.i(TAG,itemCount2+"");
         return itemCount2;
     }
 
@@ -91,15 +95,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i(TAG, "viewType:" + viewType);
+        Log.i(TAG,"onCreateViewHolder");
         RecyclerViewHolder recyclerViewHolder = null;
-        if(viewType == 1){
+        if(viewType == VIEW_TYPE_BIG_ITEM){
             return new SearchBigItemViewHolder(viewType,inflateView(R.layout.layout_search_big_item));
           //  return getBigItemViewHolder(parent,viewType);
-        }else if(viewType == 2){
+        }else if(viewType == VIEW_TYPE_SMALL_ITEM){
            //return getSmallItemViewHolder(parent,viewType);
             return new SearchSmallItemViewHolder(viewType,inflateView(R.layout.layout_search_small_item));
-        }else if(viewType == 3){
+        }else if(viewType == VIEW_TYPE_LOAD){
             return new SearchLoadMoreViewHolder(viewType,inflateView(R.layout.layout_search_load_more_footer));
         }
 
@@ -108,6 +112,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+        Log.i(TAG,"onBindViewHolder");
         int type = getItemViewType(position);
         if(type == VIEW_TYPE_BIG_ITEM){
             onBindBigItemViewHolder(holder,position);
@@ -197,7 +202,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public int getItemViewType(int position) {
-       Log.i(TAG, "position:" + position);
         if(position == getItemCount() -1  && isHasMore() ){
             return VIEW_TYPE_LOAD;
        /* }else if(mGoodsList.size() == position && isHasMore()){
@@ -235,6 +239,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         mScrollEnd = scrollEnd;
     }
 
+    public boolean isScrollEnd() {
+        return mScrollEnd;
+    }
+
     @Override
     public void onViewAttachedToWindow(RecyclerViewHolder holder) {
         super.onViewAttachedToWindow(holder);
@@ -243,4 +251,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
             layoutParams.setFullSpan(true);
         }
     }
+
+    public void setViewType(int viewType) {
+        mViewType = viewType;
+    }
+
+    public void clearData(){
+        mGoodsList.clear();
+    }
+
 }

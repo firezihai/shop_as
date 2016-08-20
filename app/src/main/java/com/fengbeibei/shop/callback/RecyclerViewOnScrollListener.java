@@ -28,36 +28,26 @@ public class RecyclerViewOnScrollListener extends RecyclerView.OnScrollListener{
         int spanCount = layoutManager.getSpanCount();
 
         int[] position =layoutManager.findLastVisibleItemPositions(new int[spanCount]);
-        int max = position[0];
+        int max2 = position[0];
+        int max = findMax(position);
+        int length  = position.length;
         int[] firstVisible = layoutManager.findFirstVisibleItemPositions(new int[spanCount]);
         int first = firstVisible[0];
+        Log.i("RecyclerOnScroll", "childCount=" + childCount + "----itemCount=" + itemCount + "---spanCount=" + spanCount + "---dy=" + dy+"--max="+max+"--first="+first+"--max2="+max2);
         RecyclerViewAdapter adapter = mPullLoadRecyclerView.getAdapter();
-       // SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTab.getHeight()
         if(dy > 0){
             mPullLoadRecyclerView.mOnScrollCallback.hideSearchTitle();
         }else{
             mPullLoadRecyclerView.mOnScrollCallback.showSearchTitle();
         }
-        if((max + spanCount) == itemCount) {
-
+        if(max2 + spanCount == itemCount){
+            Log.i("RecyclerOnScroll", "max + spanCount" + itemCount);
             adapter.setScrollEnd(true);
-            mPullLoadRecyclerView.mOnScrollCallback.pullLoadData(recyclerView,dx,dy);
         }
-       /* if(spanCount == 1){
-               int[] visibleItem = mPullLoadRecyclerView.getSmallVisibleItem();
-                if(visibleItem.length == 0){
-                    int[] position = new int[spanCount];
-                    mPullLoadRecyclerView.setBigVisibleItem(position);
-                }else{
-                    int[] bigVisibleItem = mPullLoadRecyclerView.getBigVisibleItem();
-                    int[] position = layoutManager.findLastVisibleItemPositions(bigVisibleItem);
-                    mPullLoadRecyclerView.setBigVisibleItem(position);
-                }
-        }else{
+        if(childCount > 0 && max== itemCount -1 && dy >0){
 
-        }*/
-
-        Log.i("RecyclerOnScroll", "childCount=" + childCount + "----itemCount=" + itemCount + "---spanCount=" + spanCount + "---dy=" + dy+"--max="+max+"--first="+first);
+       //     mPullLoadRecyclerView.mOnScrollCallback.pullLoadData(recyclerView, dx, dy);
+        }
     }
 
     public RecyclerViewOnScrollListener(PullLoadRecyclerView pullLoadRecyclerView) {
@@ -67,8 +57,16 @@ public class RecyclerViewOnScrollListener extends RecyclerView.OnScrollListener{
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        //super.onScrollStateChanged(recyclerView, newState);
-      //  mPullLoadRecyclerView.mOnScrollCallback.showSearchTitle();
         mPullLoadRecyclerView.mOnScrollCallback.showPage(recyclerView,newState);
+    }
+
+    public int findMax(int[] lastPosition){
+        int max = lastPosition[0];
+        for(int value : lastPosition ){
+            if(value > max){
+                max = value;
+            }
+        }
+        return max;
     }
 }
