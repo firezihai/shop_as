@@ -56,7 +56,7 @@ public class LoginActivity extends BaseActivity{
         mAccountEdit = (EditText)findViewById(R.id.account_edit);
         mPasswordEdit =(EditText)findViewById(R.id.password_edit);
         mSubmitBtn = (Button)findViewById(R.id.submit_btn);
-        mSubmitBtn.setClickable(false);
+        mSubmitBtn.setEnabled(false);
         mCancelLoginBtn = (Button) findViewById(R.id.cancel_login);
         mCancelLoginBtn.setOnClickListener(this);
         mAccountEdit.addTextChangedListener(new TextWatcher(){
@@ -77,12 +77,9 @@ public class LoginActivity extends BaseActivity{
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
                 if(s.length() >=2 && mPasswordStr.length() >= 6){
-                    mSubmitBtn.setClickable(true);
-                    changeButtonStyle();
+                    mSubmitBtn.setEnabled(true);
                 }else{
-
-                    mSubmitBtn.setClickable(false);
-                    changeButtonStyle();
+                    mSubmitBtn.setEnabled(false);
                 }
                 mAccountStr= mAccountEdit.getText().toString();
             }
@@ -94,11 +91,9 @@ public class LoginActivity extends BaseActivity{
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
                 if(s.length() >= 6 && mAccountStr.length() >= 2){
-                    mSubmitBtn.setClickable(true);
-                    changeButtonStyle();
+                    mSubmitBtn.setEnabled(true);
                 }else{
-                    mSubmitBtn.setClickable(false);
-                    changeButtonStyle();
+                    mSubmitBtn.setEnabled(false);
                 }
 
                 mPasswordStr = mPasswordEdit.getText().toString();
@@ -175,24 +170,7 @@ public class LoginActivity extends BaseActivity{
 
         });
     }
-    @TargetApi(23)
-	public void changeButtonStyle(){
-		if(mSubmitBtn.isClickable()){
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-				mSubmitBtn.setTextColor(getResources().getColor(R.color.white,null));
-			}else{
-				mSubmitBtn.setTextColor(getResources().getColor(R.color.white));
-			}
-			mSubmitBtn.setBackgroundResource(R.color.btn_enable_bg_color);
-		}else{
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-				mSubmitBtn.setTextColor(getResources().getColor(R.color.btn_disable_text_color,null));
-			}else{
-				mSubmitBtn.setTextColor(getResources().getColor(R.color.btn_disable_text_color));
-			}
-			mSubmitBtn.setBackgroundResource(R.color.btn_disable_bg_color);
-		}
-	}
+
 
 	
 }

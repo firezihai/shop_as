@@ -60,7 +60,7 @@ public class CategoryGridViewAdapter extends BaseAdapter {
 
 		ViewHolder holder;
 		if ( convertView == null){
-			convertView = LayoutInflater.from(mContext).inflate(R.layout.child_category_grid, null);
+			convertView = LayoutInflater.from(mContext).inflate(R.layout.category_child_grid, null);
 			holder = new ViewHolder();
 			holder.gcName = (TextView)convertView.findViewById(R.id.gcName);
 			holder.gcImage = (ImageView)convertView.findViewById(R.id.gcImage);

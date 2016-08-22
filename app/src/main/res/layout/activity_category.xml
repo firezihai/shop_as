@@ -30,7 +30,7 @@
         <ListView
             android:id="@+id/parentCategory"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:listSelector="@android:color/transparent"
             android:background="@color/white"
             android:choiceMode="singleChoice"
@@ -44,13 +44,17 @@
             android:id="@+id/childCategory"
             android:layout_width="0.0px"
             android:layout_height="match_parent"
+            android:layout_weight="3.0"
             android:paddingTop="5.0dip"
+            android:paddingBottom="5dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:listSelector="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:groupIndicator="@null"
             android:fadingEdge="none"
-            android:layout_weight="3.0"
             android:headerDividersEnabled="true"
-            android:dividerHeight="0.0dip"></ExpandableListView>
+            android:dividerHeight="0.0dp"></ExpandableListView>
     </LinearLayout>
 
 </LinearLayout>

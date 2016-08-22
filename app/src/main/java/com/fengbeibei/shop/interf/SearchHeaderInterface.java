@@ -1,5 +1,7 @@
 package com.fengbeibei.shop.interf;
 
+import android.widget.ImageView;
+
 /**
  * SearchHeaderListener
  *
@@ -15,7 +17,7 @@ public abstract interface SearchHeaderInterface {
     /**
      * 网格视图和列表视图切换
      */
-    public abstract void onSwitchView();
+    public abstract void onSwitchView(ImageView imageViews);
 
     /**
      * 点击搜索框时回调

@@ -23,7 +23,7 @@ import com.fengbeibei.shop.interf.SearchHeaderInterface;
 public class SearchHeaderView extends FrameLayout implements View.OnClickListener{
     private ImageView mBack;
     private TextView mSearchKeyword;
-    private TextView mFilter;
+    private ImageView mSwitchBtn;
     private SearchHeaderListener mSearchHeaderListener;
     public SearchHeaderView(Context context) {
         super(context);
@@ -50,10 +50,10 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
         LayoutInflater.from(context).inflate(R.layout.view_search_result_title, this);
         mBack= (ImageView)findViewById(R.id.back);
         mSearchKeyword = (TextView) findViewById(R.id.searchEdit);
-        mFilter = (TextView) findViewById(R.id.tv_switch_view);
+        mSwitchBtn = (ImageView) findViewById(R.id.iv_switch_view);
         mBack.setOnClickListener(this);
         mSearchKeyword.setOnClickListener(this);
-        mFilter.setOnClickListener(this);
+        mSwitchBtn.setOnClickListener(this);
     }
 
     public void setSearchHeaderListener(SearchHeaderListener searchHeaderListener) {
@@ -69,8 +69,8 @@ public class SearchHeaderView extends FrameLayout implements View.OnClickListene
             case R.id.searchEdit:
                     mSearchHeaderListener.onSearch();
                 break;
-            case R.id.tv_switch_view:
-                mSearchHeaderListener.onSwitchView();
+            case R.id.iv_switch_view:
+                mSearchHeaderListener.onSwitchView(mSwitchBtn);
                 break;
         }
     }

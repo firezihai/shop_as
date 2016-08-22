@@ -26,27 +26,16 @@ public class RecyclerViewOnScrollListener extends RecyclerView.OnScrollListener{
 
         int itemCount = layoutManager.getItemCount();
         int spanCount = layoutManager.getSpanCount();
-
         int[] position =layoutManager.findLastVisibleItemPositions(new int[spanCount]);
-        int max2 = position[0];
         int max = findMax(position);
-        int length  = position.length;
-        int[] firstVisible = layoutManager.findFirstVisibleItemPositions(new int[spanCount]);
-        int first = firstVisible[0];
-        Log.i("RecyclerOnScroll", "childCount=" + childCount + "----itemCount=" + itemCount + "---spanCount=" + spanCount + "---dy=" + dy+"--max="+max+"--first="+first+"--max2="+max2);
-        RecyclerViewAdapter adapter = mPullLoadRecyclerView.getAdapter();
-        if(dy > 0){
+        if(dy > 0 && max>6 ){
             mPullLoadRecyclerView.mOnScrollCallback.hideSearchTitle();
         }else{
             mPullLoadRecyclerView.mOnScrollCallback.showSearchTitle();
         }
-        if(max2 + spanCount == itemCount){
-            Log.i("RecyclerOnScroll", "max + spanCount" + itemCount);
-            adapter.setScrollEnd(true);
-        }
         if(childCount > 0 && max== itemCount -1 && dy >0){
 
-       //     mPullLoadRecyclerView.mOnScrollCallback.pullLoadData(recyclerView, dx, dy);
+           mPullLoadRecyclerView.mOnScrollCallback.pullLoadData(recyclerView, dx, dy);
         }
     }
 

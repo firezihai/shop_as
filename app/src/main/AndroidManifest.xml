@@ -40,16 +40,17 @@
         <activity
             android:name=".activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SearchResultActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LoginActivity"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            android:label="@string/login"></activity>
+            android:label="@string/login"/>
         <activity
             android:name=".activity.GoodsDetailActivity"
             android:screenOrientation="portrait"
@@ -58,19 +59,19 @@
         </activity>
         <activity
             android:name=".activity.OrderListActivity"
-            android:label="全部订单"></activity>
+            android:label="全部订单"/>
         <activity
             android:name=".zxing.activity.CaptureActivity"
-            android:label="扫瞄二维码"></activity>
+            android:label="扫瞄二维码"/>
         <activity
             android:name=".activity.SubjectWebActivity"
             android:screenOrientation="portrait"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name"/>
         <activity
             android:name=".activity.PhotoActivity"
             android:theme="@style/AppGoodsPhotoTheme"
             android:screenOrientation="portrait"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name"/>
     </application>
 
 </manifest>

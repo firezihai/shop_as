@@ -14,13 +14,11 @@ import android.widget.ListView;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.CategoryAdapter;
 import com.fengbeibei.shop.adapter.CategoryExpandableListAdapter;
-import com.fengbeibei.shop.adapter.CategoryGridViewAdapter;
 import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
-import com.fengbeibei.shop.widget.MyGridView;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -52,7 +50,7 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.category;
+        return R.layout.activity_category;
     }
 
     @Override

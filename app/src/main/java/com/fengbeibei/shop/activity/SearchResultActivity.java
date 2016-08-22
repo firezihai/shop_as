@@ -114,19 +114,15 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
                         String json = (String) response.obj;
                         JSONObject obj = new JSONObject(json);
                         String goodsListJson = obj.getString("list");
-
-
                         mPageCount = obj.getLong("pagecount");
+                        List<Goods> goodsList = Goods.arrayListBeanFromData(goodsListJson);
+                        mRecyclerViewAdapter.addData(goodsList);
                         if ((mPageCount * Integer.parseInt(Constants.PAGESIZE ))> (Integer.parseInt(Constants.PAGESIZE ) * mPage)) {
                             mHasMore = true;
                         }else{
                             mHasMore = false;
                         }
-                        List<Goods> goodsList = Goods.arrayListBeanFromData(goodsListJson);
-                        mRecyclerViewAdapter.addData(goodsList);
-
                         mRecyclerViewAdapter.setHasMore(mHasMore);
-                        mRecyclerViewAdapter.setScrollEnd(false);
                         mRecyclerViewAdapter.setPageCount(mPageCount);
                         mViewHolder.mSearchPageView.setText(mPage + "", mPageCount + "");
                     } catch (JSONException e) {
@@ -170,12 +166,10 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         mViewHolder.mPullLoadRecyclerView.setAdapter(mRecyclerViewAdapter);
         mViewHolder.mPullLoadRecyclerView.setOnScrollCallback(mScrollCallback);
         postSearchTitleHeight();
-        mViewHolder.mPullLoadRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
+        mViewHolder.mPullLoadRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(PullLoadRecyclerView.TYPE_LIST,
                 StaggeredGridLayoutManager.VERTICAL));
-        mViewHolder.mPullLoadRecyclerView.setSpanCount(PullLoadRecyclerView.TYPE_GRID);
         mViewHolder.mPullLoadRecyclerView.setItemDecoration(new RecyclerViewItemDecoration());
         initData();
-      //  mViewHolder.mSearchPageView.setText(mPage,(int)mPageCount);
     }
 
 

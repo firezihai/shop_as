@@ -52,7 +52,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private boolean mHasMore = true;
     private int mPageCount;
     private int mViewType = 1;
-    private int mItemCount = 0;
     private boolean mScrollEnd = false;
     public RecyclerViewAdapter(Context context, SearchResultActivity searchResultActivity) {
         mContext = context;
@@ -68,26 +67,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         mPage +=1;
         mSearchResultActivity.setPage(mPage);
         mGoodsList.addAll(data);
-        mItemCount = mGoodsList.size();
         notifyDataSetChanged();
     }
     @Override
     public int getItemCount() {
-        Log.i(TAG,"getItemCount");
         int itemCount1 = 0;
         int itemCount2 ;
         if(mGoodsList != null){
             itemCount1 = mGoodsList.size();
-            if(isScrollEnd()){
+            if(mPageCount>0){
                 itemCount2 =  itemCount1+1;
-                Log.i(TAG,"mScrollEnd "+itemCount2+"");
             }else {
                 itemCount2 = itemCount1;
             }
         }else{
             itemCount2 = itemCount1;
         }
-        Log.i(TAG,itemCount2+"");
+      //  Log.i(TAG,"mScrollEnd "+itemCount2+"");
         return itemCount2;
     }
 
@@ -95,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i(TAG,"onCreateViewHolder");
+     //   Log.i(TAG,"onCreateViewHolder");
         RecyclerViewHolder recyclerViewHolder = null;
         if(viewType == VIEW_TYPE_BIG_ITEM){
             return new SearchBigItemViewHolder(viewType,inflateView(R.layout.layout_search_big_item));
@@ -112,7 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        Log.i(TAG,"onBindViewHolder");
+        //Log.i(TAG,"onBindViewHolder position="+position);
         int type = getItemViewType(position);
         if(type == VIEW_TYPE_BIG_ITEM){
             onBindBigItemViewHolder(holder,position);
@@ -185,6 +181,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     public void onBindLoadMoreViewHolder(RecyclerViewHolder holder,int position){
         SearchLoadMoreViewHolder loadMoreViewHolder = (SearchLoadMoreViewHolder) holder;
+     //   Log.i(TAG,"onBindLoadMoreViewHolder mHasMore="+mHasMore);
         if( mPageCount >0 && mHasMore){
             loadMoreViewHolder.mProgressBarLayout.setVisibility(View.VISIBLE);
             loadMoreViewHolder.mLoadError.setVisibility(View.GONE);
@@ -202,7 +199,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if(position == getItemCount() -1  && isHasMore() ){
+        if(position == getItemCount() -1  && mPageCount>0 ){
             return VIEW_TYPE_LOAD;
        /* }else if(mGoodsList.size() == position && isHasMore()){
             return VIEW_TYPE_LOAD;*/
@@ -234,15 +231,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         params.height = width;
 
     }
-
-    public void setScrollEnd(boolean scrollEnd) {
-        mScrollEnd = scrollEnd;
-    }
-
-    public boolean isScrollEnd() {
-        return mScrollEnd;
-    }
-
     @Override
     public void onViewAttachedToWindow(RecyclerViewHolder holder) {
         super.onViewAttachedToWindow(holder);

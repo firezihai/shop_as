@@ -1,7 +1,6 @@
 package com.fengbeibei.shop.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,22 +65,23 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        TextView textView;
+        GroupViewHolder groupViewHolder;
         if(convertView == null){
-            textView = new TextView(mContext);
+            groupViewHolder = new GroupViewHolder();
+            convertView = mInflater.inflate(R.layout.category_second_item,null);
+            groupViewHolder.mTextView = (TextView) convertView.findViewById(R.id.tv_category_second);
+            convertView.setTag(groupViewHolder);
         }else{
-            textView = (TextView)convertView;
+            groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
         Category category = mParentCategory.get(groupPosition);
-        textView.setText(category.getGcName());
-        textView.setTextSize(12);
-        textView.setPadding(36, 10, 0, 10);
-        return textView;
+        groupViewHolder.mTextView.setText(category.getGcName());
+        return convertView;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
         ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.child_category_item,null);
+            convertView = mInflater.inflate(R.layout.category_child_item,null);
             viewHolder.myGridView = (MyGridView)convertView.findViewById(R.id.categoryGridView);
             convertView.setTag(viewHolder);
         }else{
@@ -98,6 +98,7 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
         List<Category> categoryList = mChildCategory.get(groupPosition);
         CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(mContext,categoryList);
+        viewHolder.myGridView.setNumColumns(3);
         viewHolder.myGridView.setAdapter(categoryGridViewAdapter);
         categoryGridViewAdapter.notifyDataSetChanged();
         return convertView;
@@ -110,6 +111,10 @@ public class CategoryExpandableListAdapter extends BaseExpandableListAdapter {
 
     class ViewHolder {
         MyGridView myGridView;
+
     }
 
+    class GroupViewHolder{
+        TextView mTextView;
+    }
 }

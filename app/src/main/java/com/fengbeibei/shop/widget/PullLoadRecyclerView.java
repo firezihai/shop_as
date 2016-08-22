@@ -56,6 +56,7 @@ public class PullLoadRecyclerView extends RelativeLayout{
     public StaggeredGridLayoutManager getLayoutManager(){
         return mLayoutManager;
     }
+
     public void setSpanCount(int spanCount){
         mLayoutManager.setSpanCount(spanCount);
         mRecyclerViewAdapter.setViewType(spanCount);

@@ -5,17 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.Category;
-import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
-import com.fengbeibei.shop.common.SystemHelper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 
@@ -61,7 +54,7 @@ public class CategoryAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if(convertView == null){
-			convertView = mInflater.inflate(R.layout.parent_category_item, arg2,false);
+			convertView = mInflater.inflate(R.layout.category_parent_item, arg2,false);
 			holder = new ViewHolder();
 			holder.gcName = (TextView)convertView.findViewById(R.id.gcName);
 			holder.gcImage = (View)convertView.findViewById(R.id.gcImage);
