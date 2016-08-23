@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.fragment;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONObject;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.OrderListActivity;
@@ -63,9 +64,8 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 	TextView mSeeAllOrder;
     @BindView(R.id.loginBtn)
     Button mLoginBtn;
-
-	private static final  String REQUEST_CODE = "0011";
-    private Boolean isLogin = false;
+    private String mKey;
+	//private static final  String REQUEST_CODE = "0011";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -74,37 +74,46 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 		View ucenterLayout = inflater.inflate(R.layout.ucenter, container, false);
 		return ucenterLayout;
 	}
-	@Override
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.ucenter;
+    }
+
+    @Override
 	public void initView(){
+        mLoadingLayout = R.layout.view_dialog_loading;
+        mLoadingStyle = R.style.Dialog;
         mApplication = MyApplication.getInstance();
-        String key = mApplication.getLoginKey();
-        if(key != null && !"".equals(key)){
+        mKey = mApplication.getLoginKey();
+        if(mKey != null && !"".equals(mKey)){
             initData();
         }
-        isLogin = mApplication.isLogin();
         mLoginBtn.setOnClickListener(this);
+        mSeeAllOrder.setOnClickListener(this);
+        mSetting.setOnClickListener(this);
 	}
 	@Override
 	public void initData(){
+
+        if(!mApplication.isLogin()){
+            showLoadingDialog();
+        }
         String key = mApplication.getLoginKey();
         String url = Constants.MEMBER_INFO_URL + "&key="+key;
         HttpClientHelper.asynGet(url, new CallBack() {
-
             @Override
             public void onFinish(Message response) {
+                hideLoadingDialog();
                 // TODO Auto-generated method stub
                 if (response.what == HttpStatus.SC_OK) {
                     String json = (String) response.obj;
                     mUser = User.newInstance(json);
 
                     if (mUser != null) {
-                        System.out.println("load" + json);
                         MyApplication.getInstance().setUserInfo(mUser);
-                        mUsername.setText(mUser.getUserName());
-                        mWaitPayCount.setText(mUser.getOrderNopayCount());
-                        mWaitShipCount.setText(mUser.getOrderNoshipCount());
-                        mWaitReceiptCount.setText(mUser.getOrderNoreceiptCount());
-                        mWaitCommentCount.setText(mUser.getOrderNocommentCount());
+                        showLoginBtn(false);
+                        setData();
                     }
                 }
             }
@@ -119,7 +128,22 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 
 	}
 
-
+    private void setData(){
+        mUsername.setText(mUser.getUserName());
+        mWaitPayCount.setText(mUser.getOrderNopayCount());
+        mWaitShipCount.setText(mUser.getOrderNoshipCount());
+        mWaitReceiptCount.setText(mUser.getOrderNoreceiptCount());
+        mWaitCommentCount.setText(mUser.getOrderNocommentCount());
+    }
+    private void showLoginBtn(boolean show){
+        if(show){
+            mUsername.setVisibility(View.GONE);
+            mLoginBtn.setVisibility(View.VISIBLE);
+        }else{
+            mUsername.setVisibility(View.VISIBLE);
+            mLoginBtn.setVisibility(View.GONE);
+        }
+    }
     @Override
     public void onClick(View v) {
             switch (v.getId()){
@@ -138,59 +162,33 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 
                     });
                     break;
-
+                case R.id.setting:
+                    IntentHelper.appSetting(getActivity());
+                    break;
             }
     }
 
-    @Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		registerBroadcastReceiver();
-	}
+
 
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.d("ucenterFragment", "onResume");
-		String key = mApplication.getLoginKey();
-		if(key != null && !"".equals(key)){
+        mKey = MyApplication.getInstance().getLoginKey();
+        String userName = MyApplication.getInstance().getProperty("user.name");
+        if(mKey != null && !"".equals(mKey)){
 			initData();
-		}
-		
+		}else if(userName != null && !userName.equals("")){
+            mUser = new User();
+            mUser.setUserName("");
+            mUser.setOrderNopayCount("");
+            mUser.setOrderNoshipCount("");
+            mUser.setOrderNoreceiptCount("");
+            mUser.setOrderNocommentCount("");
+            showLoginBtn(true);
+            setData();
+        }
+
 	}
 
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		Log.d("ucenterFragment", "onPause");
-		super.onPause();
-	}
-	
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		getActivity().unregisterReceiver(mBroadcastReceiver);
-	}
-
-	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
-			String action = intent.getAction();
-			Log.d("receiver", action);
-			if(action == REQUEST_CODE){
-				initData();
-			}
-		}
-		
-	};
-	public void registerBroadcastReceiver(){
-		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction(REQUEST_CODE);
-		getActivity().registerReceiver(mBroadcastReceiver, myIntentFilter);
-	}
 }

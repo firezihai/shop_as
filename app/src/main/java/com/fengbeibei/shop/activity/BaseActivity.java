@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.interf.BaseViewInterface;
@@ -20,6 +24,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, BaseViewInterface {
     protected Dialog mLoadingDialog;
     protected LayoutInflater mInflater;
+    protected ViewGroup mHeadLayout;
     /**
      * 加载提示布局
      */
@@ -39,13 +44,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onBeforeSetContentLayout();
-        setContentView(getLayoutId());
+    //    setContentView(getLayoutId());
         mInflater = getLayoutInflater();
+        onBeforeSetContentLayout();
         ButterKnife.bind(this);
         init(savedInstanceState);
         initView();
     }
+
+
     public void init(Bundle savedInstancedState){
 
     }
@@ -61,8 +68,33 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-
     }
+
+    /**
+     * 创建内容布局
+     * @param isAddHead 是否添加标头
+     */
+    protected void createContentView(boolean isAddHead){
+        if(isAddHead){
+            LinearLayout linearLayout = (LinearLayout) inflaterView(R.layout.activity_common);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.head_height));
+            mHeadLayout = (ViewGroup)inflaterView(R.layout.comm_head);
+            linearLayout.addView(mHeadLayout,layoutParams);
+            linearLayout.addView(inflaterView(getLayoutId()), new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            setContentView(linearLayout);
+        }else{
+            setContentView(getLayoutId());
+        }
+    }
+
+    protected void setHeadTitle(int resId){
+        ((TextView) mHeadLayout.findViewById(R.id.tv_headTitle)).setText(resId);
+    }
+
+    protected void setHeadBackBtnListener(View.OnClickListener onClickListener){
+        mHeadLayout.findViewById(R.id.back).setOnClickListener(onClickListener);
+    }
+
     /**
      * 扩展布局
      * @param resId
@@ -75,7 +107,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     /**
      * 设置内容布局之前调用
      */
-    protected void onBeforeSetContentLayout(){}
+    protected void onBeforeSetContentLayout(){createContentView(false);}
     protected void showLoadingDialog(){
         getLoadingDialog(getString(R.string.loading), mLoadingLayout, mLoadingStyle);
     }

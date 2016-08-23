@@ -9,6 +9,7 @@ import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.LoginActivity;
 import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.activity.SearchResultActivity;
+import com.fengbeibei.shop.activity.SettingActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 
 public class IntentHelper {
@@ -62,6 +63,11 @@ public class IntentHelper {
     public static void searchResult(Context context,String keyword){
         Intent intent = new Intent(context, SearchResultActivity.class);
         intent.putExtra("keyword",keyword);
+        context.startActivity(intent);
+    }
+
+    public static void appSetting(Context context){
+        Intent intent = new Intent(context, SettingActivity.class);
         context.startActivity(intent);
     }
 }

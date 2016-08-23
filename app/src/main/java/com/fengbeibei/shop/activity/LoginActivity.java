@@ -12,38 +12,44 @@ import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.MyApplication;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import butterknife.BindView;
+
 public class LoginActivity extends BaseActivity{
-	private EditText mAccountEdit;
-	private EditText mPasswordEdit;
-	private Button mSubmitBtn;
-	private Button mCancelLoginBtn;
+    @BindView(R.id.account_edit)
+	AutoCompleteTextView mAccountEdit;
+    @BindView(R.id.password_edit)
+	EditText mPasswordEdit;
+    @BindView(R.id.submit_btn)
+	Button mSubmitBtn;
+	//private Button mCancelLoginBtn;
 	private String mAccountStr = "";
 	private String mPasswordStr ="";
 
+    @Override
+    protected void onBeforeSetContentLayout() {
+        createContentView(true);
+        setHeadTitle(R.string.login);
+        setHeadBackBtnListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
 
+            }
+        });
+    }
     @Override
     protected int getLayoutId() {
-        return R.layout.login_activity;
+        return R.layout.activity_login;
     }
 
     @Override
@@ -53,67 +59,21 @@ public class LoginActivity extends BaseActivity{
 
     @Override
     public void initView() {
-        mAccountEdit = (EditText)findViewById(R.id.account_edit);
+        String key =  MyApplication.getInstance().getLoginKey();
+        System.out.println("key="+key);
+        if(key != null && !key.equals("")){
+            finish();
+        }
+        mAccountEdit = (AutoCompleteTextView)findViewById(R.id.account_edit);
         mPasswordEdit =(EditText)findViewById(R.id.password_edit);
         mSubmitBtn = (Button)findViewById(R.id.submit_btn);
         mSubmitBtn.setEnabled(false);
-        mCancelLoginBtn = (Button) findViewById(R.id.cancel_login);
-        mCancelLoginBtn.setOnClickListener(this);
-        mAccountEdit.addTextChangedListener(new TextWatcher(){
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-            }
+    //    mCancelLoginBtn = (Button) findViewById(R.id.cancel_login);
+     //   mCancelLoginBtn.setOnClickListener(this);
+        mAccountEdit.addTextChangedListener(new AccountTextChangedListener());
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                // TODO Auto-generated method stub
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-                if(s.length() >=2 && mPasswordStr.length() >= 6){
-                    mSubmitBtn.setEnabled(true);
-                }else{
-                    mSubmitBtn.setEnabled(false);
-                }
-                mAccountStr= mAccountEdit.getText().toString();
-            }
-
-        });
-        mPasswordEdit.addTextChangedListener(new TextWatcher(){
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-                if(s.length() >= 6 && mAccountStr.length() >= 2){
-                    mSubmitBtn.setEnabled(true);
-                }else{
-                    mSubmitBtn.setEnabled(false);
-                }
-
-                mPasswordStr = mPasswordEdit.getText().toString();
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                // TODO Auto-generated method stub
-
-            }
-
-        });
+        mPasswordEdit.addTextChangedListener(new PasswordTextChangedListener());
 
         mSubmitBtn.setOnClickListener(this);
     }
@@ -121,9 +81,6 @@ public class LoginActivity extends BaseActivity{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.cancel_login:
-                LoginActivity.this.finish();
-                break;
             case R.id.submit_btn:
                 sendLogin();
                 break;
@@ -155,7 +112,7 @@ public class LoginActivity extends BaseActivity{
                         MyApplication.getInstance().setLoginKey("user.key", obj.getString("key"));
                         Intent mIntent = new Intent("0011");
                         sendBroadcast(mIntent);
-                        LoginActivity.this.finish();
+                        finish();
                     } catch (JSONException e){
                         e.printStackTrace();
                     }
@@ -171,6 +128,54 @@ public class LoginActivity extends BaseActivity{
         });
     }
 
+    class PasswordTextChangedListener implements TextWatcher{
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(s.length() >= 6 && mAccountStr.length() >= 2){
+                mSubmitBtn.setEnabled(true);
+            }else{
+                mSubmitBtn.setEnabled(false);
+            }
 
+            mPasswordStr = mPasswordEdit.getText().toString();
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+    }
+
+    class AccountTextChangedListener implements TextWatcher{
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if(s.length() >=2 && mPasswordStr.length() >= 6){
+                mSubmitBtn.setEnabled(true);
+            }else{
+                mSubmitBtn.setEnabled(false);
+            }
+            mAccountStr= mAccountEdit.getText().toString();
+        }
+
+    }
 	
 }
