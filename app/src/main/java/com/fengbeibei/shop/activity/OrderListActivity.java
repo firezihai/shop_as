@@ -1,11 +1,9 @@
 package com.fengbeibei.shop.activity;
 
-import java.util.ArrayList;
-
-import org.apache.http.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.os.Bundle;
+import android.os.Message;
+import android.view.View;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.OrderListAdapter;
@@ -16,13 +14,12 @@ import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.widget.MyListView;
 
-import android.os.Bundle;
-import android.os.Message;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -71,22 +68,20 @@ public class OrderListActivity extends BaseActivity{
 
     @Override
     public void initData() {
-        showLoadingDialog();
-        String key = MyApplication.getInstance().getLoginKey();
-        String url = Constants.ORDER_LIST_URL + "curpage=5&key="+key+"&orderType="+mOrderType+"&page="+mPage;
 
+        String key = MyApplication.getInstance().getLoginKey();
+        String url = Constants.ORDER_LIST_URL + "&pagesize=5&key="+key+"&orderType="+mOrderType+"&curpage="+mPage;
         HttpClientHelper.asynGet(url, new CallBack() {
 
             @Override
             public void onFinish(Message response) {
                 // TODO Auto-generated method stub
-                ArrayList<Order> orderList = new ArrayList<Order>();
                 hideLoadingDialog();
+                ArrayList<Order> orderList = new ArrayList<Order>();
                 if (response.what == HttpStatus.SC_OK) {
                     String json = (String) response.obj;
                     Bundle bundle = response.getData();
                     mHasMore = bundle.getBoolean(HttpClientHelper.HASMORE);
-
                     mPageCount = bundle.getLong(HttpClientHelper.COUNT);
                     try {
                         JSONObject objJson = new JSONObject(json);
@@ -96,9 +91,8 @@ public class OrderListActivity extends BaseActivity{
                             JSONObject obj = arr.getJSONObject(i);
                             ArrayList<Order> order = Order.newInstance(obj.getString("order_list"));
                             orderList.addAll(order);
-
-
                         }
+
                         mOrderListAdapter.setData(orderList);
                         mOrderListAdapter.notifyDataSetChanged();
                         mOrderListView.footerVisibility(View.GONE);
@@ -138,6 +132,7 @@ public class OrderListActivity extends BaseActivity{
                 }
             }
         });
+        showLoadingDialog();
         initData();
     }
 

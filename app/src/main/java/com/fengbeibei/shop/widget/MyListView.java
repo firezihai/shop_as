@@ -14,7 +14,7 @@ import com.fengbeibei.shop.R;
 /**
  * Created by Administrator on 2016/7/30.
  */
-public class MyListView extends ListView{
+public class MyListView extends ListView implements AbsListView.OnScrollListener{
     private LinearLayout mFooterView;
     private ScrollCallListener mListScrollCallListener;
     public MyListView(Context context) {
@@ -39,14 +39,17 @@ public class MyListView extends ListView{
 
     public void initView(Context context){
         mFooterView = (LinearLayout) View.inflate(context, R.layout.listview_footer, null);
-        addFooterView(mFooterView);
+        addFooterView(mFooterView,null,false);
         mFooterView.setVisibility(View.GONE);
+        setOnScrollListener(this);
     }
+
     @Override
-    public void setOnScrollListener(OnScrollListener l) {
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
         if(getAdapter() == null && getAdapter().getCount() == 0){
             return ;
         }
+        System.out.println("ddd");
         boolean footerEnd = false;
         try {
             if(getPositionForView(mFooterView) == getLastVisiblePosition()){
@@ -61,6 +64,11 @@ public class MyListView extends ListView{
             footerVisibility(View.VISIBLE);
             mListScrollCallListener.updateData();
         }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
     }
 
     public void setScrollCallListener(ScrollCallListener listener){
