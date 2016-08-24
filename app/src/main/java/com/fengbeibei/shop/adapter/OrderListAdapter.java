@@ -33,12 +33,16 @@ public class OrderListAdapter extends BaseAdapter{
 		mLayoutResourceId = layoutResourceId;
 	}
 	public void setData(ArrayList<Order> data){
-		mOrderList = data;
+        if(mOrderList != null && !data.isEmpty()){
+            mOrderList.addAll(data);
+        }else {
+            mOrderList = data;
+        }
 	}
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return mOrderList.size();
+		return mOrderList == null ? 0 : mOrderList.size();
 	}
 
 	@Override
@@ -56,24 +60,47 @@ public class OrderListAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		Order order = mOrderList.get(position);
 		ViewHolder holder;
 		if (convertView == null){
 			convertView = LayoutInflater.from(mContext).inflate(mLayoutResourceId, null);
 			holder = new ViewHolder();
 			holder.goodsList = (LinearLayout)convertView.findViewById(R.id.goodsList);
-			holder.storeName = (TextView)convertView.findViewById(R.id.storeName);
-			holder.orderAmount = (TextView) convertView.findViewById(R.id.orderAmount);
-			holder.stateDesc = (TextView) convertView.findViewById(R.id.orderState);
+			holder.storeName = (TextView)convertView.findViewById(R.id.tv_store_name);
+            holder.shipFee = (TextView) convertView.findViewById(R.id.tv_ship_fee);
+			holder.orderAmount = (TextView) convertView.findViewById(R.id.tv_order_amount);
+			holder.stateDesc = (TextView) convertView.findViewById(R.id.tv_order_state);
+            holder.operateLayout = (LinearLayout) convertView.findViewById(R.id.ll_operate_layout);
+            holder.deleteOrderBtn = (TextView) convertView.findViewById(R.id.tv_delete_order);
+            holder.cancelOrderBtn = (TextView) convertView.findViewById(R.id.tv_cancel_order);
+            holder.orderPayBtn = (TextView) convertView.findViewById(R.id.tv_order_pay);
+            holder.orderEvaluateBtn = (TextView) convertView.findViewById(R.id.tv_order_eval);
+            holder.orderReceiptBtn = (TextView) convertView.findViewById(R.id.tv_order_receipt);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder)convertView.getTag();
 		}
-		String str = String.format("共有1件商品 合计￥ %s (含运费￥%s )", order.getOrderAmount(),order.getShippingFee());
+	//	String str = String.format("共有1件商品 合计￥ %s (含运费￥%s )", order.getOrderAmount(),order.getShippingFee());
+        Order order = mOrderList.get(position);
 		holder.storeName.setText(order.getStoreName());
-		holder.orderAmount.setText(str);
 		holder.stateDesc.setText(order.getStateDesc());
+        holder.orderAmount.setText(order.getGoodsAmount());
+        holder.shipFee.setText(String.format((String) holder.shipFee.getText(), order.getShippingFee()));
+        if(order.getIfCancel()){
+            holder.cancelOrderBtn.setVisibility(View.VISIBLE);
+            holder.cancelOrderBtn.setEnabled(true);
+            holder.cancelOrderBtn.setClickable(true);
+        }
+        if(order.getIfReceipt()){
+            holder.orderReceiptBtn.setVisibility(View.VISIBLE);
+            holder.orderReceiptBtn.setEnabled(true);
+            holder.orderReceiptBtn.setClickable(true);
+        }
 
+        if(order.getOrderState().equals("10")){
+            holder.orderPayBtn.setVisibility(View.VISIBLE);
+            holder.orderPayBtn.setEnabled(true);
+            holder.orderPayBtn.setClickable(true);
+        }
 		ArrayList<Goods> goodsList = order.getGoods();
 		int size = goodsList.size();
 		holder.goodsList.removeAllViews();
@@ -86,10 +113,10 @@ public class OrderListAdapter extends BaseAdapter{
 				TextView goodsPayPrice = (TextView) goodsView.findViewById(R.id.goodsPayPrice);
 				ImageView goodsImage = (ImageView) goodsView.findViewById(R.id.goodsImage);
 				goodsName.setText(goods.getGoodsName());
-				goodsSpec.setText(goods.getGoodsName());
-				goodsPayPrice.setText(goods.getGoodsPayPrice());
-				goodsNum.setText(goods.getGoodsNum());
-				mImageLoader.displayImage(goods.getGoodsImage(), goodsImage,mOptions,mAnimateFirstListener);
+			//	goodsSpec.setText(goods.getGoodsSpec());
+				goodsPayPrice.setText("￥"+goods.getGoodsPayPrice());
+				goodsNum.setText("x"+goods.getGoodsNum());
+				mImageLoader.displayImage(goods.getGoodsImage(), goodsImage, mOptions, mAnimateFirstListener);
 				holder.goodsList.addView(goodsView);
 			}
 		}
@@ -100,5 +127,12 @@ public class OrderListAdapter extends BaseAdapter{
 		LinearLayout goodsList;
 		TextView orderAmount;
 		TextView stateDesc;
+        LinearLayout operateLayout;
+        TextView shipFee;
+        TextView deleteOrderBtn;
+        TextView cancelOrderBtn;
+        TextView orderEvaluateBtn;
+        TextView orderPayBtn;
+        TextView orderReceiptBtn;
 	}
 }

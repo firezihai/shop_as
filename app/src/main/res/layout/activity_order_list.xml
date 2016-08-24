@@ -15,48 +15,127 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/all_order"
-                android:textSize="16sp"
-                android:textColor="@color/pub_color_three"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_all_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/all_order"
+                    android:textSize="16sp"
+                    android:textColor="@color/pub_color_three"
+                    />
+                <View
+                    android:id="@+id/all_order_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_alignLeft="@+id/tv_all_order"
+                    android:layout_alignRight="@+id/tv_all_order"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/green"/>
+            </RelativeLayout>
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/wait_pay"
-            android:textSize="16sp"
-            android:textColor="@color/pub_color_three"/>
-        <TextView
+            android:layout_weight="1">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_wait_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/wait_pay"
+                    android:textSize="16sp"
+                    android:textColor="@color/pub_color_three"
+                    />
+                <View
+                    android:id="@+id/wait_pay_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:visibility="gone"
+                    android:layout_alignLeft="@+id/tv_wait_pay"
+                    android:layout_alignRight="@+id/tv_wait_pay"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/green"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/wait_receipt"
-            android:textSize="16sp"
-            android:textColor="@color/pub_color_three"/>
-        <TextView
+            android:layout_weight="1">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_wait_receipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/wait_receipt"
+                    android:textSize="16sp"
+                    android:textColor="@color/pub_color_three"
+                    />
+                <View
+                    android:id="@+id/wait_receipt_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:visibility="gone"
+                    android:layout_alignLeft="@+id/tv_wait_receipt"
+                    android:layout_alignRight="@+id/tv_wait_receipt"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/green"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/wait_comment"
-            android:textSize="16sp"
-            android:textColor="@color/pub_color_three"/>
+            android:layout_weight="1">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_wait_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/wait_comment"
+                    android:textSize="16sp"
+                    android:textColor="@color/pub_color_three"
+                    />
+                <View
+                    android:id="@+id/wait_comment_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_alignLeft="@+id/tv_wait_comment"
+                    android:layout_alignRight="@+id/tv_wait_comment"
+                    android:layout_alignParentBottom="true"
+                    android:visibility="gone"
+                    android:background="@color/green"/>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
-	<ListView
+	<com.fengbeibei.shop.widget.MyListView
 	    android:id="@+id/orderListView"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+        android:listSelector="@color/transparent"
 	    android:divider="@null"
         android:fadingEdge="none"
         android:dividerHeight="10dp"
         android:layout_marginTop="10dp"
-        android:scrollbars="none"></ListView>
+        android:scrollbars="none"/>
 </LinearLayout>

@@ -83,7 +83,6 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
                 mDelayLoad = false;
                 if (response.what == HttpStatus.SC_OK) {
                     Bundle bundle = response.getData();
-                    System.out.println(bundle);
                     mHasmore = bundle.getBoolean(HttpClientHelper.HASMORE);
 
                     mPageCount = bundle.getLong(HttpClientHelper.COUNT);

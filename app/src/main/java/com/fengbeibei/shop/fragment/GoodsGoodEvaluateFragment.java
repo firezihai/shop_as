@@ -2,8 +2,12 @@ package com.fengbeibei.shop.fragment;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.GoodsEvalAdapter;
@@ -24,7 +28,7 @@ import butterknife.BindView;
 /**
  * Created by thinkpad on 2016-08-01.
  */
-public class GoodsGoodEvaluateFragment extends GoodsBaseFragment {
+public class GoodsGoodEvaluateFragment extends GoodsBaseFragment implements ListView.OnScrollListener{
     private static final String TAG ="GoodsGoodEvalFragment";
     private String mGoodsId;
     private int mPage =1;
@@ -113,5 +117,40 @@ public class GoodsGoodEvaluateFragment extends GoodsBaseFragment {
     public void setUpdate(String data) {
         mGoodsId = data;
         mDelayLoad = true;
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if(mGoodsEvalAdapter == null || mGoodsEvalAdapter.getCount() == 0){
+            return;
+        }
+        boolean footerEnd = true;
+        Log.i(TAG, "onScrollStateChanged footerEnd:" + footerEnd + " mHasmore:" + mHasmore + " mPageCount:" + mPageCount);
+        try {
+            if(view.getPositionForView(mFooterView) == view.getLastVisiblePosition()){
+                footerEnd = true;
+            }else{
+                footerEnd = false;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(footerEnd){
+            mFooterView.setVisibility(View.VISIBLE);
+
+            if(mHasmore && mPageCount > mPage){
+                mPage++;
+                initData();
+            }else{
+                ((TextView)mFooterView.findViewById(R.id.upToLoadText)).setText("到底了");
+                (mFooterView.findViewById(R.id.progressbar)).setVisibility(View.GONE);
+            }
+
+        }
     }
 }

@@ -7,9 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-
-
-
 public class Order {
 	public String orderId;
 	public String orderSn;
@@ -17,10 +14,10 @@ public class Order {
 	public String orderState;
 	public String stateDesc;
 	public String goodsAmount;
-	public String ifCancel;
-	public String ifDeliver;
-	public String ifLock;
-	public String ifReceipt;
+	public boolean ifCancel;
+	public boolean ifDeliver;
+	public boolean ifLock;
+	public boolean ifReceipt;
 	public String orderAmount;
 	public String paymentName;
 	public String shippingFee;
@@ -28,7 +25,7 @@ public class Order {
 
 	public Order(String orderId, String orderSn, String storeName,
 			String orderState, String stateDesc, String goodsAmount,
-			String ifCancel, String ifDeliver, String ifLock, String ifReceipt,
+			boolean ifCancel, boolean ifDeliver, boolean ifLock, boolean ifReceipt,
 			String orderAmount, String paymentName, String shippingFee,
 			ArrayList<Goods> goods) {
 		super();
@@ -57,13 +54,13 @@ public class Order {
 				String orderId = obj.getString(Attr.ORDER_ID);
 				String orderSn = obj.getString(Attr.ORDER_SN);
 				String storeName = obj.getString(Attr.STORE_NAME);
-				String orderState = obj.getString(Attr.ORDER_STATE);
+                String orderState = obj.getString(Attr.ORDER_STATE);
 				String stateDesc = obj.getString(Attr.STATE_DESC);
 				String goodsAmount = obj.getString(Attr.GOODS_AMOUNT);
-				String ifCancel = obj.getString(Attr.IF_CANCEL);
-				String ifDeliver = obj.getString(Attr.IF_DELIVER);
-				String ifLock = obj.getString(Attr.IF_LOCK);
-				String ifReceipt = obj.getString(Attr.IF_RECEIPT);
+				boolean ifCancel = obj.getBoolean(Attr.IF_CANCEL);
+                boolean ifDeliver = obj.getBoolean(Attr.IF_DELIVER);
+                boolean ifLock = obj.getBoolean(Attr.IF_LOCK);
+				boolean ifReceipt = obj.getBoolean(Attr.IF_RECEIPT);
 				String orderAmount = obj.getString(Attr.ORDER_AMOUNT);
 				String paymentName = obj.getString(Attr.PAYMENT_NAME);
 				String shippingFee = obj.getString(Attr.SHIPPING_FEE);
@@ -111,28 +108,28 @@ public class Order {
 	public void setGoodsAmount(String goodsAmount) {
 		this.goodsAmount = goodsAmount;
 	}
-	public String getIfCancel() {
+	public boolean getIfCancel() {
 		return ifCancel;
 	}
-	public void setIfCancel(String ifCancel) {
+	public void setIfCancel(boolean ifCancel) {
 		this.ifCancel = ifCancel;
 	}
-	public String getIfDeliver() {
+	public boolean getIfDeliver() {
 		return ifDeliver;
 	}
-	public void setIfDeliver(String ifDeliver) {
+	public void setIfDeliver(boolean ifDeliver) {
 		this.ifDeliver = ifDeliver;
 	}
-	public String getIfLock() {
+	public boolean getIfLock() {
 		return ifLock;
 	}
-	public void setIfLock(String ifLock) {
+	public void setIfLock(boolean ifLock) {
 		this.ifLock = ifLock;
 	}
-	public String getIfReceipt() {
+	public boolean getIfReceipt() {
 		return ifReceipt;
 	}
-	public void setIfReceipt(String ifReceipt) {
+	public void setIfReceipt(boolean ifReceipt) {
 		this.ifReceipt = ifReceipt;
 	}
 	public String getOrderAmount() {
@@ -169,7 +166,7 @@ public class Order {
 				+ ", orderAmount=" + orderAmount + ", paymentName="
 				+ paymentName + ", shippingFree=" + shippingFee + "]";
 	}
-	
+
 	private static final class Attr{
 		public static final String ORDER_ID = "order_id";
 		public static final String ORDER_SN = "order_sn";
