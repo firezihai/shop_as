@@ -4,10 +4,6 @@
     android:id="@+id/listView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:divider="@color/lightgrey"
-    android:dividerHeight="15dp"
-    android:scrollbars="none"
-    android:footerDividersEnabled="false"
-    android:listSelector="@color/transparent">
+    style="@style/listViewStyle">
 
 </com.fengbeibei.shop.widget.MyListView>

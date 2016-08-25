@@ -86,7 +86,7 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
         mLoadingStyle = R.style.Dialog;
         mApplication = MyApplication.getInstance();
         mKey = mApplication.getLoginKey();
-        if(mKey != null && !"".equals(mKey)){
+        if(isLogin()){
             initData();
         }
         mLoginBtn.setOnClickListener(this);
@@ -146,29 +146,28 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
     }
     @Override
     public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.loginBtn:
-                    IntentHelper.login(getActivity());
-                    break;
-                case R.id.seeAllOrder:
-                    mSeeAllOrder.setOnClickListener(new OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            // TODO Auto-generated method stub
-                            Intent intent = new Intent(getActivity(), OrderListActivity.class);
-                            startActivity(intent);
-                        }
-
-                    });
-                    break;
-                case R.id.setting:
-                    IntentHelper.appSetting(getActivity());
-                    break;
-            }
+        if(!isLogin()){
+            IntentHelper.login(getActivity());
+            return ;
+        }
+        switch (v.getId()){
+            case R.id.seeAllOrder:
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.setting:
+                IntentHelper.appSetting(getActivity());
+                break;
+        }
     }
 
-
+    public boolean isLogin(){
+        if(mKey != null && !"".equals(mKey)) {
+            return true;
+        }
+        return false;
+    }
 
 	@Override
 	public void onResume() {
@@ -176,7 +175,7 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 		super.onResume();
         mKey = MyApplication.getInstance().getLoginKey();
         String userName = MyApplication.getInstance().getProperty("user.name");
-        if(mKey != null && !"".equals(mKey)){
+        if(isLogin()){
 			initData();
 		}else if(userName != null && !userName.equals("")){
             mUser = new User();

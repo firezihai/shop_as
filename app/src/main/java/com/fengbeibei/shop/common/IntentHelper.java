@@ -70,4 +70,10 @@ public class IntentHelper {
         Intent intent = new Intent(context, SettingActivity.class);
         context.startActivity(intent);
     }
+
+    public static void orderDetail(Context context,String orderId){
+        Intent intent = new Intent(context, SearchResultActivity.class);
+        intent.putExtra("orderId",orderId);
+        context.startActivity(intent);
+    }
 }

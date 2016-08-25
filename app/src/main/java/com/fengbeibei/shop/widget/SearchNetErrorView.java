@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -43,7 +44,7 @@ public class SearchNetErrorView extends FrameLayout{
 
     public void initView(Context context){
         LayoutInflater.from(context).inflate(R.layout.view_search_net_error, this);
-        ((Button)findViewById(R.id.retry)).setOnClickListener(new Test(this));
+        ((Button)findViewById(R.id.retry)).setOnClickListener(new SearchNetErrorViewClickListener(this));
     }
 
     public Context getCurrentContext(){
@@ -58,4 +59,5 @@ public class SearchNetErrorView extends FrameLayout{
     public SearchNetErrorListener getSearchNetErrorListener(){
         return mSearchNetErrorListener;
     }
+
 }

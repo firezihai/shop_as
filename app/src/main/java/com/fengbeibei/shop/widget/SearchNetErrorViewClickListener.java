@@ -13,9 +13,9 @@ import com.fengbeibei.shop.utils.NetUtil;
  * @author zihai(https://github.com/firezihai)
  * @created 2016-08-08 21:02
  */
-public class Test implements View.OnClickListener{
+public class SearchNetErrorViewClickListener implements View.OnClickListener{
     private SearchNetErrorView mSearchNetErrorView;
-    public Test(SearchNetErrorView searchNetErrorView) {
+    public SearchNetErrorViewClickListener(SearchNetErrorView searchNetErrorView) {
         mSearchNetErrorView = searchNetErrorView;
     }
 
@@ -27,7 +27,7 @@ public class Test implements View.OnClickListener{
             Toast.makeText(MyApplication.getContext(),"当前网络连接异常，请检查网络后再试吧",Toast.LENGTH_SHORT).show();
         }else {
             SearchNetErrorListener viewInterface = mSearchNetErrorView.getSearchNetErrorListener();
-            viewInterface.a();
+            viewInterface.retry();
         }
     }
 }

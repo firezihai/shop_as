@@ -29,12 +29,10 @@ import butterknife.BindView;
 /**
  * Created by thinkpad on 2016-08-01.
  */
-public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListView.OnScrollListener {
+public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements MyListView.ScrollCallListener{
     private String TAG = "GoodsAllEvalFragment";
     private String mGoodsId;
     private int mPage =1;
-    private LinearLayout mFooterView;
-    private List<GoodsEval> mGoodsEval;
     private GoodsEvalAdapter mGoodsEvalAdapter;
     private Boolean mHasmore;
     private long mPageCount;
@@ -63,13 +61,8 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
         //super.initView(view);
         mGoodsEvalAdapter = new GoodsEvalAdapter(getActivity());
         mListView.setAdapter(mGoodsEvalAdapter);
-        mListView.setOnScrollListener(this);
-
+        mListView.setScrollCallListener(this);
         mDelayLoad = true;
-        mFooterView = (LinearLayout) View.inflate(getActivity(), R.layout.listview_footer, null);
-        mListView.addFooterView(mFooterView);
-        mFooterView.setVisibility(View.GONE);
-
     }
     @Override
     public void initData(){
@@ -93,7 +86,7 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
                         List<GoodsEval> goodsEval = GoodsEval.arrayGoodsEvalFromData(goodsEvalJson);
                         mGoodsEvalAdapter.setData(goodsEval);
                         mGoodsEvalAdapter.notifyDataSetChanged();
-                        mFooterView.setVisibility(View.GONE);
+                        mListView.footerVisibility(View.GONE);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -110,40 +103,6 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
         });
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(mGoodsEvalAdapter == null || mGoodsEvalAdapter.getCount() == 0){
-            return;
-        }
-        boolean footerEnd = true;
-        Log.i(TAG,"onScrollStateChanged footerEnd:" + footerEnd+ " mHasmore:"+mHasmore+" mPageCount:"+mPageCount);
-        try {
-            if(view.getPositionForView(mFooterView) == view.getLastVisiblePosition()){
-                footerEnd = true;
-            }else{
-                footerEnd = false;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if(footerEnd){
-            mFooterView.setVisibility(View.VISIBLE);
-
-            if(mHasmore && mPageCount > mPage){
-                mPage++;
-                initData();
-            }else{
-                ((TextView)mFooterView.findViewById(R.id.upToLoadText)).setText("到底了");
-                (mFooterView.findViewById(R.id.progressbar)).setVisibility(View.GONE);
-            }
-
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-    }
 
     @Override
     protected int getLayoutId() {
@@ -163,5 +122,15 @@ public class GoodsAllEvaluateFragment extends GoodsBaseFragment implements ListV
     public void setUpdate(String data) {
         mGoodsId = data;
         mDelayLoad = true;
+    }
+
+    @Override
+    public void updateData() {
+        if (mHasmore && mPageCount > mPage) {
+            mPage++;
+            initData();
+        } else {
+            mListView.setFooterViewText("到底了");
+        }
     }
 }

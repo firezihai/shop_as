@@ -52,7 +52,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private boolean mHasMore = true;
     private int mPageCount;
     private int mViewType = 1;
-    private boolean mScrollEnd = false;
+
+    private OnItemClickListener mOnItemClickListener;
+    public interface OnItemClickListener{
+        void onItemClick(View view,String goodsId);
+    }
+
     public RecyclerViewAdapter(Context context, SearchResultActivity searchResultActivity) {
         mContext = context;
         mSearchResultActivity = searchResultActivity;
@@ -123,9 +128,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         return LayoutInflater.from(mContext).inflate(layoutRes,null);
     }
 
-    public void onBindBigItemViewHolder(RecyclerViewHolder holder,int position){
-        Goods goods= mGoodsList.get(position);
-        SearchBigItemViewHolder bigItemViewHolder = (SearchBigItemViewHolder) holder;
+    public void onBindBigItemViewHolder(final RecyclerViewHolder holder,final int position){
+        final Goods goods= mGoodsList.get(position);
+        final SearchBigItemViewHolder bigItemViewHolder = (SearchBigItemViewHolder) holder;
+        if(mOnItemClickListener != null){
+            bigItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(bigItemViewHolder.itemView,goods.getGoodsId());
+
+                }
+            });
+        }
         bigItemViewHolder.mGoodsPrice.setText(goods.getGoodsPrice());
         setImageViewSize(bigItemViewHolder.mGoodsImage);
         mImageLoader.displayImage(goods.getGoodsImageUrl(), bigItemViewHolder.mGoodsImage, mOptions, mAnimateFirstListener);
@@ -151,9 +165,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         bigItemViewHolder.mPromotion3.setVisibility(isXianShi);
     }
 
-    public void onBindSmallItemViewHolder(RecyclerViewHolder holder,int position){
-        Goods goods= mGoodsList.get(position);
-        SearchSmallItemViewHolder itemViewHolder = (SearchSmallItemViewHolder) holder;
+    public void onBindSmallItemViewHolder(final RecyclerViewHolder holder, final int position){
+        final Goods goods= mGoodsList.get(position);
+        final SearchSmallItemViewHolder itemViewHolder = (SearchSmallItemViewHolder) holder;
+        if(mOnItemClickListener != null){
+            itemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(itemViewHolder.itemView,goods.getGoodsId());
+
+                }
+            });
+        }
+
+
         mImageLoader.displayImage(goods.getGoodsImageUrl(), itemViewHolder.mGoodsImage, mOptions, mAnimateFirstListener);
         itemViewHolder.mGoodsName.setText(goods.getGoodsName());
         itemViewHolder.mGoodsPrice.setText(goods.getGoodsPrice());
@@ -248,4 +273,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         mGoodsList.clear();
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
 }

@@ -49,7 +49,6 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
         if(getAdapter() == null && getAdapter().getCount() == 0){
             return ;
         }
-        System.out.println("ddd");
         boolean footerEnd = false;
         try {
             if(getPositionForView(mFooterView) == getLastVisiblePosition()){
@@ -60,9 +59,11 @@ public class MyListView extends ListView implements AbsListView.OnScrollListener
         }catch (Exception e){
             e.printStackTrace();
         }
-        if(footerEnd){
+        if(footerEnd && scrollState == OnScrollListener.SCROLL_STATE_IDLE){
             footerVisibility(View.VISIBLE);
-            mListScrollCallListener.updateData();
+            if(mListScrollCallListener != null) {
+                mListScrollCallListener.updateData();
+            }
         }
     }
 

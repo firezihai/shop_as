@@ -1,8 +1,10 @@
 package com.fengbeibei.shop.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
@@ -12,6 +14,7 @@ import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.MyApplication;
+import com.fengbeibei.shop.utils.DialogUtil;
 import com.fengbeibei.shop.widget.MyListView;
 
 import org.apache.http.HttpStatus;
@@ -20,10 +23,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 
-public class OrderListActivity extends BaseActivity{
+public class OrderListActivity extends BaseActivity implements MyListView.OnItemClickListener{
 	@BindView(R.id.orderListView)
     MyListView mOrderListView;
     @BindView(R.id.tv_all_order)
@@ -47,7 +51,9 @@ public class OrderListActivity extends BaseActivity{
     private int mPage = 1;
     private boolean mHasMore;
     private long mPageCount;
+    private boolean mLoadState = true;
     private OrderListAdapter mOrderListAdapter;
+    private Dialog mConfirmDialog;
     @Override
     protected void onBeforeSetContentLayout() {
         createContentView(true);
@@ -61,6 +67,7 @@ public class OrderListActivity extends BaseActivity{
         });
     }
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_order_list;
@@ -68,14 +75,16 @@ public class OrderListActivity extends BaseActivity{
 
     @Override
     public void initData() {
-
+        mLoadState = true;
         String key = MyApplication.getInstance().getLoginKey();
         String url = Constants.ORDER_LIST_URL + "&pagesize=5&key="+key+"&orderType="+mOrderType+"&curpage="+mPage;
+        System.out.println(url);
         HttpClientHelper.asynGet(url, new CallBack() {
 
             @Override
             public void onFinish(Message response) {
                 // TODO Auto-generated method stub
+                mLoadState = false;
                 hideLoadingDialog();
                 ArrayList<Order> orderList = new ArrayList<Order>();
                 if (response.what == HttpStatus.SC_OK) {
@@ -121,14 +130,17 @@ public class OrderListActivity extends BaseActivity{
         mWaitCommentTab.setOnClickListener(this);
         mOrderListAdapter = new OrderListAdapter(OrderListActivity.this, R.layout.order_list_item);
         mOrderListView.setAdapter(mOrderListAdapter);
+        mOrderListView.setOnItemClickListener(this);
         mOrderListView.setScrollCallListener(new MyListView.ScrollCallListener() {
             @Override
             public void updateData() {
-                if(mHasMore && mPageCount >mPage){
-                    mPage++;
-                    initData();
-                }else{
-                    mOrderListView.setFooterViewText("到底了");
+                if(!mLoadState) {
+                    if (mHasMore && mPageCount > mPage) {
+                        mPage++;
+                        initData();
+                    } else {
+                        mOrderListView.setFooterViewText("到底了");
+                    }
                 }
             }
         });
@@ -170,5 +182,71 @@ public class OrderListActivity extends BaseActivity{
 
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Order order = (Order)parent.getAdapter().getItem(position);
+
+    }
+
+    public static void cancelOrder(final OrderListActivity activity, final String orderId){
+        activity.mConfirmDialog= DialogUtil.confirmDialog(activity,"","您确定要删除订单吗？",new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                activity.cancelOrder(orderId);
+            }
+        },new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                activity.mConfirmDialog.dismiss();
+            }
+        });
+        activity.mConfirmDialog.show();
+    }
+
+
+
+    public void cancelOrder(String orderId){
+        String key = MyApplication.getInstance().getLoginKey();
+        String url = Constants.ORDER_CANCEL_URL + "&key="+key;
+        HashMap<String,String> params = new HashMap<String,String>();
+        params.put("order_id",orderId);
+        System.out.println("order_id="+orderId);
+        HttpClientHelper.asynPost(url, params, new CallBack() {
+            @Override
+            public void onFinish(Message response) {
+                mConfirmDialog.dismiss();
+                if(response.what == HttpStatus.SC_OK){
+                    String json = (String)response.obj;
+                    if (json.equals("1")) {
+                        mOrderListAdapter.notifyDataSetChanged();
+                        MyApplication.showToast( "成功取消订单");
+                        return;
+                    }
+
+                    try{
+                        JSONObject jsonObj = new JSONObject(json);
+                        if(jsonObj.has("error")){
+
+                            String error = jsonObj.getString("error");
+                            //   Toast.makeText(activity,error, Toast.LENGTH_SHORT).show();
+                            MyApplication.showToast(error);
+                        }else{
+                            mOrderListAdapter.notifyDataSetChanged();
+                            MyApplication.showToast( "成功取消订单");
+
+                            //  Toast.makeText(activity, "成功取消订单", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
 
 }

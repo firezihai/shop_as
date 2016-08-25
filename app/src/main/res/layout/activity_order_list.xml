@@ -132,10 +132,5 @@
 	    android:id="@+id/orderListView"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-        android:listSelector="@color/transparent"
-        android:footerDividersEnabled="false"
-        android:dividerHeight="0dp"
-	    android:divider="@null"
-        android:fadingEdge="none"
-        android:scrollbars="none"/>
+        style="@style/listViewStyle"/>
 </LinearLayout>

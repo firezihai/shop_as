@@ -87,7 +87,7 @@ public class LoginActivity extends BaseActivity{
         }
     }
     public void sendLogin(){
-        if(!mSubmitBtn.isClickable()){
+        if(!mSubmitBtn.isEnabled()){
             return;
         }
         HashMap<String,String> params = new HashMap<String,String>();

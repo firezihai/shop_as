@@ -5,5 +5,5 @@ package com.fengbeibei.shop.interf;
  * @created 2016-08-08 19:59
  */
 public abstract interface SearchNetErrorListener {
-    public abstract void a();
+    public abstract void retry();
 }

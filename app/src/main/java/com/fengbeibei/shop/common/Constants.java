@@ -84,4 +84,13 @@ public final class Constants {
 	  * 会员订单
 	  */
 	 public static final String ORDER_LIST_URL = APP_URL + "act=member_order&op=order_list";
+
+    /**
+     * 删除订单
+     */
+    public static final String ORDER_DELETER_URL = APP_URL + "act=member_order&op=order_delete";
+    /**
+     * 取消订单
+     */
+    public static final String ORDER_CANCEL_URL = APP_URL + "act=member_order&op=order_cancel";
 }

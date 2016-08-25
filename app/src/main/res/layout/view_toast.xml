@@ -3,7 +3,6 @@
     android:id="@+id/dialog_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#3f000000"
     android:orientation="vertical" >
     <RelativeLayout 
         android:layout_width="wrap_content"
@@ -28,7 +27,7 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_toRightOf="@id/toastIcon"
             android:gravity="center_vertical"
-            android:textColor="@color/darkgrey"
+            android:textColor="@color/white"
             android:textSize="16sp"/>"
     </RelativeLayout>
 

@@ -149,8 +149,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
             mViewHolder.mSearchNetErrorView.setVisibility(View.VISIBLE);
             mViewHolder.mSearchNetErrorView.setSearchNetErrorListener( new SearchNetErrorListener() {
                 @Override
-                public void a() {
-                    Toast.makeText(getApplicationContext(),"刷新成功",Toast.LENGTH_LONG).show();
+                public void retry() {
+                    Toast.makeText(SearchResultActivity.this,"刷新成功",Toast.LENGTH_LONG).show();
                 }
             });
         }else{
@@ -163,6 +163,12 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
         mRecyclerViewAdapter = new RecyclerViewAdapter(this,this);
         mRecyclerViewAdapter.setHasMore(mHasMore);
+        mRecyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, String goodsId) {
+                IntentHelper.goodsDetail(SearchResultActivity.this,goodsId);
+            }
+        });
         mViewHolder.mPullLoadRecyclerView.setAdapter(mRecyclerViewAdapter);
         mViewHolder.mPullLoadRecyclerView.setOnScrollCallback(mScrollCallback);
         postSearchTitleHeight();
@@ -331,7 +337,5 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         mPage = page;
     }
 
-    public boolean isLoadState() {
-        return mLoadState;
-    }
+
 }

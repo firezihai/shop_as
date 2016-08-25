@@ -3,6 +3,7 @@ package com.fengbeibei.shop.adapter;
 import java.util.ArrayList;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.OrderListActivity;
 import com.fengbeibei.shop.bean.Order;
 import com.fengbeibei.shop.bean.Order.Goods;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
@@ -22,14 +23,14 @@ import android.widget.TextView;
 
 public class OrderListAdapter extends BaseAdapter{
 	private ArrayList<Order> mOrderList;
-	private Context mContext;
+	private OrderListActivity mOrderListActivity;
 	private int mLayoutResourceId;
 	private ImageLoader mImageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
 	private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
-	public OrderListAdapter(Context context,int layoutResourceId) {
+	public OrderListAdapter(OrderListActivity orderListActivity,int layoutResourceId) {
 		super();
-		mContext = context;
+		mOrderListActivity = orderListActivity;
 		mLayoutResourceId = layoutResourceId;
 	}
 	public void setData(ArrayList<Order> data){
@@ -62,7 +63,7 @@ public class OrderListAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if (convertView == null){
-			convertView = LayoutInflater.from(mContext).inflate(mLayoutResourceId, null);
+			convertView = LayoutInflater.from(mOrderListActivity).inflate(mLayoutResourceId, null);
 			holder = new ViewHolder();
 			holder.goodsList = (LinearLayout)convertView.findViewById(R.id.goodsList);
 			holder.storeName = (TextView)convertView.findViewById(R.id.tv_store_name);
@@ -83,13 +84,14 @@ public class OrderListAdapter extends BaseAdapter{
         Order order = mOrderList.get(position);
 		holder.storeName.setText(order.getStoreName());
 		holder.stateDesc.setText(order.getStateDesc());
-        holder.orderAmount.setText(order.getGoodsAmount());
+        holder.orderAmount.setText(order.getOrderAmount());
         holder.shipFee.setText(String.format((String) holder.shipFee.getText(), order.getShippingFee()));
         if(order.getIfCancel()){
             holder.cancelOrderBtn.setVisibility(View.VISIBLE);
             holder.cancelOrderBtn.setEnabled(true);
             holder.cancelOrderBtn.setClickable(true);
         }
+
         if(order.getIfReceipt()){
             holder.orderReceiptBtn.setVisibility(View.VISIBLE);
             holder.orderReceiptBtn.setEnabled(true);
@@ -101,12 +103,15 @@ public class OrderListAdapter extends BaseAdapter{
             holder.orderPayBtn.setEnabled(true);
             holder.orderPayBtn.setClickable(true);
         }
+        holder.cancelOrderBtn.setOnClickListener(new RegOnClickListener(order.getOrderId()));
+        holder.orderReceiptBtn.setOnClickListener(new RegOnClickListener(order.getOrderId()));
+        holder.orderPayBtn.setOnClickListener(new RegOnClickListener(order.getOrderId()));
 		ArrayList<Goods> goodsList = order.getGoods();
 		int size = goodsList.size();
 		holder.goodsList.removeAllViews();
 		if (size > 0){
 			for(Goods goods : goodsList){
-				View goodsView = LayoutInflater.from(mContext).inflate(R.layout.order_goods_item, null);
+				View goodsView = LayoutInflater.from(mOrderListActivity).inflate(R.layout.order_goods_item, null);
 				TextView goodsName = (TextView)goodsView.findViewById(R.id.goodsName);
 				TextView goodsSpec = (TextView)goodsView.findViewById(R.id.goodsSpec);
 				TextView goodsNum = (TextView)goodsView.findViewById(R.id.goodsNum);
@@ -135,4 +140,21 @@ public class OrderListAdapter extends BaseAdapter{
         TextView orderPayBtn;
         TextView orderReceiptBtn;
 	}
+
+    class RegOnClickListener implements View.OnClickListener{
+        private String orderId;
+
+        public RegOnClickListener(String orderId) {
+            this.orderId = orderId;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.tv_cancel_order:
+                    OrderListActivity.cancelOrder(mOrderListActivity,orderId);
+                    break;
+            }
+        }
+    }
 }

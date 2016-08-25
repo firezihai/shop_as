@@ -25,12 +25,10 @@ import butterknife.BindView;
 /**
  * Created by thinkpad on 2016-08-01.
  */
-public class GoodsMediumEvaluateFragment extends GoodsBaseFragment {
+public class GoodsMediumEvaluateFragment extends GoodsBaseFragment implements MyListView.ScrollCallListener{
     private static final String TAG ="GoodsGoodEvalFragment";
     private String mGoodsId;
     private int mPage =1;
-    private LinearLayout mFooterView;
-    private List<GoodsEval> mGoodsEval;
     private GoodsEvalAdapter mGoodsEvalAdapter;
     private Boolean mHasmore = true;
     private long mPageCount = 1;
@@ -60,9 +58,7 @@ public class GoodsMediumEvaluateFragment extends GoodsBaseFragment {
         mDelayLoad = true;
         mGoodsEvalAdapter = new GoodsEvalAdapter(getActivity());
         mListView.setAdapter(mGoodsEvalAdapter);
-        mFooterView = (LinearLayout) View.inflate(getActivity(), R.layout.listview_footer, null);
-        mListView.addFooterView(mFooterView);
-        mFooterView.setVisibility(View.GONE);
+        mListView.setScrollCallListener(this);
     }
 
     @Override
@@ -85,7 +81,7 @@ public class GoodsMediumEvaluateFragment extends GoodsBaseFragment {
                         String goodsEvalJson = obj.getString("goods_eval_list");
                         List<GoodsEval> goodsEval = GoodsEval.arrayGoodsEvalFromData(goodsEvalJson);
                         mGoodsEvalAdapter.setData(goodsEval);
-                        mFooterView.setVisibility(View.GONE);
+                        mListView.footerVisibility(View.GONE);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -115,5 +111,15 @@ public class GoodsMediumEvaluateFragment extends GoodsBaseFragment {
     public void setUpdate(String data) {
         mGoodsId = data;
         mDelayLoad = true;
+    }
+
+    @Override
+    public void updateData() {
+        if (mHasmore && mPageCount > mPage) {
+            mPage++;
+            initData();
+        } else {
+            mListView.setFooterViewText("到底了");
+        }
     }
 }
