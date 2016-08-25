@@ -7,6 +7,7 @@ import android.net.Uri;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.LoginActivity;
+import com.fengbeibei.shop.activity.OrderDetailActivity;
 import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.activity.SettingActivity;
@@ -72,7 +73,7 @@ public class IntentHelper {
     }
 
     public static void orderDetail(Context context,String orderId){
-        Intent intent = new Intent(context, SearchResultActivity.class);
+        Intent intent = new Intent(context, OrderDetailActivity.class);
         intent.putExtra("orderId",orderId);
         context.startActivity(intent);
     }

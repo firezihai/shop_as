@@ -203,4 +203,20 @@
         <item name="android:scrollbars">none</item>
         <item name="android:listSelector">@color/transparent</item>
     </style>
+    <style name="AppTheme.Btn" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="orderOrangeBtn" parent="AppTheme.Btn">
+        <item name="android:background">@drawable/btn_orange_bg</item>
+        <item name="android:textColor">@color/orange</item>
+    </style>
+    <style name="orderGreyBtn" parent="AppTheme.Btn">
+        <item name="android:background">@drawable/btn_grey_bg</item>
+        <item name="android:textColor">@color/pub_color_three</item>
+    </style>
+    <style name="orderRedBtn" parent="AppTheme.Btn">
+        <item name="android:background">@drawable/btn_pay_bg</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

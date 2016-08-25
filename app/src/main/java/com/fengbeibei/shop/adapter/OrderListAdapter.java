@@ -1,18 +1,5 @@
 package com.fengbeibei.shop.adapter;
 
-import java.util.ArrayList;
-
-import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.activity.OrderListActivity;
-import com.fengbeibei.shop.bean.Order;
-import com.fengbeibei.shop.bean.Order.Goods;
-import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
-import com.fengbeibei.shop.common.SystemHelper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +7,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.OrderListActivity;
+import com.fengbeibei.shop.bean.Order;
+import com.fengbeibei.shop.bean.Order.Goods;
+import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.IntentHelper;
+import com.fengbeibei.shop.common.SystemHelper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.util.ArrayList;
 
 public class OrderListAdapter extends BaseAdapter{
 	private ArrayList<Order> mOrderList;
@@ -103,9 +103,11 @@ public class OrderListAdapter extends BaseAdapter{
             holder.orderPayBtn.setEnabled(true);
             holder.orderPayBtn.setClickable(true);
         }
-        holder.cancelOrderBtn.setOnClickListener(new RegOnClickListener(order.getOrderId()));
-        holder.orderReceiptBtn.setOnClickListener(new RegOnClickListener(order.getOrderId()));
-        holder.orderPayBtn.setOnClickListener(new RegOnClickListener(order.getOrderId()));
+		RegOnClickListener regOnClickListener = new RegOnClickListener(order.orderId);
+        holder.cancelOrderBtn.setOnClickListener(regOnClickListener);
+        holder.orderReceiptBtn.setOnClickListener(regOnClickListener);
+        holder.orderPayBtn.setOnClickListener(regOnClickListener);
+		holder.goodsList.setOnClickListener(regOnClickListener);
 		ArrayList<Goods> goodsList = order.getGoods();
 		int size = goodsList.size();
 		holder.goodsList.removeAllViews();
@@ -154,6 +156,15 @@ public class OrderListAdapter extends BaseAdapter{
                 case R.id.tv_cancel_order:
                     OrderListActivity.cancelOrder(mOrderListActivity,orderId);
                     break;
+				case R.id.tv_order_pay:
+
+					break;
+				case R.id.tv_order_receipt:
+
+					break;
+				case R.id.goodsList:
+					IntentHelper.orderDetail(mOrderListActivity,orderId);
+					break;
             }
         }
     }

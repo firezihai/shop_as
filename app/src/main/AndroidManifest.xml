@@ -67,6 +67,11 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="com.fengbeibei.shop.activity.OrderListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.fengbeibei.shop.activity.OrderDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.fengbeibei.shop.activity.SubjectWebActivity"

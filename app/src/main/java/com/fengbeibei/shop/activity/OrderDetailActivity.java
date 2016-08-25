@@ -11,9 +11,10 @@ import com.fengbeibei.shop.R;
  * @created 2016-08-25 11:38
  */
 public class OrderDetailActivity extends BaseActivity{
+    private String mOrderId;
     @Override
     protected int getLayoutId() {
-        return super.getLayoutId();
+        return R.layout.activity_order_detail;
     }
 
     @Override
@@ -23,7 +24,8 @@ public class OrderDetailActivity extends BaseActivity{
 
     @Override
     public void initView() {
-        super.initView();
+        mOrderId = getIntent().getStringExtra("orderId");
+
     }
 
     @Override

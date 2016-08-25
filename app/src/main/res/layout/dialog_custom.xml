@@ -51,7 +51,7 @@
             android:background="@color/transparent"
             android:text="@string/cancel"
             android:textColor="@color/pub_color_three"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="normal"
             style="?android:attr/borderlessButtonStyle"/>
         <View
@@ -67,7 +67,7 @@
             android:background="@color/transparent"
             android:text="@string/confirm"
             android:textColor="@color/pub_color_three"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:elevation="@null"
             android:textStyle="normal"
             style="?android:attr/borderlessButtonStyle"/>
