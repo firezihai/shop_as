@@ -53,7 +53,7 @@
             android:textColor="@color/pub_color_three"
             android:textSize="20sp"
             android:textStyle="normal"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="@style/AppTheme.Btn"/>
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
@@ -70,6 +70,6 @@
             android:textSize="20sp"
             android:elevation="@null"
             android:textStyle="normal"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="@style/AppTheme.Btn"/>
     </LinearLayout>
 </LinearLayout>
