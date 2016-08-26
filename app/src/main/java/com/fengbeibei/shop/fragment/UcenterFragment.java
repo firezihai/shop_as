@@ -1,12 +1,21 @@
 package com.fengbeibei.shop.fragment;
 
-import org.apache.http.HttpStatus;
-import org.json.JSONObject;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.AccountManageActivity;
 import com.fengbeibei.shop.activity.OrderListActivity;
 import com.fengbeibei.shop.bean.User;
-import com.fengbeibei.shop.common.CircleImageDrawable;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
@@ -14,24 +23,7 @@ import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import org.apache.http.HttpStatus;
 
 import butterknife.BindView;
 
@@ -64,6 +56,8 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 	TextView mSeeAllOrder;
     @BindView(R.id.loginBtn)
     Button mLoginBtn;
+    @BindView(R.id.account_manage)
+    LinearLayout mAccountManage;
     private String mKey;
 	//private static final  String REQUEST_CODE = "0011";
 	@Override
@@ -92,6 +86,7 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
         mLoginBtn.setOnClickListener(this);
         mSeeAllOrder.setOnClickListener(this);
         mSetting.setOnClickListener(this);
+        mAccountManage.setOnClickListener(this);
 	}
 	@Override
 	public void initData(){
@@ -158,6 +153,9 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
                 break;
             case R.id.setting:
                 IntentHelper.appSetting(getActivity());
+                break;
+            case R.id.account_manage:
+                IntentHelper.accountManage(getActivity(), AccountManageActivity.ACCOUNT_MANAGE);
                 break;
         }
     }

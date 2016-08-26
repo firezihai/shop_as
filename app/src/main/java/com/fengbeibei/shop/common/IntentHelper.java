@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.fengbeibei.shop.activity.AccountManageActivity;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.LoginActivity;
@@ -84,4 +85,10 @@ public class IntentHelper {
         intent.putExtra("orderId",orderId);
         context.startActivity(intent);
     }
+
+	public static void accountManage(Context context,int fragmentType){
+		Intent intent = new Intent(context, AccountManageActivity.class);
+		intent.putExtra(AccountManageActivity.DISPLAY_FRAGMENT_TYPE,fragmentType);
+		context.startActivity(intent);
+	}
 }

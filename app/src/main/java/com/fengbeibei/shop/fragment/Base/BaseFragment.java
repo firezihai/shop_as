@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.interf.BaseViewInterface;
@@ -24,6 +26,8 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
     private static final String TAG = "BaseFragment";
     protected Dialog mWaitDialog;
     protected LayoutInflater mInflater;
+    protected boolean mAddHead = false;
+    protected ViewGroup mHeadLayout;
     /**
      * 加载提示布局
      */
@@ -43,8 +47,18 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.mInflater = inflater;
-        View view =  super.onCreateView(inflater, container, savedInstanceState);
-        return view;
+        onBeforeSetContentLayout();
+        if(!isAddHead()) {
+            return inflater.inflate(getLayoutId(), container, false);
+        }else{
+            LinearLayout linearLayout = (LinearLayout) inflaterView(R.layout.activity_common);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelSize(R.dimen.head_height));
+            mHeadLayout = (ViewGroup)inflaterView(R.layout.comm_head);
+            linearLayout.addView(mHeadLayout,layoutParams);
+            linearLayout.addView(inflaterView(getLayoutId()), new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            return linearLayout;
+        }
+
     }
 
     @Override
@@ -52,6 +66,19 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         initView();
+    }
+
+    protected void onBeforeSetContentLayout(){}
+    public void setAddHead(boolean addHead) {
+        mAddHead = addHead;
+    }
+
+    public boolean isAddHead() {
+        return mAddHead;
+    }
+
+    public void setHeadTitle(int resId){
+        ((TextView) mHeadLayout.findViewById(R.id.tv_headTitle)).setText(resId);
     }
 
     /**
