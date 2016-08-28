@@ -48,7 +48,7 @@ public class LogisticsAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if(convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.list_logistics_item,null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item_logistics,null);
             viewHolder = new ViewHolder();
             viewHolder.mTopLine = (TextView) convertView.findViewById(R.id.tv_top_line);
             viewHolder.mDeliverIcon = (ImageView)convertView.findViewById(R.id.iv_deliver_icon);

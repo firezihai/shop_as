@@ -14,6 +14,7 @@ import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.activity.SettingActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
+import com.fengbeibei.shop.fragment.AddressEditFragment;
 
 public class IntentHelper {
 
@@ -89,6 +90,13 @@ public class IntentHelper {
 	public static void accountManage(Context context,int fragmentType){
 		Intent intent = new Intent(context, AccountManageActivity.class);
 		intent.putExtra(AccountManageActivity.DISPLAY_FRAGMENT_TYPE,fragmentType);
+		context.startActivity(intent);
+	}
+
+	public static void editAddress(Context context,String addressId){
+		Intent intent = new Intent(context,AccountManageActivity.class);
+		intent.putExtra(AccountManageActivity.DISPLAY_FRAGMENT_TYPE,AccountManageActivity.ADDRESS_EDIT);
+		intent.putExtra(AddressEditFragment.ADDRESS_ID,addressId);
 		context.startActivity(intent);
 	}
 }
