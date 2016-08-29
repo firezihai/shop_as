@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
@@ -40,6 +41,8 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
     TextView mUsername;
     @BindView(R.id.tv_phone)
     TextView mPhone;
+    @BindView(R.id.rl_area_layout)
+    RelativeLayout mAreaLayout;
     @BindView(R.id.tv_area)
     TextView mArea;
     @BindView(R.id.tv_address_info)
@@ -64,8 +67,15 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void initView() {
         setHeadTitle(R.string.edit_address);
+        setHeadBackBtnListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         mAddressId = getActivity().getIntent().getStringExtra(ADDRESS_ID);
         mSelectContact.setOnClickListener(this);
+        mAreaLayout.setOnClickListener(this);
         mBtnSave.setOnClickListener(this);
         initData();
     }
@@ -113,6 +123,9 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.ll_select_contact:
                 selectContact();
+                break;
+            case R.id.rl_area_layout:
+
                 break;
         }
     }

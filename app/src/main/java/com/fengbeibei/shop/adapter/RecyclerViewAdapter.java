@@ -70,7 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
             mGoodsList.clear();
         }
         mPage +=1;
-        mSearchResultActivity.setPage(mPage);
+      //  mSearchResultActivity.setPage(mPage);
         mGoodsList.addAll(data);
         notifyDataSetChanged();
     }
@@ -271,6 +271,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     public void clearData(){
         mGoodsList.clear();
+        mPage = 0;
+    }
+
+    public int getPage() {
+        return mPage;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

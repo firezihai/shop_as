@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.SearchResultActivity;
 import com.fengbeibei.shop.interf.SearchTabInterface;
 
 /**
@@ -22,7 +24,7 @@ import com.fengbeibei.shop.interf.SearchTabInterface;
 public class SearchTab  extends FrameLayout implements View.OnClickListener{
     private Context mContext;
     private TextView mTvSearchSort;
-    private LinearLayout mOpenSort;
+    private LinearLayout mSortLayout;
     private TextView mTvMixSort;
     private ImageView mIvMixSort;
     private TextView mTvPriceUp;
@@ -45,6 +47,10 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
     private SearchTabInterface mSearchTabInterface;
     private LinearLayout mLlSales;
     private TextView mTvSales;
+    /**
+     * 用于设置遮罩的可见性
+     */
+    private SearchResultActivity.SearchMaskCallback mSearchMaskCallback;
     public SearchTab(Context context) {
         super(context);
         initView(context);
@@ -69,7 +75,7 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.layout_search_sort, this);
         mTvSearchSort = (TextView) findViewById(R.id.tv_search_sort);
-        mOpenSort = (LinearLayout) findViewById(R.id.ll_open_sort);
+        mSortLayout= (LinearLayout) findViewById(R.id.ll_sort_layout);
         mSearchSortMask = (View) findViewById(R.id.searchSortMask);
         mLlSales = (LinearLayout) findViewById(R.id.ll_sales);
         mTvSales = (TextView) findViewById(R.id.tv_sales);
@@ -101,15 +107,33 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
         findViewById(R.id.ll_sales).setOnClickListener(this);
         findViewById(R.id.ll_ownshop).setOnClickListener(this);
         findViewById(R.id.ll_promotion).setOnClickListener(this);
-
+      /*  mSearchSortMask.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        float y = event.getRawY();
+                        if(y>0){
+                            setSortLayoutVisibility(View.GONE);
+                        }
+                        break;
+                }
+                return true;
+            }
+        });*/
+        mSortLayout.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ll_search_sort:
-                    mOpenSort.setVisibility(View.VISIBLE);
-                    mSearchSortMask.setVisibility(View.VISIBLE);
+                    setSortLayoutVisibility(View.VISIBLE);
                  break;
             case R.id.rl_mix_sort:
                     mixSort();
@@ -137,6 +161,9 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
                 break;
             case R.id.ll_sales:
                 salesSort();
+                break;
+            case R.id.searchSortMask:
+                setSortLayoutVisibility(View.GONE);
                 break;
         }
     }
@@ -225,7 +252,7 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
 
     public boolean isSortLayoutVisibility(){
         boolean bool = false;
-        if(mOpenSort.getVisibility() == View.VISIBLE){
+        if(mSortLayout.getVisibility() == View.VISIBLE){
             bool = true;
         }
         return bool;
@@ -252,14 +279,16 @@ public class SearchTab  extends FrameLayout implements View.OnClickListener{
         mIvEvalUp.setVisibility(evalUp);
         mIvEvalDown.setVisibility(evalDown);
         mIvDate.setVisibility(date);
-        mOpenSort.setVisibility(View.GONE);
-        mSearchSortMask.setVisibility(View.GONE);
+        setSortLayoutVisibility(View.GONE);
     }
 
-    public void hideSortLayout(){
-        if(mOpenSort.getVisibility() == View.VISIBLE){
-            mOpenSort.setVisibility(View.GONE);
-            mSearchSortMask.setVisibility(View.GONE);
-        }
+    public void setSortLayoutVisibility(int visibility){
+            mSortLayout.setVisibility(visibility);
+       //     mSearchSortMask.setVisibility(visibility);
+        mSearchMaskCallback.setSearchMakVisibility(visibility);
+    }
+
+    public void setSearchMaskCallback(SearchResultActivity.SearchMaskCallback searchMaskCallback) {
+        mSearchMaskCallback = searchMaskCallback;
     }
 }

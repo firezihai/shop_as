@@ -27,6 +27,9 @@
     </style>
 	<style name="AppGoodsPhotoTheme" parent="AppBaseTheme">
 		<item name="colorPrimaryDark">@color/goods_photo_bg</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
 	</style>
 	<style name="MainMenuBtn">
 	    <item name="android:layout_width">0dp</item>

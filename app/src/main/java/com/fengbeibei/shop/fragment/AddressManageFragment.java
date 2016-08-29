@@ -49,6 +49,12 @@ public class AddressManageFragment extends BaseFragment implements View.OnClickL
     public void initView() {
         mkey = MyApplication.getInstance().getLoginKey();
         setHeadTitle(R.string.address_manage);
+        setHeadBackBtnListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         initData();
     }
 
@@ -62,9 +68,9 @@ public class AddressManageFragment extends BaseFragment implements View.OnClickL
             public void onFinish(Message response) {
                 if (response.what == HttpStatus.SC_OK){
                     String json = (String) response.obj;
-                    System.out.println(json);
                     try{
                         JSONObject obj = new JSONObject(json);
+                        System.out.println(json);
                         if(obj.has("address_list")){
                             String addressListJson = obj.getString("address_list");
                             List<Address> addressList = Address.arrayAddressFromData(addressListJson);

@@ -36,7 +36,13 @@
             android:layout_height="match_parent"
             android:visibility="gone"
             android:layout_marginTop="93.0dip" />
+        <View android:id="@+id/search_mask"
+              android:background="#49000000"
+              android:visibility="gone"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent" />
         <LinearLayout
+            android:id="@+id/ll_search_title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

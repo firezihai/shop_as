@@ -35,6 +35,12 @@ public class AccountManageFragment extends BaseFragment implements View.OnClickL
     @Override
     public void initView() {
         setHeadTitle(R.string.account);
+        setHeadBackBtnListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         mAddressManage.setOnClickListener(this);
         mModifyPassword.setOnClickListener(this);
     }

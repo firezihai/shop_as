@@ -97,6 +97,10 @@ public class PullLoadRecyclerView extends RelativeLayout{
         mOnScrollCallback = onScrollCallback;
     }
 
+    public void setRecyclerViewTouchListener(OnTouchListener onTouchListener){
+        mRecyclerView.setOnTouchListener(onTouchListener);
+    }
+
     public int[] getBigVisibleItem() {
         return mBigVisibleItem;
     }

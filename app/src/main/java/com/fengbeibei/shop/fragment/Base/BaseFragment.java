@@ -80,7 +80,9 @@ public abstract class BaseFragment extends Fragment implements BaseViewInterface
     public void setHeadTitle(int resId){
         ((TextView) mHeadLayout.findViewById(R.id.tv_headTitle)).setText(resId);
     }
-
+    protected void setHeadBackBtnListener(View.OnClickListener onClickListener){
+        mHeadLayout.findViewById(R.id.back).setOnClickListener(onClickListener);
+    }
     /**
      * 扩展布局
      * @param resId

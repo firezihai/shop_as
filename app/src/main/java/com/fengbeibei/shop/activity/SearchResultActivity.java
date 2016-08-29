@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -41,10 +42,9 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     private ViewHolder mViewHolder;
     private String mCateId;
     private String mSearchKeyword;
-    private int mPage = 0;
     private long mPageCount = 0;
     private boolean mHasMore = true;
-    private boolean mLoadState = true;
+    private boolean mLoadState = false;
     private RecyclerViewAdapter mRecyclerViewAdapter;
     private PullLoadRecyclerViewOnScrollListener mScrollCallback = new PullLoadRecyclerViewOnScrollListener(this);
     /**
@@ -82,7 +82,8 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void initData() {
-        String url = Constants.SEARCH_GOODS_LIST_URL+"&page="+Constants.PAGESIZE+"&curpage="+mPage;
+        int page = mRecyclerViewAdapter.getPage();
+        String url = Constants.SEARCH_GOODS_LIST_URL+"&page="+Constants.PAGESIZE+"&curpage="+page;
         if(mCateId != null && !mCateId.equals("")){
             url = url + "&gc_id="+mCateId;
         }
@@ -99,7 +100,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
             url +="is_promotion=1";
         }
         url +="&key="+mOrderType;
-        Log.i("RecyclerViewAdapter", url);
         mLoadState = true;
         HttpClientHelper.asynGet(url, new HttpClientHelper.CallBack() {
             @Override
@@ -108,7 +108,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
                 if (response.what == HttpStatus.SC_OK) {
                     Bundle bundle = response.getData();
                     //mHasMore = bundle.getBoolean(HttpClientHelper.HASMORE);
-                    //     mPageCount = bundle.getLong(HttpClientHelper.COUNT);
+                    //mPageCount = bundle.getLong(HttpClientHelper.COUNT);
 
                     try {
                         String json = (String) response.obj;
@@ -117,14 +117,14 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
                         mPageCount = obj.getLong("pagecount");
                         List<Goods> goodsList = Goods.arrayListBeanFromData(goodsListJson);
                         mRecyclerViewAdapter.addData(goodsList);
-                        if ((mPageCount * Integer.parseInt(Constants.PAGESIZE ))> (Integer.parseInt(Constants.PAGESIZE ) * mPage)) {
+                        if ((mPageCount * Integer.parseInt(Constants.PAGESIZE)) > (Integer.parseInt(Constants.PAGESIZE) * mRecyclerViewAdapter.getPage())) {
                             mHasMore = true;
-                        }else{
+                        } else {
                             mHasMore = false;
                         }
                         mRecyclerViewAdapter.setHasMore(mHasMore);
                         mRecyclerViewAdapter.setPageCount(mPageCount);
-                        mViewHolder.mSearchPageView.setText(mPage + "", mPageCount + "");
+                        mViewHolder.mSearchPageView.setText(mRecyclerViewAdapter.getPage() + "", mPageCount + "");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -160,29 +160,56 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         mViewHolder.mSearchHeaderView.setSearchHeaderListener(mSearchHeaderListener);
         mViewHolder.mSearchHeaderView.setSearchKeyword(mSearchKeyword);
         mViewHolder.mSearchTab.setSearchTabListener(this);
+        //绑定设置遮罩的可见性的操作类
+        mViewHolder.mSearchTab.setSearchMaskCallback(new SearchMaskCallback(this));
+        //遮罩禁用滑动事件,并隐藏遮罩
+        mViewHolder.mSearchMask.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        if(event.getRawY() > 0){
+                            mViewHolder.mSearchTab.setSortLayoutVisibility(View.GONE);
+                        }
+                        break;
+                }
 
+                return true;
+            }
+        });
         mRecyclerViewAdapter = new RecyclerViewAdapter(this,this);
         mRecyclerViewAdapter.setHasMore(mHasMore);
         mRecyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, String goodsId) {
-                IntentHelper.goodsDetail(SearchResultActivity.this,goodsId);
+                IntentHelper.goodsDetail(SearchResultActivity.this, goodsId);
             }
         });
         mViewHolder.mPullLoadRecyclerView.setAdapter(mRecyclerViewAdapter);
         mViewHolder.mPullLoadRecyclerView.setOnScrollCallback(mScrollCallback);
+        //设置搜索栏的高度
         postSearchTitleHeight();
         mViewHolder.mPullLoadRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(PullLoadRecyclerView.TYPE_LIST,
                 StaggeredGridLayoutManager.VERTICAL));
         mViewHolder.mPullLoadRecyclerView.setItemDecoration(new RecyclerViewItemDecoration());
+        mViewHolder.mPullLoadRecyclerView.setRecyclerViewTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(mLoadState){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+        });
         initData();
     }
 
 
     @Override
     public void mixSort() {
-        mOrderType = 2;
-        mPage = 0;
+        mOrderType = 1;
         mRecyclerViewAdapter.clearData();
         initData();
     }
@@ -191,7 +218,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void priceUp() {
         mOrderType = 3;
         mOrder = "ASC";
-        mPage = 0;
         mRecyclerViewAdapter.clearData();
         initData();
     }
@@ -200,7 +226,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void priceDown() {
         mOrderType = 3;
         mOrder = "DESC";
-        mPage = 0;
         mRecyclerViewAdapter.clearData();
         initData();
     }
@@ -209,7 +234,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void evalUp() {
         mOrderType = 4;
         mOrder = "ASC";
-        mPage = 0;
         initData();
     }
 
@@ -217,7 +241,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void evalDown() {
         mOrderType = 4;
         mOrder = "DESC";
-        mPage = 0;
         mRecyclerViewAdapter.clearData();
         initData();
     }
@@ -226,14 +249,12 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     public void dateSort() {
         mOrderType = 5;
         mOrder = "DESC";
-        mPage = 0;
         mRecyclerViewAdapter.clearData();
         initData();
     }
 
     @Override
     public void isOwnShop() {
-        mPage = 0;
         mOwnShop = mViewHolder.mSearchTab.isOwnShop();
         mRecyclerViewAdapter.clearData();
         initData();
@@ -241,7 +262,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void isPromotion() {
-        mPage = 0;
         mIsPromotion = mViewHolder.mSearchTab.isPromotion();
         mRecyclerViewAdapter.clearData();
         initData();
@@ -249,7 +269,6 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     @Override
     public void SalesSort() {
-        mPage = 0;
         mRecyclerViewAdapter.clearData();
         mOrderType = 1;
         initData();
@@ -266,7 +285,7 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
 
     public void onBack(){
         if(mViewHolder.mSearchTab.isSortLayoutVisibility()){
-            mViewHolder.mSearchTab.hideSortLayout();
+            mViewHolder.mSearchTab.setSortLayoutVisibility(View.GONE);
             return;
         }
         finish();
@@ -289,10 +308,10 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
     }
 
     private void postSearchTitleHeight(){
-        mViewHolder.mSearchTitle.post(new Runnable() {
+        mViewHolder.mSearchTitleLayout.post(new Runnable() {
             @Override
             public void run() {
-                mViewHolder.mPullLoadRecyclerView.setPaddingTop(mViewHolder.mSearchTitle.getHeight());
+                mViewHolder.mPullLoadRecyclerView.setPaddingTop(mViewHolder.mSearchTitleLayout.getHeight());
             }
         });
     }
@@ -307,9 +326,11 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
         public SearchNetErrorView mSearchNetErrorView;
         public SearchNoResult mSearchNoResult;
         public SearchPageView mSearchPageView;
+        public LinearLayout mSearchTitleLayout;
         public LinearLayout mSearchTitle;
         public SearchTab mSearchTab;
-        SearchHeaderView mSearchHeaderView;
+        public View  mSearchMask;
+        public SearchHeaderView mSearchHeaderView;
         public ViewHolder(SearchResultActivity searchResultActivity) {
             mSearchResultActivity = searchResultActivity;
             initView();
@@ -320,22 +341,33 @@ public class SearchResultActivity extends BaseActivity implements SearchTabInter
             mSearchNetErrorView = (SearchNetErrorView) mSearchResultActivity.findViewById(R.id.netErrorView);
             mSearchPageView = (SearchPageView) mSearchResultActivity.findViewById(R.id.search_page_view);
             mSearchNoResult = (SearchNoResult) mSearchResultActivity.findViewById(R.id.search_no_result_view);
+            mSearchTitleLayout = (LinearLayout) mSearchResultActivity.findViewById(R.id.ll_search_title_layout);
             mSearchTitle = (LinearLayout) mSearchResultActivity.findViewById(R.id.ll_search_title);
             mSearchHeaderView = (SearchHeaderView) mSearchResultActivity.findViewById(R.id.searchHeader);
             mSearchTab = (SearchTab) mSearchResultActivity.findViewById(R.id.searchTab);
+            mSearchMask = (View) mSearchResultActivity.findViewById(R.id.search_mask);
         }
     }
 
     public static void updateData(SearchResultActivity activity,int scrollState){
-     //   Log.i("RecyclerOnScroll","mState"+scrollState+" ");
-        if(scrollState != RecyclerView.SCROLL_STATE_IDLE && !activity.mLoadState && activity.mPage<activity.mPageCount) {
+        if(scrollState != RecyclerView.SCROLL_STATE_IDLE && !activity.mLoadState && activity.mRecyclerViewAdapter.getPage()<activity.mPageCount) {
             activity.initData();
         }
     }
 
-    public void setPage(int page) {
-        mPage = page;
-    }
+    /**
+     * 遮罩的可见性
+     */
+    public class SearchMaskCallback{
+        private SearchResultActivity mSearchResultActivity;
 
+        public SearchMaskCallback(SearchResultActivity searchResultActivity) {
+            mSearchResultActivity = searchResultActivity;
+        }
+
+        public void setSearchMakVisibility(int visibility){
+           SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchMask.setVisibility(visibility);
+        }
+    }
 
 }

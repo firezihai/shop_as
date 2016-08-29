@@ -23,7 +23,7 @@ public class PullLoadRecyclerViewOnScrollListener implements PullLoadRecyclerVie
     @TargetApi(12)
     @Override
     public void hideSearchTitle() {
-        SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTitle.animate().translationY(-SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTab.getHeight()).setInterpolator(new DecelerateInterpolator(2.0F));
+        SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTitleLayout.animate().translationY(-SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTab.getHeight()).setInterpolator(new DecelerateInterpolator(2.0F));
     }
 
     @Override
@@ -42,6 +42,6 @@ public class PullLoadRecyclerViewOnScrollListener implements PullLoadRecyclerVie
     @TargetApi(12)
     @Override
     public void showSearchTitle() {
-        SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTitle.animate().translationY(0.0F).setInterpolator(new DecelerateInterpolator(2.0F));
+        SearchResultActivity.getViewHolder(mSearchResultActivity).mSearchTitleLayout.animate().translationY(0.0F).setInterpolator(new DecelerateInterpolator(2.0F));
     }
 }
