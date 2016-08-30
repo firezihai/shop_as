@@ -1,5 +1,6 @@
 package com.fengbeibei.shop.fragment;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,10 +16,13 @@ import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.Address;
+import com.fengbeibei.shop.callback.AddrEditAreaSelectedListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
+import com.fengbeibei.shop.fragment.dialog.AddressDialogFragment;
+import com.fengbeibei.shop.fragment.dialog.AreaDialogBuilder;
 import com.fengbeibei.shop.utils.PhoneUtil;
 
 import org.apache.http.HttpStatus;
@@ -52,6 +56,12 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
     @BindView(R.id.btn_save)
     Button mBtnSave;
 
+    private String mProvinceName;
+    private String mProvinceId;
+    private String mCityName;
+    private String mCityId;
+    private String mDistrictName;
+    private String mDistrictId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +111,10 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
                             mPhone.setText(address.getMobPhone());
                             mArea.setText(address.getAreaInfo());
                             mAddressInfo.setText(address.getAddress());
+                            String area_info = obj.getString("area_info");
+                            JSONObject areaObj = new JSONObject(area_info);
+                         //   mProvinceName = areaObj.getString("province_name");
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -125,7 +139,7 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
                 selectContact();
                 break;
             case R.id.rl_area_layout:
-
+                showAreaDialog(null);
                 break;
         }
     }
@@ -165,5 +179,37 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
 
 
         }
+    }
+
+    public void showAreaDialog(com.fengbeibei.shop.common.Address address){
+        AreaDialogBuilder builder = new AreaDialogBuilder();
+        builder.setAreaType(3)
+                    .setAddress(address)
+                    .setAreaSelectedListener(new AddrEditAreaSelectedListener(this))
+                .show(getFragmentManager());
+    }
+
+    public static void setProvinceName(AddressEditFragment fragment,String provinceName){
+        fragment.mProvinceName = provinceName;
+    }
+
+    public static void setProvinceId(AddressEditFragment fragment,String provinceId) {
+        fragment.mProvinceId = provinceId;
+    }
+
+    public static void setCityName(AddressEditFragment fragment,String cityName) {
+        fragment.mCityName = cityName;
+    }
+
+    public static void setCityId(AddressEditFragment fragment,String cityId) {
+        fragment.mCityId = cityId;
+    }
+
+    public static void setDistrictName(AddressEditFragment fragment,String districtName) {
+        fragment.mDistrictName = districtName;
+    }
+
+    public static void setDistrictId(AddressEditFragment fragment,String districtId) {
+        fragment.mDistrictId = districtId;
     }
 }

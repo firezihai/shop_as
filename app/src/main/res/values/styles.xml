@@ -31,6 +31,17 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
 	</style>
+    <!--满屏对话框样式-->
+    <style name="DialogFullScreen" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
 	<style name="MainMenuBtn">
 	    <item name="android:layout_width">0dp</item>
 	    <item name="android:layout_height">match_parent</item>
@@ -54,6 +65,7 @@
 	    <item name="android:textColor">@color/darkgrey</item>
 	    <item name="android:textSize">12sp</item>
 	</style>
+
 	<style name="SendBtn">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
@@ -67,9 +79,8 @@
 	    <item name="android:textColor">@drawable/btn_text_change_enable_state</item>
 	    <item name="android:background">@drawable/btn_bg_change_enable_state</item>
         <item name="android:stateListAnimator">@null</item>
-     <!--   <item name="android:stateListAnimator">@null</item>-->
 	</style>
-	<style name="loadingDialog" parent="android:style/Theme.Dialog">
+	<style name="loadingDialog" parent="@android:style/Theme.Dialog">
 	    <item name="android:windowNoTitle">true</item>
 	    <item name="android:windowBackground">@drawable/loading_bg</item>
 	    <item name="android:windowIsFloating">true</item>
@@ -80,6 +91,16 @@
         <item name="android:indeterminateDrawable">@drawable/progressloading</item>
         <item name="android:indeterminateDuration">1000</item>
         <item name="android:indeterminateOnly">true</item>
+    </style>
+    <!---->
+    <style name="dialog_float_up" parent="DialogFullScreen">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowAnimationStyle">@style/windowAnimFloatUp</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
     <!--  横向线条-->
    <style name="h_line">
@@ -139,16 +160,6 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
-    <style name="FullScreenDialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowNoTitle">false</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowIsTranslucent">false</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:windowFullscreen">false</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
     <style name="ContentOverlay" parent="@android:style/Theme.Dialog">
@@ -225,5 +236,10 @@
     <style name="orderRedBtn" parent="AppTheme.Btn">
         <item name="android:background">@drawable/btn_pay_bg</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="windowAnimFloatUp">
+        <item name="android:windowEnterAnimation">@anim/popup_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_out</item>
     </style>
 </resources>

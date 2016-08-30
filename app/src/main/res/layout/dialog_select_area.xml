@@ -36,6 +36,7 @@
 		android:layout_height="1px"
 		android:background="@color/color_dcdcdc"/>
 	<RadioGroup
+        android:id="@+id/rg_area_select"
 		android:layout_width="match_parent"
 		android:layout_height="40dp"
 		android:orientation="horizontal"
@@ -63,14 +64,14 @@
 			android:textSize="13sp"
 			android:textColor="@color/pub_color_three"/>
 		<RadioButton
-			android:id="@+id/rb_area"
+			android:id="@+id/rb_district"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="1"
 			android:gravity="center"
 			android:checked="false"
 			android:button="@null"
-			android:text="@string/select_area"
+			android:text="@string/select_district"
 			android:textSize="13sp"
 			android:textColor="@color/pub_color_three"/>
 	</RadioGroup>
@@ -79,6 +80,7 @@
 		android:layout_height="1dp"
 		android:background="@color/color_d9d9d9">
 		<View
+            android:id="@+id/view_line"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:background="@drawable/bg_address_line_selected"/>
@@ -87,6 +89,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 		<ListView
+            android:id="@+id/lv_address"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:fadingEdge="none"
@@ -102,6 +105,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp" />
 			<RelativeLayout
+                android:id="@+id/rv_progress_layout"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:gravity="center"
