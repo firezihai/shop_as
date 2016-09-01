@@ -19,12 +19,14 @@ public class AddrEditAreaSelectedListener implements AddressDialogFragment.OnAre
 
     @Override
     public void onAreaSelected(Address address) {
-        AddressEditFragment.setProvinceName(mAddressEditFragment,address.getProvinceName());
+        AddressEditFragment.setProvinceName(mAddressEditFragment, address.getProvinceName());
         AddressEditFragment.setProvinceId(mAddressEditFragment, address.getProvinceId());
         AddressEditFragment.setCityName(mAddressEditFragment, address.getCityName());
         AddressEditFragment.setCityId(mAddressEditFragment, address.getCityId());
         AddressEditFragment.setDistrictName(mAddressEditFragment, address.getDistrictName());
-        AddressEditFragment.setDistrictId(mAddressEditFragment,address.getDistrictId());
-
+        AddressEditFragment.setDistrictId(mAddressEditFragment, address.getDistrictId());
+        AddressEditFragment.getAreaInfo(mAddressEditFragment).setLength(0);
+        String str = address.getProvinceName()+" " +address.getCityName()+" " +address.getDistrictName();
+        AddressEditFragment.getArea(mAddressEditFragment).setText(str);
     }
 }

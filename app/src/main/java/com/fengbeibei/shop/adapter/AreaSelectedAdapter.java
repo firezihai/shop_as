@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.interf.Area;
-import com.fengbeibei.shop.widget.MyListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +31,8 @@ public class AreaSelectedAdapter extends BaseAdapter{
         mData.clear();
         if(data != null){
             mData.addAll(data);
-        }else{
-            notifyDataSetChanged();
         }
-
+        notifyDataSetChanged();
     }
 
 
@@ -47,6 +44,10 @@ public class AreaSelectedAdapter extends BaseAdapter{
 
     @Override
     public Object getItem(int position) {
+        return getArea(position);
+    }
+
+    public Area getArea(int position){
         return mData.get(position);
     }
 

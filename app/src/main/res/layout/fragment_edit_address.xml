@@ -29,10 +29,11 @@
 						android:text="@string/consignor_colon"
 						android:textSize="14sp"
 						android:textColor="@color/pub_color_three"/>
-					<TextView
+					<EditText
 						android:id="@+id/tv_consignor"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:background="@null"
 						android:text=""
 						android:textSize="14sp"
 						android:textColor="@color/pub_color_three"/>
@@ -53,10 +54,11 @@
 						android:text="@string/phone_colon"
 						android:textSize="14sp"
 						android:textColor="@color/pub_color_three"/>
-					<TextView
+					<EditText
 						android:id="@+id/tv_phone"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:background="@null"
 						android:text=""
 						android:textSize="14sp"
 						android:textColor="@color/pub_color_three"/>
@@ -139,15 +141,41 @@
 				android:text="@string/address_info_colon"
 				android:textSize="14sp"
 				android:textColor="@color/pub_color_three"/>
-			<TextView
+			<EditText
 				android:id="@+id/tv_address_info"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:paddingTop="10dp"
 				android:paddingBottom="10dp"
-				android:text="ggggggggg"
+				android:background="@null"
+				android:text=""
 				android:textSize="14sp"
 				android:lineSpacingExtra="2dp"
+				android:textColor="@color/pub_color_three"/>
+		</LinearLayout>
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1px"
+			android:background="@color/color_dcdcdc"/>
+		<LinearLayout
+			android:id="@+id/ll_set_default"
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:paddingLeft="10dp"
+			android:gravity="center_vertical"
+			android:orientation="horizontal"
+			android:background="@color/white">
+			<ImageView
+				android:id="@+id/iv_checkbox_icon"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/addr_selected_bg"/>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="5dp"
+				android:text="@string/set_default"
+				android:textSize="14sp"
 				android:textColor="@color/pub_color_three"/>
 		</LinearLayout>
 		<View

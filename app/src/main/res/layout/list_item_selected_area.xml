@@ -3,11 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:minHeight="44dp">
     <TextView
         android:id="@+id/tv_area_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:background="@drawable/bg_select_grey_transparent"
         android:paddingLeft="14dp"

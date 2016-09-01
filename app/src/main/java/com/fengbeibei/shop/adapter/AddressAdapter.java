@@ -83,7 +83,7 @@ public class AddressAdapter extends BaseAdapter{
         viewHolder.editAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEditInterface.editAddress(address.getAddressId());
+                mEditInterface.editAddress(address);
             }
         });
         viewHolder.deleteAddress.setOnClickListener(new View.OnClickListener() {

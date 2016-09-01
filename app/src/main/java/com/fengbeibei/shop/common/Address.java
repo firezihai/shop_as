@@ -109,4 +109,15 @@ public class Address implements Parcelable , Serializable {
         parcel.writeString(mDistrictId);
     }
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "mCityId='" + mCityId + '\'' +
+                ", mProvinceName='" + mProvinceName + '\'' +
+                ", mProvinceId='" + mProvinceId + '\'' +
+                ", mCityName='" + mCityName + '\'' +
+                ", mDistrictName='" + mDistrictName + '\'' +
+                ", mDistrictId='" + mDistrictId + '\'' +
+                '}';
+    }
 }

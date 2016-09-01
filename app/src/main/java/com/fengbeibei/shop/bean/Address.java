@@ -1,5 +1,8 @@
 package com.fengbeibei.shop.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -12,7 +15,7 @@ import java.util.List;
  * @author zihai(https://github.com/firezihai)
  * @created 2016-08-28 11:23
  */
-public class Address {
+public class Address implements Parcelable{
 
     /**
      * address_id : 245
@@ -53,6 +56,54 @@ public class Address {
     private String dlypId;
     @SerializedName("chain_id")
     private String chainId;
+
+    protected Address(Parcel in) {
+        addressId = in.readString();
+        memberId = in.readString();
+        trueName = in.readString();
+        areaId = in.readString();
+        cityId = in.readString();
+        areaInfo = in.readString();
+        address = in.readString();
+        telPhone = in.readString();
+        mobPhone = in.readString();
+        isDefault = in.readString();
+        dlypId = in.readString();
+        chainId = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(addressId);
+        dest.writeString(memberId);
+        dest.writeString(trueName);
+        dest.writeString(areaId);
+        dest.writeString(cityId);
+        dest.writeString(areaInfo);
+        dest.writeString(address);
+        dest.writeString(telPhone);
+        dest.writeString(mobPhone);
+        dest.writeString(isDefault);
+        dest.writeString(dlypId);
+        dest.writeString(chainId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Address> CREATOR = new Creator<Address>() {
+        @Override
+        public Address createFromParcel(Parcel in) {
+            return new Address(in);
+        }
+
+        @Override
+        public Address[] newArray(int size) {
+            return new Address[size];
+        }
+    };
 
     public static Address objectFromData(String str) {
 
@@ -162,4 +213,6 @@ public class Address {
     public void setChainId(String chainId) {
         this.chainId = chainId;
     }
+
+
 }

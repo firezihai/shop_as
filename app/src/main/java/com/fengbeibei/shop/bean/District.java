@@ -13,6 +13,7 @@ public class District implements Area {
     private String mName;
     private String mId;
 
+
     public District( City city, String name, String id) {
         mCity = city;
         mName = name;

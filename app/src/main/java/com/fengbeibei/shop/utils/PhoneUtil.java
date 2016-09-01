@@ -7,6 +7,9 @@ package com.fengbeibei.shop.utils;
  */
 public class PhoneUtil {
     public static String addStarFormat(String phone,int num){
+        if(phone == null || phone.isEmpty()){
+            return "";
+        }
         String startStr = phone.substring(0,3);
         String endStr = phone.substring(phone.length()-4,phone.length());
         String star = "";
@@ -19,12 +22,18 @@ public class PhoneUtil {
     }
 
     public static String addHyphen(String phone,String hyphen){
+        if(phone == null || phone.isEmpty()){
+            return "";
+        }
         String startStr = phone.substring(0,3);
         String middleStr = phone.substring(3,7);
         String endStr = phone.substring(phone.length()-4,phone.length());
         return startStr+hyphen+middleStr+hyphen+endStr;
     }
     public static String delHyphen(String phone,String hyphen){
+        if(phone == null || phone.isEmpty()){
+            return "";
+        }
         return phone.replace(hyphen,"");
     }
 }

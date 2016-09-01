@@ -1,14 +1,14 @@
 package com.fengbeibei.shop.fragment.dialog;
 
 
-
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,11 +24,23 @@ import android.widget.RelativeLayout;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.AreaSelectedAdapter;
-import com.fengbeibei.shop.common.MyApplication;
-import com.fengbeibei.shop.interf.Area;
 import com.fengbeibei.shop.bean.City;
+import com.fengbeibei.shop.bean.District;
 import com.fengbeibei.shop.bean.Province;
 import com.fengbeibei.shop.common.Address;
+import com.fengbeibei.shop.common.Constants;
+import com.fengbeibei.shop.common.HttpClientHelper;
+import com.fengbeibei.shop.common.MyApplication;
+import com.fengbeibei.shop.interf.Area;
+
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,47 +83,95 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
                 break;
             case R.id.rb_city:
                 Province province = (Province)mProvinceBtn.getTag();
+                if(province == null){
+                    return ;
+                }
                 setCity(province);
                 break;
             case R.id.rb_district:
-                setDistrict();
+                City city = (City)mCityBtn.getTag();
+                if(city == null){
+                    return;
+                }
+                setDistrict(city);
                 break;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i("AddressEditFragment",mAdapter.getArea(position).getType()+"");
+        switch (mAdapter.getArea(position).getType()){
+            case Area.TYPE_PROVINCE:
+                Province province = (Province)mAdapter.getArea(position);
+                mProvinceBtn.setText(province.getName());
+                mProvinceBtn.setTag(province);
+                setRadioButtonCheck(mCityBtn, true);
+                getAreaList(province.getId(), Area.TYPE_CITY);
+
+                break;
+            case Area.TYPE_CITY:
+                City city = (City)mAdapter.getArea(position);
+                mCityBtn.setText(city.getName());
+                mCityBtn.setTag(city);
+                setRadioButtonCheck(mDistrictBtn,true);
+                getAreaList(city.getId(),Area.TYPE_DISTRICT);
+                break;
+            case Area.TYPE_DISTRICT:
+                District district = (District)mAdapter.getArea(position);
+                Address address = new Address(district);
+                mDistrictBtn.setText(district.getName());
+                mDistrictBtn.setTag(district);
+                mOnAreaSelectedListener.onAreaSelected(address);
+                dismiss();
+                break;
+        }
 
     }
 
+
     public AddressDialogFragment() {
+
+    }
+
+    private void setBundle(){
         Bundle bundle = getArguments();
         if(bundle != null){
             mType = bundle.getInt("area_type",1);
-            Address mAddress = bundle.getParcelable("address");
-           switch (mType){
-               case Area.TYPE_PROVINCE:
-                   if(mAddress != null){
+
+            mAddress = bundle.getParcelable("address");
+            System.out.println("area_type======"+mAddress);
+            switch (mType){
+                case Area.TYPE_PROVINCE:
+                    if(mAddress != null){
                         mProvinceBtn.setText(mAddress.getProvinceName());
                         mProvinceBtn.setTag(getProvince(mAddress));
-                       setRadioButtonCheck(mCityBtn,true);
-                   }
-                   break;
-               case Area.TYPE_CITY:
-                   mProvinceBtn.setText(mAddress.getProvinceName());
-                   mProvinceBtn.setTag(getProvince(mAddress));
-                   Province province = getProvince(mAddress);
-                   mCityBtn.setText(mAddress.getCityName());
-                   mCityBtn.setTag(getCity(province,mAddress));
-                   setRadioButtonCheck(mDistrictBtn, true);
-                   break;
-               case Area.TYPE_DISTRICT:
+                        setRadioButtonCheck(mCityBtn,true);
+                    }
+                    break;
+                case Area.TYPE_CITY:
+                    mProvinceBtn.setText(mAddress.getProvinceName());
+                    mProvinceBtn.setTag(getProvince(mAddress));
+                    Province province = getProvince(mAddress);
+                    mCityBtn.setText(mAddress.getCityName());
+                    mCityBtn.setTag(getCity(province,mAddress));
+                    setRadioButtonCheck(mDistrictBtn, true);
+                    break;
+                case Area.TYPE_DISTRICT:
 
-                   break;
-           }
+                    mProvinceBtn.setText(mAddress.getProvinceName());
+                    mProvinceBtn.setTag(getProvince(mAddress));
+                    Province province2 = getProvince(mAddress);
+                    City city = getCity(province2, mAddress);
+                    mCityBtn.setText(mAddress.getCityName());
+                    mCityBtn.setTag(city);
+                    mDistrictBtn.setText(mAddress.getDistrictName());
+                    mDistrictBtn.setTag(getDistrict(city,mAddress));
+                    setRadioButtonCheck(mDistrictBtn, true);
+                    break;
+            }
         }
     }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -133,7 +193,8 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         });
         mAdapter = new AreaSelectedAdapter(getActivity());
         mListView.setAdapter(mAdapter);
-
+        mListView.setOnItemClickListener(this);
+        setBundle();
         return layout;
     }
 
@@ -141,19 +202,21 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         setProvinceBtn();
         mAdapter.setData(null);
         setBtnTouchListener(0);
-
+        getAreaList("0",Area.TYPE_PROVINCE);
     }
 
     public void setCity(Province province){
         setCityBtn();
         mAdapter.setData(null);
         setBtnTouchListener(1);
+        getAreaList(province.getId(),Area.TYPE_CITY);
     }
 
-    public void setDistrict(){
-        setDistrict();
+    public void setDistrict(City city){
+        setDistrictBtn();
         mAdapter.setData(null);
-        setBtnTouchListener(3);
+        setBtnTouchListener(2);
+        getAreaList(city.getId(), Area.TYPE_DISTRICT);
     }
 
 
@@ -181,7 +244,7 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         int type = 2;
         super.onStart();
         getDialog().setCanceledOnTouchOutside(true);
-       Window window  = getDialog().getWindow();
+        Window window  = getDialog().getWindow();
         DisplayMetrics dm = getResources().getDisplayMetrics();
         window.getAttributes().width = dm.widthPixels;
         window.getAttributes().height = dm.heightPixels/2;
@@ -202,7 +265,9 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
     private City getCity(Province province,Address address){
         return new City(province,address.getCityName(),address.getCityId());
     }
-
+    private District getDistrict(City city,Address address){
+        return new District(city,address.getDistrictName(),address.getDistrictId());
+    }
     public void setRadioButtonCheck(final RadioButton button ,final boolean checked){
         button.post(new Runnable() {
             @Override
@@ -212,6 +277,71 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         });
     }
 
+    public void getAreaList(String areaId,final int type){
+        String key = MyApplication.getInstance().getLoginKey();
+        String url = Constants.APP_URL+"act=member_address&op=area_list&key="+key;
+        HashMap<String,String> hashMap = new HashMap<String,String>();
+        hashMap.put("area_id",areaId);
+        mProgressLayout.setVisibility(View.VISIBLE);
+        HttpClientHelper.asynPost(url, hashMap, new HttpClientHelper.CallBack() {
+            @Override
+            public void onFinish(Message response) {
+                mProgressLayout.setVisibility(View.GONE);
+                if(response.what == HttpStatus.SC_OK){
+
+                    String json = (String)response.obj;
+                    System.out.println(json);
+                    try{
+                        JSONObject obj = new JSONObject(json);
+                        List<Area> areaList = new ArrayList<Area>();
+                        String areaJson = obj.getString("area_list");
+                        JSONArray arr = new JSONArray(areaJson);
+                        int size = arr.length();
+                        switch (type){
+                            case Area.TYPE_PROVINCE:
+
+                                for(int i=0;i<size;i++){
+                                    JSONObject itemObj = arr.getJSONObject(i);
+                                    Province  province = new Province(itemObj.getString("area_name"),itemObj.getString("area_id"));
+                                    areaList.add(province);
+                                }
+                                mAdapter.setData(areaList);
+                                break;
+                            case Area.TYPE_CITY:
+                                for(int i=0;i<size;i++){
+                                    JSONObject itemObj = arr.getJSONObject(i);
+                                    City  city = new City((Province)mProvinceBtn.getTag(),itemObj.getString("area_name"),itemObj.getString("area_id"));
+                                    areaList.add(city);
+                                }
+                                mAdapter.setData(areaList);
+                                break;
+                            case Area.TYPE_DISTRICT:
+                                for(int i=0;i<size;i++){
+                                    JSONObject itemObj = arr.getJSONObject(i);
+                                    District district = new District((City)mCityBtn.getTag(),itemObj.getString("area_name"),itemObj.getString("area_id"));
+                                    areaList.add(district);
+                                }
+                                mAdapter.setData(areaList);
+                                break;
+                            default:
+                                break;
+                        }
+                        //List<Area> areaList =
+
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    MyApplication.showToast("内容无法加载，请重试！");
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
 
     public String getName(){
         return "SelectAreaDialog";
@@ -233,7 +363,7 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
             mDistrictBtn.setOnTouchListener(onTouchListener);
             return ;
         }
-       mDistrictBtn.setOnTouchListener(null);
+        mDistrictBtn.setOnTouchListener(null);
     }
     public void setOnAreaSelectedListener(OnAreaSelectedListener onAreaSelectedListener) {
         mOnAreaSelectedListener = onAreaSelectedListener;
@@ -248,7 +378,7 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         private AddressDialogFragment mFragment;
 
         public RegOnTouchListener(AddressDialogFragment fragment, int msgResId) {
-             mFragment= fragment;
+            mFragment= fragment;
             mMsgResId = msgResId;
         }
 
