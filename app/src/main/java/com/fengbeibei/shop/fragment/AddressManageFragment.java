@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.AccountManageActivity;
 import com.fengbeibei.shop.adapter.AddressAdapter;
 import com.fengbeibei.shop.bean.Address;
 import com.fengbeibei.shop.common.Constants;
@@ -58,6 +59,7 @@ public class AddressManageFragment extends BaseFragment implements View.OnClickL
                 getActivity().finish();
             }
         });
+        mAddAddrBtn.setOnClickListener(this);
         initData();
     }
 
@@ -96,7 +98,9 @@ public class AddressManageFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
+        if(v.getId() == R.id.tv_add_address){
+            IntentHelper.accountManage(getActivity(), AccountManageActivity.ADDRESS_ADD);
+        }
     }
 
 
@@ -107,7 +111,7 @@ public class AddressManageFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void editAddress(Address address) {
-        IntentHelper.editAddress(getActivity(),address);
+        IntentHelper.editAddress(getActivity(), address);
     }
 
     @Override

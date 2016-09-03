@@ -31,8 +31,10 @@
 						android:textColor="@color/pub_color_three"/>
 					<EditText
 						android:id="@+id/tv_consignor"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
+						android:layout_width="0dp"
+						android:layout_height="match_parent"
+						android:gravity="center_vertical"
+						android:layout_weight="1"
 						android:background="@null"
 						android:text=""
 						android:textSize="14sp"
@@ -56,8 +58,10 @@
 						android:textColor="@color/pub_color_three"/>
 					<EditText
 						android:id="@+id/tv_phone"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
+						android:layout_width="0dp"
+						android:layout_height="match_parent"
+						android:layout_weight="1"
+						android:gravity="center_vertical"
 						android:background="@null"
 						android:text=""
 						android:textSize="14sp"
@@ -110,7 +114,8 @@
 			<TextView
 				android:id="@+id/tv_area"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center_vertical"
 				android:layout_toRightOf="@id/tv_label"
 				android:layout_centerInParent="true"
 				android:text=""
@@ -129,7 +134,7 @@
 			android:background="@color/color_dcdcdc"/>
 		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="40dp"
 			android:background="@color/white"
 			android:paddingLeft="10dp"
 			android:gravity="center_vertical"
@@ -143,10 +148,10 @@
 				android:textColor="@color/pub_color_three"/>
 			<EditText
 				android:id="@+id/tv_address_info"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:paddingTop="10dp"
-				android:paddingBottom="10dp"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:gravity="center_vertical"
 				android:background="@null"
 				android:text=""
 				android:textSize="14sp"
@@ -169,7 +174,7 @@
 				android:id="@+id/iv_checkbox_icon"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:src="@drawable/addr_selected_bg"/>
+				android:src="@drawable/addr_checkbox_bg"/>
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"

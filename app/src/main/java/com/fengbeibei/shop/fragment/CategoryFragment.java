@@ -50,7 +50,7 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_category;
+        return R.layout.fragment_category;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class CategoryFragment extends BaseFragment {
 						JSONObject obj = new JSONObject(json);
 						if(!obj.isNull("class_list")){
 							JSONArray arr = new JSONArray(obj.getString("class_list"));
-							int size = arr == null ? 0 : arr.length();
+							int size =  arr.length();
 							for( int i = 0 ; i < size ; i ++){
 								JSONObject cateObj = arr.getJSONObject(i);
 								JSONObject cateJsonObj = new JSONObject(cateObj.toString());

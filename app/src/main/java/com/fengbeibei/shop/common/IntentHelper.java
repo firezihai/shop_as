@@ -98,4 +98,6 @@ public class IntentHelper {
 		intent.putExtra("edit_addr",address);
 		context.startActivity(intent);
 	}
+
+
 }

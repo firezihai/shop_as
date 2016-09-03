@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -122,7 +121,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-        mRootView = inflater.inflate(R.layout.home,parent, false);
+        mRootView = inflater.inflate(R.layout.fragment_home,parent, false);
 	//	initView(homeLayout);
         mInflater = inflater;
 
@@ -147,7 +146,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 				return true;
 			}
 			
-		});;
+		});
 	}
 
     @Override
@@ -231,7 +230,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 					try{
 						String json = (String)response.obj;
 						JSONArray arr = new JSONArray(json);
-						int size = null == arr ? 0 : arr.length();
+						int size =  arr.length();
 						for(int i =0 ; i<size ; i++){
 							JSONObject  obj = arr.getJSONObject(i);
 							JSONObject jsonObj = new JSONObject(obj.toString());
@@ -316,7 +315,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 		OnViewClick(imageView1,home2Data.getSquareType(),home2Data.getSquareData());
 		OnViewClick(imageView2,home2Data.getRectangle1Type(),home2Data.getRectangle1Data());
 		OnViewClick(imageView2,home2Data.getRectangle2Type(),home2Data.getRectangle2Data());
-		if(!home2Data.getTitle().equals("") && !home2Data.getTitle().equals("null") && home2Data.getTitle() != null){
+		if(!home2Data.getTitle().equals("") && !home2Data.getTitle().equals("null")){
 			home2Title.setVisibility(View.VISIBLE);
 			home2Title.setText(home2Data.getTitle());
 		}else{
@@ -338,7 +337,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 		Home3GridViewAdapter home3GridViewAdapter= new Home3GridViewAdapter(HomeFragment.this.getContext());
 		home3GridViewAdapter.setHome3Data(home3DataItemList);
 		home3GridView.setAdapter(home3GridViewAdapter);
-		if (!home3Data.getTitle().equals("") && !home3Data.getTitle().equals("null") && home3Data.getTitle() != null){
+		if (!home3Data.getTitle().equals("") && !home3Data.getTitle().equals("null")){
 			home3Title.setText(home3Data.getTitle());
 			home3Title.setVisibility(View.VISIBLE);
 		}else{
@@ -363,7 +362,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 				homeGoodsGridView.setAdapter(homeGoodsGridViewAdapter);
 				homeGoodsGridViewAdapter.notifyDataSetChanged();
 				TextView homeGoodsTitle = (TextView)homeGoodsView.findViewById(R.id.homeGoodsTitle);
-				if(!title.equals("") && !title.equals("null") && title != null){			
+				if(!title.equals("") && !title.equals("null") ){
 					homeGoodsTitle.setText(title);
 					homeGoodsTitle.setVisibility(View.VISIBLE);
 				}else{
@@ -390,7 +389,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 		} catch (JSONException e){
 			e.printStackTrace();
 		}
-		if(adList.size() > 0 && adList != null){
+		if(adList != null && adList.size() > 0){
 			mAdViewPager.removeAllViews();
 			mAdData.clear();
 			for(int i =0 ; i<adList.size() ; i++){

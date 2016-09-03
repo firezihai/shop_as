@@ -142,4 +142,12 @@
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
     <string name="save">保存</string>
+
+    <string name="all_select">全选</string>
+    <string name="goto_settle">去结算(%s)</string>
+    <string name="choose_goods">(已选：%s)</string>
+    <string name="cart_amount">合计：%s</string>
+    <string name="free_ship_fee">免运费</string>
+    <string name="include_ship_fee">含运费</string>
+    <string name="cart_ship_fee_format">运费：%s</string>
 </resources>

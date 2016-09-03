@@ -65,13 +65,13 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
 			Bundle savedInstanceState) {
         mInflater = inflater;
 		// TODO Auto-generated method stub
-		View ucenterLayout = inflater.inflate(R.layout.ucenter, container, false);
+		View ucenterLayout = inflater.inflate(R.layout.fragment_ucenter, container, false);
 		return ucenterLayout;
 	}
 
     @Override
     protected int getLayoutId() {
-        return R.layout.ucenter;
+        return R.layout.fragment_ucenter;
     }
 
     @Override
@@ -161,7 +161,7 @@ public class UcenterFragment extends BaseFragment implements OnClickListener{
     }
 
     public boolean isLogin(){
-        if(mKey != null && !"".equals(mKey)) {
+        if(mKey != null && !mKey.equals("")) {
             return true;
         }
         return false;

@@ -107,21 +107,26 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
                 mProvinceBtn.setText(province.getName());
                 mProvinceBtn.setTag(province);
                 setRadioButtonCheck(mCityBtn, true);
-                getAreaList(province.getId(), Area.TYPE_CITY);
+                mAdapter.setData(null);
+                Log.i("AddressDialogFragment", "item province");
+               // getAreaList(province.getId(), Area.TYPE_CITY);
 
                 break;
             case Area.TYPE_CITY:
                 City city = (City)mAdapter.getArea(position);
                 mCityBtn.setText(city.getName());
                 mCityBtn.setTag(city);
-                setRadioButtonCheck(mDistrictBtn,true);
-                getAreaList(city.getId(),Area.TYPE_DISTRICT);
+                mAdapter.setData(null);
+                setRadioButtonCheck(mDistrictBtn, true);
+                Log.i("AddressDialogFragment", "item city");
+                //getAreaList(city.getId(),Area.TYPE_DISTRICT);
                 break;
             case Area.TYPE_DISTRICT:
                 District district = (District)mAdapter.getArea(position);
                 Address address = new Address(district);
                 mDistrictBtn.setText(district.getName());
                 mDistrictBtn.setTag(district);
+                mAdapter.setData(null);
                 mOnAreaSelectedListener.onAreaSelected(address);
                 dismiss();
                 break;
@@ -138,24 +143,28 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         Bundle bundle = getArguments();
         if(bundle != null){
             mType = bundle.getInt("area_type",1);
-
             mAddress = bundle.getParcelable("address");
-            System.out.println("area_type======"+mAddress);
             switch (mType){
                 case Area.TYPE_PROVINCE:
                     if(mAddress != null){
                         mProvinceBtn.setText(mAddress.getProvinceName());
                         mProvinceBtn.setTag(getProvince(mAddress));
                         setRadioButtonCheck(mCityBtn,true);
+                        return;
                     }
+                    setProvince();
                     break;
                 case Area.TYPE_CITY:
-                    mProvinceBtn.setText(mAddress.getProvinceName());
-                    mProvinceBtn.setTag(getProvince(mAddress));
-                    Province province = getProvince(mAddress);
-                    mCityBtn.setText(mAddress.getCityName());
-                    mCityBtn.setTag(getCity(province,mAddress));
-                    setRadioButtonCheck(mDistrictBtn, true);
+                    if(mAddress != null) {
+                        mProvinceBtn.setText(mAddress.getProvinceName());
+                        mProvinceBtn.setTag(getProvince(mAddress));
+                        Province province = getProvince(mAddress);
+                        mCityBtn.setText(mAddress.getCityName());
+                        mCityBtn.setTag(getCity(province, mAddress));
+                        setRadioButtonCheck(mDistrictBtn, true);
+                        return;
+                    }
+                    setCity((Province)mProvinceBtn.getTag());
                     break;
                 case Area.TYPE_DISTRICT:
 
@@ -209,6 +218,7 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         setCityBtn();
         mAdapter.setData(null);
         setBtnTouchListener(1);
+        Log.i("AddressDialogFragment", "setCity");
         getAreaList(province.getId(),Area.TYPE_CITY);
     }
 
@@ -241,7 +251,7 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
     }
     @Override
     public void onStart() {
-        int type = 2;
+        int type = 3;
         super.onStart();
         getDialog().setCanceledOnTouchOutside(true);
         Window window  = getDialog().getWindow();
@@ -251,11 +261,11 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         window.setGravity(Gravity.BOTTOM);
         Bundle bundle = getArguments();
         if(bundle != null){
-            type = bundle.getInt("area_type");
-            if(type == 1){
-                type = 2;
+            int areaType = bundle.getInt("area_type");
+            if(areaType == 1){
+                areaType = type;
             }
-            mUnderline.getLayoutParams().width = dm.widthPixels/type;
+            mUnderline.getLayoutParams().width = dm.widthPixels/areaType;
         }
     }
 
@@ -277,8 +287,9 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
         });
     }
 
-    public void getAreaList(String areaId,final int type){
+    public void getAreaList(final String areaId,final int type){
         String key = MyApplication.getInstance().getLoginKey();
+        Log.i("AddressDialogFragment", "getAreaList");
         String url = Constants.APP_URL+"act=member_address&op=area_list&key="+key;
         HashMap<String,String> hashMap = new HashMap<String,String>();
         hashMap.put("area_id",areaId);
@@ -290,7 +301,7 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
                 if(response.what == HttpStatus.SC_OK){
 
                     String json = (String)response.obj;
-                    System.out.println(json);
+                    Log.i("AddressDialogFragment",json);
                     try{
                         JSONObject obj = new JSONObject(json);
                         List<Area> areaList = new ArrayList<Area>();

@@ -65,7 +65,7 @@
 				android:id="@+id/iv_checkbox_icon"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:src="@drawable/addr_selected_bg"/>
+				android:src="@drawable/addr_checkbox_bg"/>
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"

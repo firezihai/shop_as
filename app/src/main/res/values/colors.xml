@@ -30,5 +30,5 @@
     <color name="color_333333">#333333</color>
     <color name="color_cacaca">#cacaca</color>
     <color name="goods_photo_bg">#4f4f4f</color>
-
+    <color name="price_color_dark">#ffdd0000</color>
 </resources>

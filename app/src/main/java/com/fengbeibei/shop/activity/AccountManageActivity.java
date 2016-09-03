@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.fragment.AccountManageFragment;
+import com.fengbeibei.shop.fragment.AddressAddFragment;
 import com.fengbeibei.shop.fragment.AddressEditFragment;
 import com.fengbeibei.shop.fragment.AddressManageFragment;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
@@ -46,6 +47,9 @@ public class AccountManageActivity extends BaseActivity{
                 break;
             case ADDRESS_EDIT:
                 fragment = new AddressEditFragment();
+                break;
+            case ADDRESS_ADD:
+                fragment = new AddressAddFragment();
                 break;
         }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

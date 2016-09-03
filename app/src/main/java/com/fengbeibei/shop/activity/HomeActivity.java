@@ -1,12 +1,8 @@
 package com.fengbeibei.shop.activity;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.fengbeibei.shop.R;
@@ -37,7 +33,7 @@ public class HomeActivity extends BaseActivity{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_fragment;
+        return R.layout.activity_main;
     }
 
     @Override
