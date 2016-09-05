@@ -62,6 +62,7 @@ public class cart {
     @SerializedName("goods")
     private List<Goods> goods;
 
+    private boolean checked = true;
     public static cart objectFromData(String str) {
 
         return new Gson().fromJson(str, cart.class);
@@ -97,6 +98,14 @@ public class cart {
 
     public void setGoods(List<Goods> goods) {
         this.goods = goods;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 
     public static class Goods {
@@ -165,6 +174,7 @@ public class cart {
         @SerializedName("sole_info")
         private List<?> soleInfo;
 
+        private boolean checked = true;
         public static Goods objectFromData(String str) {
 
             return new Gson().fromJson(str, Goods.class);
@@ -432,6 +442,14 @@ public class cart {
 
         public void setSoleInfo(List<?> soleInfo) {
             this.soleInfo = soleInfo;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
+
+        public boolean isChecked() {
+            return checked;
         }
     }
 }

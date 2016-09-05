@@ -170,11 +170,13 @@
 			android:gravity="center_vertical"
 			android:orientation="horizontal"
 			android:background="@color/white">
-			<ImageView
-				android:id="@+id/iv_checkbox_icon"
+			<CheckBox
+				android:id="@+id/cb_set_default"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:src="@drawable/addr_checkbox_bg"/>
+				android:background="@drawable/addr_checkbox_bg"
+				android:button="@null"
+				android:checked="false"/>
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"

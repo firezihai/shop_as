@@ -65,6 +65,12 @@ public class CategoryFragment extends BaseFragment {
         mThirdCategory = new  ArrayList<List<Category>>();
         mExpandableListAdapter = new CategoryExpandableListAdapter(getContext(),mSecondCategory,mThirdCategory);
         mExpandableListView.setAdapter(mExpandableListAdapter);
+		mExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				return true;
+			}
+		});
      	initData();
 
     }
@@ -150,6 +156,7 @@ public class CategoryFragment extends BaseFragment {
 								}
                                 mThirdCategory.add(childCategoryData);
                                 mExpandableListView.expandGroup(i);
+
 							//	mChildCategoryLayout.addView(childCategoryView);
 							}
                             Log.i("CateFragment","mThirdCategory:"+mThirdCategory);

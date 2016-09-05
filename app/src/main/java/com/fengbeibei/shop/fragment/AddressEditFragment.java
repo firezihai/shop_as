@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -57,6 +58,8 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
     LinearLayout mSelectContact;
     @BindView(R.id.ll_set_default)
     LinearLayout mSetDefault;
+    @BindView(R.id.cb_set_default)
+    CheckBox mCheckBox;
     @BindView(R.id.btn_save)
     Button mBtnSave;
 
@@ -137,10 +140,10 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
                 showAreaDialog(address);
                 break;
             case R.id.ll_set_default:
-                if(mSetDefault.isSelected()){
-                    mSetDefault.setSelected(false);
+                if(mCheckBox.isChecked()){
+                    mCheckBox.setChecked(false);
                 }else{
-                    mSetDefault.setSelected(true);
+                    mCheckBox.setChecked(true);
                 }
                 break;
         }
@@ -190,7 +193,7 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
         hashMap.put("mob_phone",mPhoneStr);
         hashMap.put("area_id", mDistrictId);
         hashMap.put("city_id", mCityId);
-        if(mSetDefault.isSelected()){
+        if(mCheckBox.isChecked()){
             hashMap.put("is_default", "1");
         }
         showLoadingDialog("");

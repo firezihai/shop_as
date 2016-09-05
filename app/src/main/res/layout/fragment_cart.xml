@@ -36,21 +36,24 @@
     <ExpandableListView
         android:id="@+id/lv_cart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/rl_head"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:groupIndicator="@null"
         android:fadingEdge="none"
-        android:headerDividersEnabled="true">
+        android:scrollbars="none"
+        android:divider="@null"/>
 
-    </ExpandableListView>
     <LinearLayout
         android:id="@+id/ll_cart_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
+        <View android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_dcdcdc"/>
         <RelativeLayout
             android:id="@+id/rl_cart_settle"
             android:layout_width="match_parent"
@@ -64,9 +67,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/addr_checkbox_bg"
                 android:button="@null"
-                android:clickable="true"
-                android:checked="false"
-                android:focusable="false"/>
+                android:clickable="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,9 +131,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/addr_checkbox_bg"
-                android:button="@null"
-                android:checked="false"
-                android:focusable="false"/>
+                android:button="@null" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -164,7 +163,7 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center"
                 android:background="@drawable/btn_cart_bg"
-                android:text="@string/goto_settle"
+                android:text="@string/delete"
                 android:textColor="@color/white"
                 android:textSize="15sp"/>
         </RelativeLayout>
