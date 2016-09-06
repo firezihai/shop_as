@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.adapter.CartAdapter;
-import com.fengbeibei.shop.bean.cart;
+import com.fengbeibei.shop.bean.Cart;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.MyApplication;
@@ -56,7 +56,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     TextView mCartDeleteBtn;
 
     private CartAdapter mCartAdapter;
-    private List<cart> mCartList;
+    private List<Cart> mCartList;
     private boolean mEditStatus= false;
     private boolean mUpdateGoodsNumStatus = false;
     private int mCheckedNum = 0;
@@ -76,7 +76,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         mCheckboxSettle.setOnClickListener(this);
         mCheckboxSettle.setOnClickListener(this);
         mCartFooter.setVisibility(View.GONE);
-        mCartList = new ArrayList<cart>();
+        mCartList = new ArrayList<Cart>();
         mCartAdapter = new CartAdapter(getActivity(),mCartList);
         mCartAdapter.setCartFragment(this);
         mCheckboxSettle.setChecked(true);
@@ -104,7 +104,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     try {
                         JSONObject obj = new JSONObject(json);
                         if (obj.has("cart_list")) {
-                            List<cart> cartList = cart.arrayCartFromData(obj.getString("cart_list"));
+                            List<Cart> cartList = Cart.arrayCartFromData(obj.getString("cart_list"));
                             if (obj.has("sum")) {
                                 mCartAmountView.setText(String.format(getResources().getString(R.string.cart_amount), obj.getString("sum")));
                             }
@@ -254,7 +254,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     }
 
     public void calcTotal(){
-        List<cart> cartList = mCartAdapter.getCartList();
+        List<Cart> cartList = mCartAdapter.getCartList();
         int groupChild  = cartList.size();
         int checkNum = 0;
         float goodsAmount = 0;
@@ -262,7 +262,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         for(int i=0;i<groupChild;i++){
             int child = cartList.get(i).getGoods().size();
             for (int k=0;k<child;k++){
-                cart.Goods goods = cartList.get(i).getGoods().get(k);
+                Cart.Goods goods = cartList.get(i).getGoods().get(k);
                 if(goods.isChecked()){
                     checkNum += Integer.parseInt(goods.getGoodsNum());
                     goodsAmount = goodsAmount + Float.parseFloat(goods.getGoodsPrice())*Integer.parseInt(goods.getGoodsNum());

@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
-import com.fengbeibei.shop.bean.cart;
+import com.fengbeibei.shop.bean.Cart;
 import com.fengbeibei.shop.callback.EditCartNumListener;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.SystemHelper;
@@ -31,7 +31,7 @@ import java.util.List;
  * @created 2016-09-03 21:57
  */
 public class CartAdapter extends BaseExpandableListAdapter {
-    private List<cart> mCartList;
+    private List<Cart> mCartList;
     private CartFragment mCartFragment;
     private Context mContext;
     private LayoutInflater mInflater;
@@ -40,7 +40,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
     private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
     private boolean mShopChecked = false;
     private boolean mProductChecked = false;
-    public CartAdapter(Context context, List<cart> cartList) {
+    public CartAdapter(Context context, List<Cart> cartList) {
         mContext = context;
         mCartList = cartList;
         mInflater = LayoutInflater.from(mContext);
@@ -97,7 +97,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
         }else{
             viewHolder = (ShopViewHolder) convertView.getTag();
         }
-        cart cart = (com.fengbeibei.shop.bean.cart)getGroup(groupPosition);
+        Cart cart = (Cart)getGroup(groupPosition);
 
         if(!mShopChecked) {
             viewHolder.mCheckBox.setChecked(cart.isChecked());
@@ -139,8 +139,8 @@ public class CartAdapter extends BaseExpandableListAdapter {
         }else{
             viewHolder = (ProductViewHolder) convertView.getTag();
         }
-        cart cart = (com.fengbeibei.shop.bean.cart)getGroup(groupPosition);
-        final com.fengbeibei.shop.bean.cart.Goods goods = (com.fengbeibei.shop.bean.cart.Goods)getChild(groupPosition, childPosition);
+        Cart cart = (Cart)getGroup(groupPosition);
+        final Cart.Goods goods = (Cart.Goods)getChild(groupPosition, childPosition);
         mImageLoader.displayImage(goods.getGoodsImageUrl(), viewHolder.mProductImage, mOptions, mAnimateFirstListener);
 
 
@@ -222,7 +222,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    public List<cart> getCartList() {
+    public List<Cart> getCartList() {
         return mCartList;
     }
 
@@ -333,7 +333,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
         @Override
         public void onClick(View v) {
             final ProductViewHolder viewHolder = (ProductViewHolder)mView.getTag();
-            cart.Goods goods = mCartAdapter.getCartList().get(mGroupPosition).getGoods().get(mChildPosition);
+            Cart.Goods goods = mCartAdapter.getCartList().get(mGroupPosition).getGoods().get(mChildPosition);
             int num = Integer.parseInt(viewHolder.mEditNum.getText().toString());
             switch (v.getId()){
                 case R.id.iv_edit_sub :
@@ -360,7 +360,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    public void showEditCartNumDialog(String num,ProductViewHolder viewHolder,cart.Goods goods){
+    public void showEditCartNumDialog(String num,ProductViewHolder viewHolder,Cart.Goods goods){
         EditCartNumDialog dialog = new EditCartNumDialog();
         Bundle bundle = new Bundle();
         bundle.putString("num",num);

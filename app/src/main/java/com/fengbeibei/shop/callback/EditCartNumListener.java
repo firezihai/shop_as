@@ -1,7 +1,7 @@
 package com.fengbeibei.shop.callback;
 
 import com.fengbeibei.shop.adapter.CartAdapter;
-import com.fengbeibei.shop.bean.cart;
+import com.fengbeibei.shop.bean.Cart;
 import com.fengbeibei.shop.fragment.CartFragment;
 import com.fengbeibei.shop.interf.EditCartNumInterface;
 
@@ -11,9 +11,9 @@ import com.fengbeibei.shop.interf.EditCartNumInterface;
  */
 public class EditCartNumListener implements EditCartNumInterface{
     private CartAdapter.ProductViewHolder mProductViewHolder;
-    private cart.Goods mGoods;
+    private Cart.Goods mGoods;
     private CartFragment mCartFragment;
-    public EditCartNumListener(CartFragment cartFragment,CartAdapter.ProductViewHolder productViewHolder, cart.Goods goods) {
+    public EditCartNumListener(CartFragment cartFragment,CartAdapter.ProductViewHolder productViewHolder, Cart.Goods goods) {
         mProductViewHolder = productViewHolder;
         mGoods = goods;
         mCartFragment = cartFragment;
