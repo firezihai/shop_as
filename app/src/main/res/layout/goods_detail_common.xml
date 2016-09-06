@@ -171,8 +171,7 @@
                             android:layout_toLeftOf="@+id/addBtn"
                             android:layout_toRightOf="@+id/minusBtn"
                             android:layout_centerVertical="true"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
+
                             android:background="@color/white"
                             android:gravity="center"
                             android:text="1"

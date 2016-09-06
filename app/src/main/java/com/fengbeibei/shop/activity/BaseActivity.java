@@ -2,13 +2,11 @@ package com.fengbeibei.shop.activity;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
@@ -114,7 +112,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void showLoadingDialog(String message){
         getLoadingDialog(message, mLoadingLayout, mLoadingStyle);
     }
-
+    protected void showLoadingDialog(String message,int loadingLayout,int loadingStyle){
+        getLoadingDialog(message, loadingLayout, loadingStyle);
+    }
     private Dialog getLoadingDialog(String message,int resLayout,int resStyle){
         if(mLoadingDialog == null){
             mLoadingDialog = DialogUtil.getLoadingDialog(this, message, resLayout, resStyle);

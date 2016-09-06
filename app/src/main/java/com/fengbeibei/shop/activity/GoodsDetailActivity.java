@@ -2,12 +2,11 @@ package com.fengbeibei.shop.activity;
 
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,7 +23,10 @@ import android.widget.TextView;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.Spec;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.Constants;
+import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.IntentHelper;
+import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.fragment.Base.GoodsBaseFragment;
 import com.fengbeibei.shop.fragment.GoodsDetailFragment;
@@ -37,6 +39,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +49,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFragment.OnPopWindow,GoodsFragmentListener{
 
@@ -145,6 +147,8 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
         mAddBtn = (ImageView) mPopupWindowView.findViewById(R.id.addBtn);
         mMinusBtn = (ImageView) mPopupWindowView.findViewById(R.id.minusBtn);
         mBuyNum = (EditText) mPopupWindowView.findViewById(R.id.buyNum);
+        mBuyBtn2 = (Button) mPopupWindowView.findViewById(R.id.buyBtn2);
+        mAddCartBtn2 = (Button) mPopupWindowView.findViewById(R.id.addCartBtn2);
         mPop = new PopupWindow(mPopupWindowView, LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT, true);
         mPop.setAnimationStyle(R.style.animationFade);
@@ -159,7 +163,23 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
         mCartBtn.setOnClickListener(this);
         mBackBtn.setOnClickListener(this);
         mAddCartBtn.setOnClickListener(this);
+
+        mAddCartBtn2.setOnClickListener(this);
+        mBuyBtn2.setOnClickListener(this);
         mBuyBtn.setOnClickListener(this);
+        mAddBtn.setOnClickListener(this);
+        mMinusBtn.setOnClickListener(this);
+        mBuyNum.setFocusable(false);
+        mBuyNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mBuyNum.setFocusable(true);
+                mBuyNum.setFocusableInTouchMode(true);
+            }
+        });
+
+
     }
 
     public void initData(String goodsDetail) {
@@ -313,7 +333,11 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
             case R.id.addCartBtn:
                 if(mAddCartBtn.isEnabled()){
                     if(mIsNowBuy){
-
+                        String goodsNum = mBuyNum.getText().toString();
+                        if(goodsNum.equals("")){
+                            goodsNum = "1";
+                        }
+                        addCart(goodsNum);
                     }else {
                         changePopWindow();
                     }
@@ -335,13 +359,85 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                     finish();
                 }
                 break;
+            case R.id.addBtn:
+               // int m
+                break;
+            case R.id.addCartBtn2:
+                if(mAddCartBtn2.isEnabled()){
+                    //if(mIsNowBuy){
+                        String goodsNum = mBuyNum.getText().toString();
+                        if(goodsNum.equals("")){
+                            goodsNum = "1";
+                        }
+                        addCart(goodsNum);
+                        changePopWindow();
+                   // }else {
+                     //   changePopWindow();
+                    //}
+                }
+                break;
         }
     }
 
 
+    public void updateFragment(){
+        mGoodsDetailFragment.setUpdate(mGoodsId);
+        mGoodsGraphDetailFragment.setUpdate(mGoodsId);
+        mGoodsEvaluateFragment.setUpdate(mGoodsId);
+    }
 
-    public void addCart(String goods_id){
+    @Override
+    public void onUpdateUI(String data) {
+        initData(data);
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            return onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public boolean onBack(){
+       if(mFragments.size() > 0 && mFragmentViewPager.getCurrentItem() !=0){
+           mFragmentViewPager.setCurrentItem(0);
+       }else{
+           finish();
+       }
+        return false;
+    }
+
+    public void addCart(String goodsNum){
+        HashMap<String,String> hashMap = new HashMap<>();
+        String key = MyApplication.getInstance().getLoginKey();
+        hashMap.put("goods_id",mGoodsId);
+        hashMap.put("quantity",goodsNum);
+        showLoadingDialog("",R.layout.view_dialog_loading,R.style.Dialog);
+        HttpClientHelper.asynPost(Constants.APP_URL + "act=member_cart&op=cart_add&key="+key, hashMap, new HttpClientHelper.CallBack() {
+            @Override
+            public void onFinish(Message response) {
+                hideLoadingDialog();
+                if(response.what == HttpStatus.SC_OK){
+                    String json = (String) response.obj;
+                    if(!json.equals("1")){
+                        try{
+                            JSONObject obj = new JSONObject(json);
+                            MyApplication.showToast(obj.getString("error"));
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
     }
 
     class RegSpecOnClickListener implements View.OnClickListener{
@@ -387,42 +483,11 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                 String goodsId = obj.getString(curKey);
                 mGoodsId = goodsId;
                 updateFragment();
-             //   mFragmentListener.(goodsId);
+                //   mFragmentListener.(goodsId);
                 mGoodsDetailFragment.upData();
             }catch (JSONException e){
                 e.printStackTrace();
             }
         }
-    }
-
-
-
-    public void updateFragment(){
-        mGoodsDetailFragment.setUpdate(mGoodsId);
-        mGoodsGraphDetailFragment.setUpdate(mGoodsId);
-        mGoodsEvaluateFragment.setUpdate(mGoodsId);
-    }
-
-    @Override
-    public void onUpdateUI(String data) {
-        initData(data);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
-            return onBack();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    public boolean onBack(){
-       if(mFragments.size() > 0 && mFragmentViewPager.getCurrentItem() !=0){
-           mFragmentViewPager.setCurrentItem(0);
-       }else{
-           finish();
-       }
-        return false;
     }
 }

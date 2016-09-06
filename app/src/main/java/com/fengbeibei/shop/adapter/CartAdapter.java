@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,11 @@ import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.cart;
+import com.fengbeibei.shop.callback.EditCartNumListener;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.fragment.CartFragment;
+import com.fengbeibei.shop.fragment.dialog.EditCartNumDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -108,7 +111,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        ProductViewHolder viewHolder;
+        final ProductViewHolder viewHolder;
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.list_item_cart_product,null);
             viewHolder = new ProductViewHolder();
@@ -137,7 +140,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
             viewHolder = (ProductViewHolder) convertView.getTag();
         }
         cart cart = (com.fengbeibei.shop.bean.cart)getGroup(groupPosition);
-        com.fengbeibei.shop.bean.cart.Goods goods = (com.fengbeibei.shop.bean.cart.Goods)getChild(groupPosition, childPosition);
+        final com.fengbeibei.shop.bean.cart.Goods goods = (com.fengbeibei.shop.bean.cart.Goods)getChild(groupPosition, childPosition);
         mImageLoader.displayImage(goods.getGoodsImageUrl(), viewHolder.mProductImage, mOptions, mAnimateFirstListener);
 
 
@@ -162,7 +165,12 @@ public class CartAdapter extends BaseExpandableListAdapter {
             viewHolder.mProductNum.setVisibility(View.GONE);
             viewHolder.mEditNunLayout.setVisibility(View.VISIBLE);
             viewHolder.mEditNum.setText(goods.getGoodsNum());
-
+            viewHolder.mEditNum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showEditCartNumDialog(viewHolder.mEditNum.getText().toString(),viewHolder,goods);
+                }
+            });
            // viewHolder.mEditNum.setOnClickListener();
             viewHolder.mEditAdd.setOnClickListener(new EditNumListener(this,convertView,groupPosition,childPosition));
             viewHolder.mEditSub.setOnClickListener(new EditNumListener(this,convertView,groupPosition,childPosition));
@@ -248,27 +256,27 @@ public class CartAdapter extends BaseExpandableListAdapter {
 
     }
 
-    class ProductViewHolder{
-        RelativeLayout mPromotionLayout;
-        TextView mPromotion;
-        TextView mPromotionDetail;
-        TextView mChooseBuy;
-        CheckBox mCheckBoxProduct;
-        ImageView mProductImage;
-        TextView mProductName;
-        TextView mProductDescribe;
-        TextView mProductSpecial;
-        TextView mProductPrice;
-        TextView mProductNum;
-        LinearLayout mEditNunLayout;
-        TextView mEditNum;
-        ImageView mEditSub;
-        ImageView mEditAdd;
-        LinearLayout mAllGitLayout;
-        LinearLayout mGitLayout;
-        View mLine;
-        LinearLayout mAccessoryChildLayout;
-        TextView mAccessoryChild;
+    public class ProductViewHolder{
+        public RelativeLayout mPromotionLayout;
+        public TextView mPromotion;
+        public TextView mPromotionDetail;
+        public TextView mChooseBuy;
+        public CheckBox mCheckBoxProduct;
+        public ImageView mProductImage;
+        public TextView mProductName;
+        public TextView mProductDescribe;
+        public TextView mProductSpecial;
+        public TextView mProductPrice;
+        public TextView mProductNum;
+        public LinearLayout mEditNunLayout;
+        public TextView mEditNum;
+        public ImageView mEditSub;
+        public ImageView mEditAdd;
+        public LinearLayout mAllGitLayout;
+        public LinearLayout mGitLayout;
+        public View mLine;
+        public LinearLayout mAccessoryChildLayout;
+        public TextView mAccessoryChild;
     }
 
     class StoreCheckboxListener implements View.OnClickListener{
@@ -324,8 +332,8 @@ public class CartAdapter extends BaseExpandableListAdapter {
 
         @Override
         public void onClick(View v) {
-            ProductViewHolder viewHolder = (ProductViewHolder)mView.getTag();
-            List<cart> cartList = mCartAdapter.getCartList();
+            final ProductViewHolder viewHolder = (ProductViewHolder)mView.getTag();
+            cart.Goods goods = mCartAdapter.getCartList().get(mGroupPosition).getGoods().get(mChildPosition);
             int num = Integer.parseInt(viewHolder.mEditNum.getText().toString());
             switch (v.getId()){
                 case R.id.iv_edit_sub :
@@ -334,7 +342,9 @@ public class CartAdapter extends BaseExpandableListAdapter {
                     if(num<1){
                         num = 1;
                     }
+                    goods.setGoodsNum(num+"");
                     viewHolder.mEditNum.setText(num + "");
+                    mCartAdapter.getCartFragment().updateGoodsNum(goods.getCartId(),goods.getGoodsNum());
                     break;
                 case R.id.iv_edit_add:
                     Log.i("CartFragment",num+" add");
@@ -342,9 +352,20 @@ public class CartAdapter extends BaseExpandableListAdapter {
                     if(num>100){
                         num = 99;
                     }
+                    goods.setGoodsNum(num+"");
                     viewHolder.mEditNum.setText(num + "");
+                    mCartAdapter.getCartFragment().updateGoodsNum(goods.getCartId(), goods.getGoodsNum());
                     break;
             }
         }
+    }
+
+    public void showEditCartNumDialog(String num,ProductViewHolder viewHolder,cart.Goods goods){
+        EditCartNumDialog dialog = new EditCartNumDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("num",num);
+        dialog.setArguments(bundle);
+        dialog.setEditCartNumListener(new EditCartNumListener(mCartFragment,viewHolder,goods));
+        dialog.show(mCartFragment.getFragmentManager(),"num");
     }
 }
