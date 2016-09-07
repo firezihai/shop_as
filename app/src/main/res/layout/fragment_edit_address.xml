@@ -28,7 +28,7 @@
 						android:layout_height="wrap_content"
 						android:text="@string/consignor_colon"
 						android:textSize="14sp"
-						android:textColor="@color/pub_color_three"/>
+						android:textColor="@color/text_color"/>
 					<EditText
 						android:id="@+id/tv_consignor"
 						android:layout_width="0dp"
@@ -38,7 +38,7 @@
 						android:background="@null"
 						android:text=""
 						android:textSize="14sp"
-						android:textColor="@color/pub_color_three"/>
+						android:textColor="@color/text_color"/>
 				</LinearLayout>
 				<View
 					android:layout_width="match_parent"
@@ -55,7 +55,7 @@
 						android:layout_height="wrap_content"
 						android:text="@string/phone_colon"
 						android:textSize="14sp"
-						android:textColor="@color/pub_color_three"/>
+						android:textColor="@color/text_color"/>
 					<EditText
 						android:id="@+id/tv_phone"
 						android:layout_width="0dp"
@@ -65,7 +65,7 @@
 						android:background="@null"
 						android:text=""
 						android:textSize="14sp"
-						android:textColor="@color/pub_color_three"/>
+						android:textColor="@color/text_color"/>
 				</LinearLayout>
 			</LinearLayout>
 			<View
@@ -110,7 +110,7 @@
 				android:gravity="center_vertical"
 				android:text="@string/area_colon"
 				android:textSize="14sp"
-				android:textColor="@color/pub_color_three"/>
+				android:textColor="@color/text_color"/>
 			<TextView
 				android:id="@+id/tv_area"
 				android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
 				android:layout_centerInParent="true"
 				android:text=""
 				android:textSize="14sp"
-				android:textColor="@color/pub_color_three"/>
+				android:textColor="@color/text_color"/>
 			<ImageView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
 				android:gravity="center_vertical"
 				android:text="@string/address_info_colon"
 				android:textSize="14sp"
-				android:textColor="@color/pub_color_three"/>
+				android:textColor="@color/text_color"/>
 			<EditText
 				android:id="@+id/tv_address_info"
 				android:layout_width="0dp"
@@ -156,7 +156,7 @@
 				android:text=""
 				android:textSize="14sp"
 				android:lineSpacingExtra="2dp"
-				android:textColor="@color/pub_color_three"/>
+				android:textColor="@color/text_color"/>
 		</LinearLayout>
 		<View
 			android:layout_width="match_parent"
@@ -183,7 +183,7 @@
 				android:layout_marginLeft="5dp"
 				android:text="@string/set_default"
 				android:textSize="14sp"
-				android:textColor="@color/pub_color_three"/>
+				android:textColor="@color/text_color"/>
 		</LinearLayout>
 		<View
 			android:layout_width="match_parent"

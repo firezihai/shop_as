@@ -9,7 +9,7 @@
         android:id="@+id/goodsHeader"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/pub_color_two">
+        android:background="@drawable/bg_title_new">
         <ImageButton
             android:id="@+id/back"
             android:layout_width="30dp"
@@ -43,12 +43,17 @@
         android:persistentDrawingCache="animation" >
 
     </android.support.v4.view.ViewPager>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_dcdcdc"
+        android:layout_above="@+id/goodsBtmMenu"/>
 	<LinearLayout 
 	    android:id="@+id/goodsBtmMenu"
 	    android:layout_width="match_parent"
 	    android:layout_height="48dp"
 	    android:orientation="horizontal"
-	    android:background="@color/lightgrey"
+	    android:background="@color/white"
 	    android:layout_alignParentBottom="true">
        <LinearLayout 
             android:layout_width="0dp"
@@ -64,8 +69,9 @@
 		        android:textSize="14sp"
 		        android:textColor="@color/darkgrey"/>
             <View
-		        style="@style/v_line"
-		        android:layout_width="0.5dp"/>
+		        android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/color_dcdcdc"/>
             <TextView
                 android:id="@+id/cartBtn"
                 android:layout_width="0dp"

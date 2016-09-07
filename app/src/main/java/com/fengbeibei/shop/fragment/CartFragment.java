@@ -1,7 +1,6 @@
 package com.fengbeibei.shop.fragment;
 
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -116,10 +115,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                             mCartList.addAll(cartList);
                             for(int i=0;i<mCartList.size();i++){
                                 mListView.expandGroup(i);
-                                goodsNum += cartList.get(i).getGoods().size();
                             }
-                            mCartSettleBtn.setText(String.format(getResources().getString(R.string.goto_settle), goodsNum));
-                            mDelNum.setText(String.format(getString(R.string.choose_goods),goodsNum));
+                            calcTotal();
+                           // mCartSettleBtn.setText(String.format(getResources().getString(R.string.goto_settle), goodsNum));
+                           // mDelNum.setText(String.format(getString(R.string.choose_goods),goodsNum));
                             mCartAdapter.notifyDataSetChanged();
                         }
                     } catch (JSONException e) {
@@ -148,11 +147,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                     mEditStatus = true;
                 }
                 if(mEditStatus){
-                    Log.i("CartFragment", "onclick edit true");
                     mCartSettleLayout.setVisibility(View.GONE);
                     mCartDeleteLayout.setVisibility(View.VISIBLE);
                 }else{
-                    Log.i("CartFragment", "onclick edit false");
                     mCartSettleLayout.setVisibility(View.VISIBLE);
                     mCartDeleteLayout.setVisibility(View.GONE);
                 }
@@ -236,6 +233,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                             if(obj.has("error")){
                                 MyApplication.showToast(obj.getString("error"));
                                 return;
+                            }else{
+                               // MyApplication.showToast("成功加入购物车");
                             }
                             calcTotal();
                         }catch (JSONException e){

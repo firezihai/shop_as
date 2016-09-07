@@ -238,7 +238,7 @@
     </style>
     <style name="orderGreyBtn" parent="AppTheme.Btn">
         <item name="android:background">@drawable/btn_grey_bg</item>
-        <item name="android:textColor">@color/pub_color_three</item>
+        <item name="android:textColor">@color/text_color</item>
     </style>
     <style name="orderRedBtn" parent="AppTheme.Btn">
         <item name="android:background">@drawable/btn_pay_bg</item>

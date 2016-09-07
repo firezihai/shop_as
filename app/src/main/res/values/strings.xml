@@ -56,6 +56,7 @@
     <string name="thank_shopping_welcome_next">感谢您在蜂贝贝购物，欢迎您下次光临</string>
     <string name="online_service">在线客服</string>
     <string name="payment_type">支付方式</string>
+    <string name="online_pay">在线支付</string>
     <string name="deliver_type">配送方式</string>
     <string name="invoice_info">发票信息</string>
     <string name="invoice_title_colon">发票抬头：</string>
@@ -150,4 +151,7 @@
     <string name="free_ship_fee">免运费</string>
     <string name="include_ship_fee">含运费</string>
     <string name="cart_ship_fee_format">运费：%s</string>
+    <string name="please_select">请选择</string>
+
+    <string name="confirm_order">确认订单</string>
 </resources>

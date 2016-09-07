@@ -214,9 +214,9 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                 //  mImageLoader.displayImage(goodsImageArr[0], mGoodsImage, mOptions, mAnimateListener);
 
                 if(goodsStorage <= 0){
-                    mBuyBtn.setBackgroundResource(R.color.pub_color_one);
+                    mBuyBtn.setBackgroundResource(R.color.color_bdbdbd);
                     mBuyBtn.setEnabled(false);
-                    mAddCartBtn.setBackgroundResource(R.color.pub_color_one);
+                    mAddCartBtn.setBackgroundResource(R.color.color_bdbdbd);
                     mAddCartBtn.setEnabled(false);
                     mIsBuy = false;
                 }
@@ -327,8 +327,8 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                // IntentHelper.home(GoodsDetailActivity.this);
                 break;
             case R.id.cartBtn:
-                IntentHelper.home(GoodsDetailActivity.this,2);
-                finish();
+                IntentHelper.home(GoodsDetailActivity.this, 2);
+               // finish();
                 break;
             case R.id.addCartBtn:
                 if(mAddCartBtn.isEnabled()){
@@ -346,7 +346,8 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
             case R.id.buyBtn:
                 if(mBuyBtn.isEnabled()){
                     if(mIsNowBuy){
-
+                        String cartId = mGoodsId + "|"+mBuyNum.getText().toString();
+                      IntentHelper.buy(this,"0","0",cartId);
                     }else{
                         changePopWindow();
                     }
@@ -429,6 +430,8 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                             e.printStackTrace();
                         }
 
+                    }else{
+                        MyApplication.showToast("成功加入购物车");
                     }
                 }
             }

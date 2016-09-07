@@ -19,7 +19,7 @@
 			android:layout_centerInParent="true"
 			android:text="@string/address_manage"
 			android:textSize="14sp"
-			android:textColor="@color/pub_color_three"/>
+			android:textColor="@color/text_color"/>
 		<ImageView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
 			android:layout_centerInParent="true"
 			android:text="@string/modify_password"
 			android:textSize="14sp"
-			android:textColor="@color/pub_color_three"/>
+			android:textColor="@color/text_color"/>
 		<ImageView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

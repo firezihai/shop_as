@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:gravity="center_vertical"
-        android:background="@color/pub_color_fourteen"
+        android:background="@color/white"
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_centerVertical="true"
                 android:text="清除图片缓存"
                 android:textSize="16sp"
-                android:textColor="@color/pub_color_three"/>
+                android:textColor="@color/text_color"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:layout_centerVertical="true"
                 android:text="关于我们"
                 android:textSize="16sp"
-                android:textColor="@color/pub_color_three"/>
+                android:textColor="@color/text_color"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 android:layout_marginRight="10dp"
                 android:text="v1.0已是最新版本"
                 android:textSize="16dp"
-                android:textColor="@color/pub_color_three"/>
+                android:textColor="@color/text_color"/>
             <ImageView
                 android:id="@+id/iv_update_arrow"
                 android:layout_width="wrap_content"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.fengbeibei.shop.activity.AccountManageActivity;
+import com.fengbeibei.shop.activity.BuyActivity;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
 import com.fengbeibei.shop.activity.LoginActivity;
@@ -99,5 +100,12 @@ public class IntentHelper {
 		context.startActivity(intent);
 	}
 
+	public static void buy(Context context,String isFCode,String isCart,String cartId){
+		Intent intent = new Intent(context, BuyActivity.class);
+		intent.putExtra("isFCode",isFCode);
+		intent.putExtra("isCart",isCart);
+		intent.putExtra("cartId",cartId);
+		context.startActivity(intent);
+	}
 
 }

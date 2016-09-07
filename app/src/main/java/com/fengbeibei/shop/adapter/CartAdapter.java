@@ -17,6 +17,7 @@ import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.Cart;
 import com.fengbeibei.shop.callback.EditCartNumListener;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.fragment.CartFragment;
 import com.fengbeibei.shop.fragment.dialog.EditCartNumDialog;
@@ -177,7 +178,12 @@ public class CartAdapter extends BaseExpandableListAdapter {
 
         }
       //  viewHolder.mAccessoryChild.setText();
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentHelper.goodsDetail(getCartFragment().getActivity(),goods.getGoodsId());
+            }
+        });
         return convertView;
     }
 

@@ -17,11 +17,10 @@
     <color name="red_btn">#ED5564</color>
     <color name="result_view">#b0000000</color>
     <color name="transparent">#00000000</color>
-    <color name="pub_color_fourteen">#fff8f8f8</color>
-    <color name="pub_color_one">#BDBDBD</color>
-    <color name="pub_color_two">#fff2f2f2</color>
-    <color name="pub_color_three">#ff353d44</color>
-    <color name="pub_color_five">#ffdcdcdc</color>
+    <color name="color_bdbdbd">#BDBDBD</color>
+    <color name="text_color">#ff353d44</color>
+    <color name="color_909090">#ff909090</color>
+    <color name="color_707070">#ff707070</color>
     <color name="color_f2f2f2">#fff2f2f2</color>
     <color name="color_dcdcdc">#ffdcdcdc</color>
     <color name="color_d9d9d9">#ffd9d9d9</color>
