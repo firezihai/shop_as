@@ -96,6 +96,7 @@ public class HomeActivity extends BaseActivity{
 		} else {
 			transaction.show(mHomeFragment);
 		}
+		mHomeBtn.setChecked(true);
 		transaction.commitAllowingStateLoss();
 	}
 	public void intoCategory(){
@@ -107,6 +108,7 @@ public class HomeActivity extends BaseActivity{
 		} else {
 			transaction.show(mCategoryFragment);
 		}
+		mCategoryBtn.setChecked(true);
 		transaction.commitAllowingStateLoss();
 	}
 	public void intoCart(){
@@ -118,6 +120,7 @@ public class HomeActivity extends BaseActivity{
 		} else {
 			transaction.show(mCartFragment);
 		}
+		mCartBtn.setChecked(true);
 		transaction.commitAllowingStateLoss();
 	}
 	public void intoUcenter(){
@@ -129,6 +132,7 @@ public class HomeActivity extends BaseActivity{
 		} else {
 			transaction.show(mUcenterFragment);
 		}
+		mUcenterBtn.setChecked(true);
 		transaction.commitAllowingStateLoss();
 	}
 	private void hideFragments(FragmentTransaction transcantion){

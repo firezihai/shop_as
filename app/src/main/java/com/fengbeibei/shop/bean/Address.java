@@ -57,6 +57,9 @@ public class Address implements Parcelable{
     @SerializedName("chain_id")
     private String chainId;
 
+    public Address() {
+    }
+
     protected Address(Parcel in) {
         addressId = in.readString();
         memberId = in.readString();
@@ -214,5 +217,21 @@ public class Address implements Parcelable{
         this.chainId = chainId;
     }
 
-
+    @Override
+    public String toString() {
+        return "Address{" +
+                "address='" + address + '\'' +
+                ", addressId='" + addressId + '\'' +
+                ", memberId='" + memberId + '\'' +
+                ", trueName='" + trueName + '\'' +
+                ", areaId='" + areaId + '\'' +
+                ", cityId='" + cityId + '\'' +
+                ", areaInfo='" + areaInfo + '\'' +
+                ", telPhone='" + telPhone + '\'' +
+                ", mobPhone='" + mobPhone + '\'' +
+                ", isDefault='" + isDefault + '\'' +
+                ", dlypId='" + dlypId + '\'' +
+                ", chainId='" + chainId + '\'' +
+                '}';
+    }
 }

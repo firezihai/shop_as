@@ -1,10 +1,12 @@
 package com.fengbeibei.shop.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
 import com.fengbeibei.shop.activity.AccountManageActivity;
+import com.fengbeibei.shop.activity.AddDeliveryActivity;
 import com.fengbeibei.shop.activity.BuyActivity;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
@@ -13,14 +15,17 @@ import com.fengbeibei.shop.activity.OrderDetailActivity;
 import com.fengbeibei.shop.activity.OrderLogisticsActivity;
 import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.activity.SearchResultActivity;
+import com.fengbeibei.shop.activity.SelectDeliveryActivity;
 import com.fengbeibei.shop.activity.SettingActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
+import com.fengbeibei.shop.activity.UpdateDeliveryActivity;
+import com.fengbeibei.shop.fragment.AddressEditFragment;
 
 public class IntentHelper {
 
 	public static void home(Context context,int position){
 		Intent intent = new Intent(context, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         intent.putExtra("type",position);
 		context.startActivity(intent);
 	}
@@ -96,7 +101,7 @@ public class IntentHelper {
 	public static void editAddress(Context context, com.fengbeibei.shop.bean.Address address){
 		Intent intent = new Intent(context,AccountManageActivity.class);
 		intent.putExtra(AccountManageActivity.DISPLAY_FRAGMENT_TYPE,AccountManageActivity.ADDRESS_EDIT);
-		intent.putExtra("edit_addr",address);
+		intent.putExtra(AddressEditFragment.EXTRA_ADDRESS,address);
 		context.startActivity(intent);
 	}
 
@@ -108,4 +113,21 @@ public class IntentHelper {
 		context.startActivity(intent);
 	}
 
+	public static void selectDeliveryAddr(Activity activity, com.fengbeibei.shop.bean.Address address){
+		Intent intent = new Intent(activity,SelectDeliveryActivity.class);
+		intent.putExtra("address",address);
+		activity.startActivityForResult(intent, BuyActivity.REQUEST_SELECT_DELIVERY_ADDR);
+	}
+
+	public static void editDeliveryAddr(Activity activity,com.fengbeibei.shop.bean.Address address){
+		Intent intent = new Intent(activity, UpdateDeliveryActivity.class);
+		intent.putExtra(UpdateDeliveryActivity.EXTRA_ADDRESS,address);
+		activity.startActivityForResult(intent,BuyActivity.REQUEST_UPDATE_DELIVERY_ADDR);
+	}
+
+	public static void addDeliveryAddr(Activity activity,com.fengbeibei.shop.bean.Address address){
+		Intent intent = new Intent(activity, AddDeliveryActivity.class);
+		intent.putExtra(AddDeliveryActivity.EXTRA_ADDRESS,address);
+		activity.startActivityForResult(intent,BuyActivity.REQUEST_ADD_DELIVERY_ADDR);
+	}
 }

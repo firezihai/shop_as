@@ -1,13 +1,11 @@
-package com.fengbeibei.shop.fragment;
+package com.fengbeibei.shop.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Message;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,11 +19,10 @@ import com.fengbeibei.shop.bean.Address;
 import com.fengbeibei.shop.bean.City;
 import com.fengbeibei.shop.bean.District;
 import com.fengbeibei.shop.bean.Province;
-import com.fengbeibei.shop.callback.AddrEditAreaSelectedListener;
+import com.fengbeibei.shop.callback.DeliveryAreaSelectedListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.MyApplication;
-import com.fengbeibei.shop.fragment.Base.BaseFragment;
 import com.fengbeibei.shop.fragment.dialog.AreaDialogBuilder;
 import com.fengbeibei.shop.utils.PhoneUtil;
 
@@ -39,10 +36,11 @@ import butterknife.BindView;
 
 /**
  * @author zihai(https://github.com/firezihai)
- * @created 2016-08-28 12:07
+ * @created 2016-09-10 12:35
  */
-public class AddressEditFragment extends BaseFragment implements View.OnClickListener{
+public class UpdateDeliveryActivity extends BaseActivity{
     public static final int REQUEST_CONTACT = 0x110;
+    public static final int RESULT_UPDATE_DELIVERY = 0x1;
     public static final String EXTRA_ADDRESS = "address";
     private Address mAddress;
     @BindView(R.id.tv_consignor)
@@ -72,34 +70,33 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
     private String mDistrictId;
     private StringBuffer mAreaInfo;
     private String mPhoneStr;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setAddHead(true);
-    }
-
+    private int mType = 1;
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_edit_address;
+        return R.layout.activity_update_delivery;
     }
 
-
     @Override
-    public void initView() {
-        setHeadTitle(R.string.edit_address);
+    protected void onBeforeSetContentLayout() {
+        createContentView(true);
+        setHeadTitle(R.string.edit_delivery_address);
         setHeadBackBtnListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                finish();
+
             }
         });
-        mAddress = getActivity().getIntent().getParcelableExtra(EXTRA_ADDRESS);
+    }
+
+    @Override
+    public void initView() {
+        mAddress = getIntent().getParcelableExtra(EXTRA_ADDRESS);
         mSelectContact.setOnClickListener(this);
         mAreaLayout.setOnClickListener(this);
         mSetDefault.setOnClickListener(this);
         mBtnSave.setOnClickListener(this);
         initData();
-
     }
 
     @Override
@@ -109,7 +106,7 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
         mArea.setText(mAddress.getAreaInfo());
         mAddressInfo.setText(mAddress.getAddress());
         if(mAddress.getIsDefault().equals("1")){
-            mSetDefault.setSelected(true);
+            mCheckBox.setSelected(true);
         }
         mAreaInfo = new StringBuffer();
         String[] areaInfo = mAddress.getAreaInfo().split("\\s");
@@ -123,7 +120,6 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
         mAreaInfo.append(mProvinceName);
         mAreaInfo.append(mCityName);
         mAreaInfo.append(mDistrictName);
-
     }
 
     @Override
@@ -152,7 +148,7 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
 
     public void selectContact(){
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent,REQUEST_CONTACT);
+        startActivityForResult(intent, REQUEST_CONTACT);
     }
     public void saveAddress(){
         String key = MyApplication.getInstance().getLoginKey();
@@ -185,28 +181,34 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
             MyApplication.showToast("手机不能为空！");
             return ;
         }
-        Log.i("AddressEditFragment", address);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("address_id",mAddress.getAddressId());
-        hashMap.put("true_name",username);
-        hashMap.put("area_info",areaInfo);
-        hashMap.put("address",address);
-        hashMap.put("mob_phone",mPhoneStr);
+        hashMap.put("true_name", username);
+        hashMap.put("area_info", areaInfo);
+        hashMap.put("address", address);
+        hashMap.put("mob_phone", mPhoneStr);
         hashMap.put("area_id", mDistrictId);
         hashMap.put("city_id", mCityId);
         if(mCheckBox.isChecked()){
             hashMap.put("is_default", "1");
+            mAddress.setIsDefault("1");
         }
+        mAddress.setAreaId(mDistrictId);
+        mAddress.setCityId(mCityId);
+        mAddress.setMobPhone(mPhoneStr);
+        mAddress.setTrueName(username);
+        mAddress.setAreaInfo(areaInfo);
+        mAddress.setAddress(address);
         showLoadingDialog("");
         HttpClientHelper.asynPost(url, hashMap, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
                 hideLoadingDialog();
                 if (response.what == HttpStatus.SC_OK) {
-                    String json= (String)response.obj;
-                    if(json.equals("1")){
-                        MyApplication.showToast("修改成功");
-                    }else {
+                    String json = (String) response.obj;
+                    if (json.equals("1")) {
+                        backBuy();
+                    } else {
                         try {
                             JSONObject obj = new JSONObject(json);
                             if (obj.has("error")) {
@@ -232,12 +234,21 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
         });
     }
 
+    private void backBuy(){
+        Intent intent = new Intent();
+       // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("address",mAddress);
+        setResult(RESULT_UPDATE_DELIVERY, intent);
+      //  startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CONTACT){
             Uri uri = data.getData();
-            ContentResolver cr = getActivity().getContentResolver();
+            ContentResolver cr = getContentResolver();
             Cursor cursor = cr.query(uri, null, null, null, null);
            /* int nameIndex;
             while (cursor.moveToNext()){
@@ -259,46 +270,25 @@ public class AddressEditFragment extends BaseFragment implements View.OnClickLis
                 }
             }
 
+
         }
     }
 
     public void showAreaDialog(com.fengbeibei.shop.common.Address address){
         AreaDialogBuilder builder = new AreaDialogBuilder();
         builder.setAreaType(3)
-                    .setAddress(address)
-                    .setAreaSelectedListener(new AddrEditAreaSelectedListener(this))
-                .show(getFragmentManager());
+                .setAddress(address)
+                .setAreaSelectedListener(new DeliveryAreaSelectedListener(this))
+                .show(getSupportFragmentManager());
     }
 
-    public static void setProvinceName(AddressEditFragment fragment,String provinceName){
-        fragment.mProvinceName = provinceName;
-    }
-
-    public static void setProvinceId(AddressEditFragment fragment,String provinceId) {
-        fragment.mProvinceId = provinceId;
-    }
-
-    public static void setCityName(AddressEditFragment fragment,String cityName) {
-        fragment.mCityName = cityName;
-    }
-
-    public static void setCityId(AddressEditFragment fragment,String cityId) {
-        fragment.mCityId = cityId;
-    }
-
-    public static void setDistrictName(AddressEditFragment fragment,String districtName) {
-        fragment.mDistrictName = districtName;
-    }
-
-    public static void setDistrictId(AddressEditFragment fragment,String districtId) {
-        fragment.mDistrictId = districtId;
-    }
-
-    public static StringBuffer getAreaInfo(AddressEditFragment fragment){
-        return fragment.mAreaInfo;
-    }
-
-    public static TextView getArea(AddressEditFragment fragment){
-        return fragment.mArea;
+    public static void onAreaSelected(UpdateDeliveryActivity activity,com.fengbeibei.shop.common.Address address) {
+        activity.mProvinceName = address.getProvinceName();
+        activity.mProvinceId = address.getProvinceId();
+        activity.mCityName = address.getCityName();
+        activity.mCityId = address.getCityId();
+        activity.mDistrictName = address.getDistrictName();
+        activity.mDistrictId = address.getDistrictId();
+        activity.mArea.setText(activity.mProvinceName+" "+activity.mCityName+" "+activity.mDistrictName);
     }
 }

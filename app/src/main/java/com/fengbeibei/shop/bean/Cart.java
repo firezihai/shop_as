@@ -63,6 +63,17 @@ public class Cart {
     private List<Goods> goods;
 
     private boolean checked = true;
+    private String freight;
+
+    private String storeGoodsTotal;
+
+    private String storeMansongRuleList;
+
+    private String storeVoucherInfo;
+
+    private List<Voucher> storeVoucherList;
+
+
     public static Cart objectFromData(String str) {
 
         return new Gson().fromJson(str, Cart.class);
@@ -106,6 +117,36 @@ public class Cart {
 
     public boolean isChecked() {
         return checked;
+    }
+
+    public void setFreight(String freight) {
+        this.freight = freight;
+    }
+
+    public void setStoreGoodsTotal(String storeGoodsTotal) {
+        this.storeGoodsTotal = storeGoodsTotal;
+    }
+    public void setStoreVoucherList(List<Voucher> storeVoucherList) {
+        this.storeVoucherList = storeVoucherList;
+    }
+    public String getFreight() {
+        return freight;
+    }
+
+    public String getStoreGoodsTotal() {
+        return storeGoodsTotal;
+    }
+
+    public List<Voucher> getStoreVoucherList() {
+        return storeVoucherList;
+    }
+
+    public void setStoreVoucherInfo(String storeVoucherInfo) {
+        this.storeVoucherInfo = storeVoucherInfo;
+    }
+
+    public String getStoreVoucherInfo() {
+        return storeVoucherInfo;
     }
 
     public static class Goods {

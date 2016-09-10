@@ -24,7 +24,8 @@ public class AddressAdapter extends BaseAdapter{
     private AddressItemEditInterface mEditInterface;
     private List<Address> mAddressList;
     private Context mContext;
-
+    private int mViewType = 0;
+    private String mSelected;
     public AddressAdapter(Context context, List<Address> addressList) {
         mContext = context;
         mAddressList = addressList;
@@ -32,6 +33,18 @@ public class AddressAdapter extends BaseAdapter{
 
     public void setEditListener(AddressItemEditInterface editListener){
         mEditInterface = editListener;
+    }
+
+    public void setViewType(int viewType) {
+        mViewType = viewType;
+    }
+
+    public void setSelected(String selected) {
+        mSelected = selected;
+    }
+
+    public String getSelected() {
+        return mSelected;
     }
 
     @Override
@@ -51,6 +64,15 @@ public class AddressAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if(mViewType == 1){
+            return getDeliveryView(position,convertView,parent);
+        }else{
+            return getAddressView(position,convertView,parent);
+        }
+
+    }
+
+    public View getAddressView(int position, View convertView, ViewGroup parent){
         ViewHolder viewHolder;
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item_address,null);
@@ -69,7 +91,7 @@ public class AddressAdapter extends BaseAdapter{
         final Address address = mAddressList.get(position);
         viewHolder.username.setText(address.getTrueName());
         viewHolder.phone.setText(PhoneUtil.addStarFormat(address.getMobPhone(),4));
-        viewHolder.addressInfo.setText(address.getAreaInfo()+address.getAddress());
+        viewHolder.addressInfo.setText(address.getAreaInfo() + address.getAddress());
         if("1".equals(address.getIsDefault())){
             viewHolder.checkbox.setSelected(true);
         }
@@ -95,6 +117,38 @@ public class AddressAdapter extends BaseAdapter{
         return convertView;
     }
 
+    public View getDeliveryView(int position, View convertView, ViewGroup parent){
+        ViewHolder viewHolder;
+        if(convertView == null){
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item_delivery_address,null);
+            viewHolder = new ViewHolder();
+            viewHolder.tick = (ImageView) convertView.findViewById(R.id.iv_tick);
+            viewHolder.username = (TextView)convertView.findViewById(R.id.tv_username);
+            viewHolder.phone = (TextView) convertView.findViewById(R.id.tv_phone);
+            viewHolder.addressInfo = (TextView) convertView.findViewById(R.id.tv_address_info);
+            viewHolder.editAddressIv = (ImageView) convertView.findViewById(R.id.iv_edit_addr);
+            viewHolder.deleteAddress = (LinearLayout) convertView.findViewById(R.id.ll_delete_addr);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        final Address address = mAddressList.get(position);
+        if(address.getAddressId().equals(getSelected())){
+            viewHolder.tick.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.tick.setVisibility(View.INVISIBLE);
+        }
+        viewHolder.username.setText(address.getTrueName());
+        viewHolder.phone.setText(PhoneUtil.addStarFormat(address.getMobPhone(), 4));
+        viewHolder.addressInfo.setText(address.getAreaInfo() + address.getAddress());
+        viewHolder.editAddressIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditInterface.editAddress(address);
+            }
+        });
+        return convertView;
+    }
     class ViewHolder{
         TextView username;
         TextView phone;
@@ -103,6 +157,8 @@ public class AddressAdapter extends BaseAdapter{
         LinearLayout setDefault;
         LinearLayout editAddress;
         LinearLayout deleteAddress;
+        ImageView editAddressIv;
+        ImageView tick;
     }
 
 }

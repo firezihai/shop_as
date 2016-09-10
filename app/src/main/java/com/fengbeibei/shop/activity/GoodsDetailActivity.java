@@ -77,11 +77,11 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
     private Button mAddCartBtn2;
 
     /* 商品规格控件 */
-    private HashMap<String,View> mSpecViews = new HashMap<String,View>();
+    private HashMap<String,View> mSpecViews = new HashMap<>();
     private String mSpecListJson;
     /*当前商品的规格*/
-    private ArrayList<String> mGoodsSpecSelected = new ArrayList<String>();
-    private HashMap<String,String> mSelectedSpec = new HashMap<String,String>();
+    private ArrayList<String> mGoodsSpecSelected = new ArrayList<>();
+    private HashMap<String,String> mSelectedSpec = new HashMap<>();
     /*图片缓存*/
     protected ImageLoader mImageLoader = ImageLoader.getInstance();
     private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
@@ -228,7 +228,7 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                     JSONObject objSpecValue = new JSONObject(goodsSpecValue);
                     Iterator<?> itSpecName = objSpecName.keys();
                     while (itSpecName.hasNext()){
-                        ArrayList<Spec> list = new ArrayList<Spec>();
+                        ArrayList<Spec> list = new ArrayList<>();
                         final String specId = itSpecName.next().toString();
                         String specName = objSpecName.getString(specId);
                         String specValue = objSpecValue.getString(specId);
@@ -285,27 +285,6 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
         });
     }
 
-    public class GoodsFragmentViewPagerAdapter extends FragmentPagerAdapter {
-        public GoodsFragmentViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mHeadTitle[position % mHeadTitle.length];
-        }
-    }
 
     public void changePopWindow(){
         if(mPop.isShowing()){
@@ -333,11 +312,7 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
             case R.id.addCartBtn:
                 if(mAddCartBtn.isEnabled()){
                     if(mIsNowBuy){
-                        String goodsNum = mBuyNum.getText().toString();
-                        if(goodsNum.equals("")){
-                            goodsNum = "1";
-                        }
-                        addCart(goodsNum);
+                        addCart();
                     }else {
                         changePopWindow();
                     }
@@ -346,11 +321,25 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
             case R.id.buyBtn:
                 if(mBuyBtn.isEnabled()){
                     if(mIsNowBuy){
-                        String cartId = mGoodsId + "|"+mBuyNum.getText().toString();
-                      IntentHelper.buy(this,"0","0",cartId);
+                        String cartId = mGoodsId + "|"+currentGoodsNum();
+                        IntentHelper.buy(this,"0","0",cartId);
                     }else{
                         changePopWindow();
                     }
+                }
+                break;
+            case R.id.addCartBtn2:
+                if(mAddCartBtn2.isEnabled()){
+                    addCart();
+                    changePopWindow();
+                }
+                break;
+            case R.id.buyBtn2:
+                if(mBuyBtn.isEnabled()){
+
+                    String cartId = mGoodsId + "|"+currentGoodsNum();
+                    IntentHelper.buy(this,"0","0",cartId);
+                    changePopWindow();
                 }
                 break;
             case R.id.back:
@@ -361,22 +350,12 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                 }
                 break;
             case R.id.addBtn:
-               // int m
+                numAddAndSub(1);
                 break;
-            case R.id.addCartBtn2:
-                if(mAddCartBtn2.isEnabled()){
-                    //if(mIsNowBuy){
-                        String goodsNum = mBuyNum.getText().toString();
-                        if(goodsNum.equals("")){
-                            goodsNum = "1";
-                        }
-                        addCart(goodsNum);
-                        changePopWindow();
-                   // }else {
-                     //   changePopWindow();
-                    //}
-                }
+            case R.id.minusBtn:
+                numAddAndSub(0);
                 break;
+
         }
     }
 
@@ -410,11 +389,11 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
         return false;
     }
 
-    public void addCart(String goodsNum){
+    public void addCart(){
         HashMap<String,String> hashMap = new HashMap<>();
         String key = MyApplication.getInstance().getLoginKey();
         hashMap.put("goods_id",mGoodsId);
-        hashMap.put("quantity",goodsNum);
+        hashMap.put("quantity",currentGoodsNum());
         showLoadingDialog("",R.layout.view_dialog_loading,R.style.Dialog);
         HttpClientHelper.asynPost(Constants.APP_URL + "act=member_cart&op=cart_add&key="+key, hashMap, new HttpClientHelper.CallBack() {
             @Override
@@ -443,6 +422,30 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
         });
     }
 
+    public String currentGoodsNum(){
+        String goodsNum = mBuyNum.getText().toString();
+        if(goodsNum.equals("")){
+            goodsNum = "1";
+        }
+        return goodsNum;
+    }
+
+    public void numAddAndSub(int type){
+        int goodsNum = Integer.parseInt(currentGoodsNum());
+        if(type == 1) {
+            ++goodsNum;
+            if (goodsNum > 100) {
+                goodsNum = 99;
+            }
+        }else{
+           --goodsNum;
+            if(goodsNum<1){
+                goodsNum =1;
+            }
+        }
+        mBuyNum.setText(goodsNum+"");
+
+    }
     class RegSpecOnClickListener implements View.OnClickListener{
         private String specId;
         private String curSpecValueId;
@@ -475,16 +478,15 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
                 }
             }
             Arrays.sort(curKeySort);
-            for(int k =0;k<curKeySort.length;k++){
-                curKey += "|"+curKeySort[k];
+            for(int tempkey : curKeySort){
+                curKey += "|"+tempkey;
             }
             curKey = curKey.replaceFirst("\\|","");
             System.out.println(mSpecListJson);
             try{
                 JSONObject obj = new JSONObject(mSpecListJson);
 
-                String goodsId = obj.getString(curKey);
-                mGoodsId = goodsId;
+                mGoodsId = obj.getString(curKey);
                 updateFragment();
                 //   mFragmentListener.(goodsId);
                 mGoodsDetailFragment.upData();
@@ -493,4 +495,27 @@ public class GoodsDetailActivity extends BaseActivity implements GoodsDetailFrag
             }
         }
     }
+
+    public class GoodsFragmentViewPagerAdapter extends FragmentPagerAdapter {
+        public GoodsFragmentViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mHeadTitle[position % mHeadTitle.length];
+        }
+    }
+
 }

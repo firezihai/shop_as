@@ -4,10 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Proxy;
-import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * @author zihai(https://github.com/firezihai)
@@ -37,15 +35,15 @@ public class NetUtil {
         ConnectivityManager connectivity = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
         if(networkInfo != null && !networkInfo.isAvailable() && !networkInfo.isConnected()){
-            String  type = networkInfo.getTypeName();
+            return  networkInfo.getTypeName();
         }
 
-        return "wifi";
+        return "";
     }
 
     /**
      * 获取当前网络类型
-     * @param context
+     * @param context 内容上下文
      * @return 返回当前网络类型
      */
     public static int getNetWorkType(Context context){
@@ -80,7 +78,6 @@ public class NetUtil {
             return false;
         }
         String  type= connectivity.getActiveNetworkInfo().getTypeName();
-        Log.i(TAG,type);
         if("wifi".equals(type.toLowerCase())){
             return true;
         }

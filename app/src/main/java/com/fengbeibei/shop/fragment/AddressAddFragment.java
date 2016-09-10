@@ -161,7 +161,7 @@ public class AddressAddFragment extends BaseFragment implements View.OnClickList
                 String contact_id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                         ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contact_id, null, null);
-                while (phoneCursor.moveToNext() && cursor != null) {
+                while (phoneCursor != null && phoneCursor.moveToNext()) {
                     String phone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     mPhoneStr = PhoneUtil.delHyphen(phone, "-");
                     mPhone.setText(PhoneUtil.addStarFormat(PhoneUtil.delHyphen(phone, "-"), 4));
@@ -211,7 +211,7 @@ public class AddressAddFragment extends BaseFragment implements View.OnClickList
             return ;
         }
         Log.i("AddressEditFragment", address);
-        HashMap<String,String> hashMap = new HashMap<String,String>();
+        HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("true_name",username);
         hashMap.put("area_info",areaInfo);
         hashMap.put("address",address);
@@ -219,7 +219,6 @@ public class AddressAddFragment extends BaseFragment implements View.OnClickList
         hashMap.put("area_id", mDistrictId);
         hashMap.put("city_id", mCityId);
         if(mSetDefault.isSelected()){
-            Log.i("AddressEditFragment","setDefault");
             hashMap.put("is_default", "1");
         }
         showLoadingDialog("");

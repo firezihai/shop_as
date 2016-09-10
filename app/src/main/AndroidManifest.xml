@@ -93,10 +93,25 @@
         <activity
             android:name="com.fengbeibei.shop.activity.AccountManageActivity"
             android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.fengbeibei.shop.activity.BuyActivity"
             android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.fengbeibei.shop.activity.SelectDeliveryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.fengbeibei.shop.activity.UpdateDeliveryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.fengbeibei.shop.activity.AddDeliveryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.fengbeibei.shop.activity.SubjectWebActivity"

@@ -1,6 +1,7 @@
 package com.fengbeibei.shop.fragment;
 
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +15,7 @@ import com.fengbeibei.shop.adapter.CartAdapter;
 import com.fengbeibei.shop.bean.Cart;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
 
@@ -61,7 +63,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     private int mCheckedNum = 0;
     private float mCartAmount = 0;
     private float mShipFeeAmount = 0;
-
+    private String mCartId ;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_cart;
@@ -75,7 +77,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         mCheckboxSettle.setOnClickListener(this);
         mCheckboxSettle.setOnClickListener(this);
         mCartFooter.setVisibility(View.GONE);
-        mCartList = new ArrayList<Cart>();
+        mCartList = new ArrayList<>();
         mCartAdapter = new CartAdapter(getActivity(),mCartList);
         mCartAdapter.setCartFragment(this);
         mCheckboxSettle.setChecked(true);
@@ -155,7 +157,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
                 }
                 break;
             case R.id.tv_cart_settle:
-
+                if(mCartId.equals("")){
+                    MyApplication.showToast("您还没有选择要购买的商品!");
+                }else {
+                    Log.i("BuyActivity", mCartId);
+                    IntentHelper.buy(getActivity(), "0", "1", mCartId);
+                }
                 break;
             case R.id.tv_cart_delete:
 
@@ -254,21 +261,24 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     public void calcTotal(){
         List<Cart> cartList = mCartAdapter.getCartList();
-        int groupChild  = cartList.size();
+        int group  = cartList.size();
+        mCartId = "";
         int checkNum = 0;
         float goodsAmount = 0;
         float shipFee = 0;
-        for(int i=0;i<groupChild;i++){
+        for(int i=0;i<group;i++){
             int child = cartList.get(i).getGoods().size();
             for (int k=0;k<child;k++){
                 Cart.Goods goods = cartList.get(i).getGoods().get(k);
                 if(goods.isChecked()){
+                    mCartId += ","+goods.getCartId()+"|"+goods.getGoodsNum();
                     checkNum += Integer.parseInt(goods.getGoodsNum());
                     goodsAmount = goodsAmount + Float.parseFloat(goods.getGoodsPrice())*Integer.parseInt(goods.getGoodsNum());
                     shipFee += Float.parseFloat(goods.getGoodsFreight());
                 }
             }
         }
+        mCartId = mCartId.replaceFirst(",","");
         mCartAmount = goodsAmount;
         mShipFeeAmount = shipFee;
         mCheckedNum = checkNum;

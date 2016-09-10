@@ -36,6 +36,7 @@ import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.IntentHelper;
+import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.fragment.Base.BaseFragment;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
@@ -102,7 +103,7 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 	private float downLocation;
 
 	/*轮播广告*/
-	private ArrayList<ImageView> mAdData = new ArrayList<ImageView>();
+	private ArrayList<ImageView> mAdData = new ArrayList<>();
 	private boolean isMoving = false;
 	private boolean isScroll = false;
 	private int mCurrentIndex = 0;
@@ -254,6 +255,8 @@ public class HomeFragment extends BaseFragment implements OnRefreshListener<Scro
 					} catch(JSONException e){
 						e.printStackTrace();
 					}
+				}else{
+					MyApplication.showToast("加载失败！");
 				}
 			}
 
