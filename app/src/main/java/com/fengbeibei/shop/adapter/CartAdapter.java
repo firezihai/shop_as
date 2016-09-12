@@ -343,7 +343,6 @@ public class CartAdapter extends BaseExpandableListAdapter {
             int num = Integer.parseInt(viewHolder.mEditNum.getText().toString());
             switch (v.getId()){
                 case R.id.iv_edit_sub :
-                    Log.i("CartFragment",num+" sub");
                     num = num-1;
                     if(num<1){
                         num = 1;

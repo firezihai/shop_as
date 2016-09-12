@@ -143,7 +143,7 @@
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
     <string name="save">保存</string>
-
+    <string name="close">关闭</string>
     <string name="all_select">全选</string>
     <string name="goto_settle">去结算(%s)</string>
     <string name="choose_goods">(已选：%s)</string>
@@ -165,4 +165,23 @@
     <string name="edit_delivery_address">编辑收货地址</string>
     <string name="add_delivery_address">新增收货地址</string>
     <string name="save_and_use">保存并使用</string>
+    <string-array name="invoice_type">
+        <item>明细</item>
+        <item>酒</item>
+        <item>食品</item>
+        <item>饮料</item>
+        <item>玩具</item>
+        <item>日用品</item>
+        <item>装修材料</item>
+        <item>化妆品</item>
+        <item>办公用品</item>
+        <item>学生用品</item>
+        <item>饰品</item>
+        <item>服装</item>
+        <item>箱包</item>
+        <item>家电</item>
+        <item>劳防用品</item>
+        <item>耗材</item>
+        <item>电脑配件</item>
+    </string-array>
 </resources>

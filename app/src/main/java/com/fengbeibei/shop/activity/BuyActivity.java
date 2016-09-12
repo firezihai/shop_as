@@ -18,7 +18,7 @@ import com.fengbeibei.shop.bean.Voucher;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.IntentHelper;
-import com.fengbeibei.shop.common.MyApplication;
+import com.fengbeibei.shop.fragment.dialog.PaymentTypeDialog;
 import com.fengbeibei.shop.widget.CartOrderProductView;
 
 import org.apache.http.HttpStatus;
@@ -36,11 +36,12 @@ import butterknife.BindView;
  * @author zihai(https://github.com/firezihai)
  * @created 2016-09-07 20:14
  */
-public class BuyActivity extends BaseActivity{
+public class BuyActivity extends BaseActivity implements PaymentTypeDialog.OnSelectedListener{
     public static final int REQUEST_UPDATE_DELIVERY_ADDR = 0x111;
     public static final int REQUEST_ADD_DELIVERY_ADDR = 0x112;
-    public final static int REQUEST_SELECT_DELIVERY_ADDR = 0x113;
-    private final static String TAG = "BuyActivity";
+    public static final int REQUEST_SELECT_DELIVERY_ADDR = 0x113;
+    public static final int REQUEST_INVOICE_SETTING = 0x114;
+    private static final String TAG = "BuyActivity";
     @BindView(R.id.product_view)
     CartOrderProductView mOrderProductView;
     @BindView(R.id.rl_address_layout)
@@ -84,6 +85,7 @@ public class BuyActivity extends BaseActivity{
     private String mIsCart;
     private String mCartId;
     private String mIsFCode;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_buy;
@@ -108,18 +110,18 @@ public class BuyActivity extends BaseActivity{
         mIsFCode = getIntent().getStringExtra("isFCode");
         mAddressWrapper.setOnClickListener(this);
         mInvoiceLayout.setOnClickListener(this);
+        mPaymentLayout.setOnClickListener(this);
         initData();
     }
     @Override
     public void initData() {
         showLoadingDialog("",R.layout.view_dialog_loading,R.style.Dialog);
-        String key = MyApplication.getInstance().getLoginKey();
-        String url = Constants.APP_URL+"c=buy&a=buy_step1&key="+key;
+        String url = Constants.APP_URL+"c=buy&a=buy_step1&key="+mKey;
         HashMap<String,String> hashMap = new HashMap<>();
         if(mIsFCode != null && !mIsFCode.equals("")){
             hashMap.put("is_fcode",mIsFCode);
         }
-        hashMap.put("ifcart",mIsCart);
+        hashMap.put("ifcart", mIsCart);
         hashMap.put("cart_id", mCartId);
         HttpClientHelper.asynPost(url, hashMap, new HttpClientHelper.CallBack() {
             @Override
@@ -189,7 +191,6 @@ public class BuyActivity extends BaseActivity{
     }
     @Override
     public void onClick(View v) {
-        Log.i(TAG, "onclick");
         switch (v.getId()){
             case R.id.rl_address_layout:
                 if(mCartInfo.getAddress() != null){
@@ -199,7 +200,14 @@ public class BuyActivity extends BaseActivity{
                 }
                 break;
             case R.id.rl_invoice_layout:
-
+                if(mCartInfo.getInvoiceInfo() != null) {
+                    IntentHelper.invoice(this, true, mCartInfo.getInvoiceInfo());
+                }else{
+                    IntentHelper.invoice(this,false,null);
+                }
+                break;
+            case R.id.rl_payment_type:
+                paymentTypeDialog();
                 break;
         }
     }
@@ -243,33 +251,31 @@ public class BuyActivity extends BaseActivity{
 
     public void invoiceInfo(){
         if(mCartInfo.getInvoiceInfo() != null){
-            mInvoiceInfo.setText(mCartInfo.getInvoiceInfo().getContent());
+            mInvoiceInfo.setText(mCartInfo.getInvoiceInfo().getInvTitle()+mCartInfo.getInvoiceInfo().getInvContent());
         }else{
-            mInvoiceInfo.setText("不要发票");
+            mInvoiceInfo.setText("不开发票");
         }
     }
 
     public void updateAmount(){
         mGoodsAmountView.setText(String.format(getString(R.string.goods_amount_format),mGoodsAmount+""));
-        mShipFee.setText(String.format(getString(R.string.ship_fee_format),mGoodsFreight+""));
+        mShipFee.setText(String.format(getString(R.string.ship_fee_format), mGoodsFreight + ""));
         mDiscount.setText(String.format(getString(R.string.discout_format), mDiscountAmount + ""));
         mOrderAmount = mGoodsAmount+mGoodsFreight-mDiscountAmount;
         mOrderAmountView.setText(mOrderAmount + "");
     }
 
     private void updateAddress(){
-        String key = MyApplication.getInstance().getLoginKey();
-        String url = Constants.APP_URL+"c=buy&a=change_address&key="+key;
+        String url = Constants.APP_URL+"c=buy&a=change_address&key="+mKey;
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("area_id", mCartInfo.getAddress().getAreaId());
-        hashMap.put("city_id",mCartInfo.getAddress().getCityId());
+        hashMap.put("city_id", mCartInfo.getAddress().getCityId());
         hashMap.put("freight_hash",mCartInfo.getFreightHash());
         HttpClientHelper.asynPost(url, hashMap, new HttpClientHelper.CallBack() {
             @Override
             public void onFinish(Message response) {
                 if (response.what == HttpStatus.SC_OK) {
                     String json = (String) response.obj;
-                    Log.i(TAG, json);
                     mCartInfo.setAddressApi(json);
                     addressApi(mCartInfo.getAddressApi());
                     addressInfo(mCartInfo.getAddress());
@@ -290,7 +296,6 @@ public class BuyActivity extends BaseActivity{
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case BuyActivity.REQUEST_SELECT_DELIVERY_ADDR:
-                Log.i(TAG,"selected");
                 mCartInfo.setAddress((Address) data.getParcelableExtra("address"));
                 updateAddress();
                 break;
@@ -299,10 +304,33 @@ public class BuyActivity extends BaseActivity{
                 updateAddress();
                 break;
             case BuyActivity.REQUEST_ADD_DELIVERY_ADDR:
-
+                mCartInfo.setAddress((Address) data.getParcelableExtra(AddDeliveryActivity.EXTRA_ADDRESS));
+                updateAddress();
+                break;
+            case BuyActivity.REQUEST_INVOICE_SETTING:
+                if(resultCode == InvoiceActivity.RESULT_INVOICE){
+                    mCartInfo.setInvoiceInfo((Invoice) data.getParcelableExtra(InvoiceActivity.EXTRA_INVOICE));
+                    invoiceInfo();
+                }
                 break;
         }
     }
 
+    @Override
+    public void onSelectedPayment(int type) {
+        if(type == 1){
+            mPaymentType.setText("在线支付");
+        }else if(type == 2){
+            mPaymentType.setText("货到付款");
+        }else if(type == 3){
+            mPaymentType.setText("门店支付");
+        }
+    }
 
+    public void paymentTypeDialog(){
+        String showOffPay = mCartInfo.getShowOffPay() != null ? mCartInfo.getShowOffPay() : "0";
+        PaymentTypeDialog dialog = new PaymentTypeDialog(this,R.style.dialog_float_up,showOffPay,"0");
+        dialog.setOnSelectedListener(this);
+        dialog.show();
+    }
 }

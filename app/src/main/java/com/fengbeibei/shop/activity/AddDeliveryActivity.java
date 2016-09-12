@@ -138,8 +138,7 @@ public class AddDeliveryActivity extends BaseActivity{
     }
 
     public void saveAddress(){
-        String key = MyApplication.getInstance().getLoginKey();
-        String url = Constants.APP_URL+"act=member_address&op=address_add&key="+key;
+        String url = Constants.APP_URL+"act=member_address&op=address_add&key="+mKey;
         String username = mUsername.getText().toString();
         String areaInfo = mArea.getText().toString();
         String address = mAddressInfo.getText().toString();

@@ -75,68 +75,31 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
 
     private AddressDialogFragment.OnAreaSelectedListener mOnAreaSelectedListener;
     private AreaSelectedAdapter mAdapter;
+
+    @NonNull
     @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
-            case R.id.rb_province:
-                setProvince();
-                break;
-            case R.id.rb_city:
-                Province province = (Province)mProvinceBtn.getTag();
-                if(province == null){
-                    return ;
-                }
-                setCity(province);
-                break;
-            case R.id.rb_district:
-                City city = (City)mCityBtn.getTag();
-                if(city == null){
-                    return;
-                }
-                setDistrict(city);
-                break;
-        }
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        setStyle(STYLE_NO_FRAME, R.style.dialog_float_up);
+        return super.onCreateDialog(savedInstanceState);
     }
 
+    @Nullable
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("AddressEditFragment",mAdapter.getArea(position).getType()+"");
-        switch (mAdapter.getArea(position).getType()){
-            case Area.TYPE_PROVINCE:
-                Province province = (Province)mAdapter.getArea(position);
-                mProvinceBtn.setText(province.getName());
-                mProvinceBtn.setTag(province);
-                setRadioButtonCheck(mCityBtn, true);
-                mAdapter.setData(null);
-                Log.i("AddressDialogFragment", "item province");
-               // getAreaList(province.getId(), Area.TYPE_CITY);
-
-                break;
-            case Area.TYPE_CITY:
-                City city = (City)mAdapter.getArea(position);
-                mCityBtn.setText(city.getName());
-                mCityBtn.setTag(city);
-                mAdapter.setData(null);
-                setRadioButtonCheck(mDistrictBtn, true);
-                Log.i("AddressDialogFragment", "item city");
-                //getAreaList(city.getId(),Area.TYPE_DISTRICT);
-                break;
-            case Area.TYPE_DISTRICT:
-                District district = (District)mAdapter.getArea(position);
-                Address address = new Address(district);
-                mDistrictBtn.setText(district.getName());
-                mDistrictBtn.setTag(district);
-                mAdapter.setData(null);
-                mOnAreaSelectedListener.onAreaSelected(address);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View layout = inflater.inflate(R.layout.dialog_select_area, container, false);
+        ButterKnife.bind(this, layout);
+        mAreaSelect.setOnCheckedChangeListener(this);
+        mCloseDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dismiss();
-                break;
-        }
-
-    }
-
-
-    public AddressDialogFragment() {
-
+            }
+        });
+        mAdapter = new AreaSelectedAdapter(getActivity());
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
+        setBundle();
+        return layout;
     }
 
     private void setBundle(){
@@ -181,30 +144,63 @@ public class AddressDialogFragment extends DialogFragment implements AdapterView
             }
         }
     }
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        setStyle(STYLE_NO_FRAME, R.style.dialog_float_up);
-        return super.onCreateDialog(savedInstanceState);
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId){
+            case R.id.rb_province:
+                setProvince();
+                break;
+            case R.id.rb_city:
+                Province province = (Province)mProvinceBtn.getTag();
+                if(province == null){
+                    return ;
+                }
+                setCity(province);
+                break;
+            case R.id.rb_district:
+                City city = (City)mCityBtn.getTag();
+                if(city == null){
+                    return;
+                }
+                setDistrict(city);
+                break;
+        }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.dialog_select_area, container, false);
-        ButterKnife.bind(this, layout);
-        mAreaSelect.setOnCheckedChangeListener(this);
-        mCloseDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i("AddressEditFragment", mAdapter.getArea(position).getType() + "");
+        switch (mAdapter.getArea(position).getType()){
+            case Area.TYPE_PROVINCE:
+                Province province = (Province)mAdapter.getArea(position);
+                mProvinceBtn.setText(province.getName());
+                mProvinceBtn.setTag(province);
+                setRadioButtonCheck(mCityBtn, true);
+                mAdapter.setData(null);
+                Log.i("AddressDialogFragment", "item province");
+                // getAreaList(province.getId(), Area.TYPE_CITY);
+
+                break;
+            case Area.TYPE_CITY:
+                City city = (City)mAdapter.getArea(position);
+                mCityBtn.setText(city.getName());
+                mCityBtn.setTag(city);
+                mAdapter.setData(null);
+                setRadioButtonCheck(mDistrictBtn, true);
+                Log.i("AddressDialogFragment", "item city");
+                //getAreaList(city.getId(),Area.TYPE_DISTRICT);
+                break;
+            case Area.TYPE_DISTRICT:
+                District district = (District)mAdapter.getArea(position);
+                Address address = new Address(district);
+                mDistrictBtn.setText(district.getName());
+                mDistrictBtn.setTag(district);
+                mAdapter.setData(null);
+                mOnAreaSelectedListener.onAreaSelected(address);
                 dismiss();
-            }
-        });
-        mAdapter = new AreaSelectedAdapter(getActivity());
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        setBundle();
-        return layout;
+                break;
+        }
+
     }
 
     public void setProvince(){

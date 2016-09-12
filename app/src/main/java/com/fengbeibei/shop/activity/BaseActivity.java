@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.common.MyApplication;
 import com.fengbeibei.shop.interf.BaseViewInterface;
 import com.fengbeibei.shop.utils.DialogUtil;
 
@@ -38,11 +39,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected  int getLayoutId(){
         return 0;
     }
-
+    protected String mKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     //    setContentView(getLayoutId());
+        mKey = getUserKey();
         mInflater = getLayoutInflater();
         onBeforeSetContentLayout();
         ButterKnife.bind(this);
@@ -137,4 +139,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private String getUserKey(){
+        String key = MyApplication.getInstance().getLoginKey();
+        if(key != null && !key.equals("")){
+            return key;
+        }else{
+            return "";
+        }
+    }
 }

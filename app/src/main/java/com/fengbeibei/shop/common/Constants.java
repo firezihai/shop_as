@@ -13,7 +13,7 @@ public final class Constants {
 	/** 
 	 *服务器域名
 	 */
-	public final static String HOST = "www.fengbeibei.com";
+	public final static String HOST = "www.zihaidetiandi.com";
 	
 	/**
 	 * 服务器端口
@@ -23,7 +23,7 @@ public final class Constants {
 	/**
 	 * 服务器端应用名称
 	 */
-	public final static String APP = "/mobile";
+	public final static String APP = "/shop/mobile";
 	/**
 	 * 分页数
 	 */

@@ -1,5 +1,8 @@
 package com.fengbeibei.shop.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -12,7 +15,7 @@ import java.util.List;
  * @author zihai(https://github.com/firezihai)
  * @created 2016-09-08 17:26
  */
-public class Invoice {
+public class Invoice implements Parcelable{
 
     /**
      * inv_id : 6
@@ -65,9 +68,43 @@ public class Invoice {
     private String invGotoAddr;
     @SerializedName("content")
     private String content;
+
+    private boolean checked = false;
+
     public Invoice(){
 
     }
+    protected Invoice(Parcel in){
+        invId = in.readString();
+        memberId = in.readString();
+        invState = in.readString();
+        invTitle = in.readString();
+        invContent = in.readString();
+        invCompany = in.readString();
+        invCode = in.readString();
+        invRegAddr = in.readString();
+        invRegPhone = in.readString();
+        invRegBname = in.readString();
+        invRegBaccount = in.readString();
+        invRecName = in.readString();
+        invRecMobphone = in.readString();
+        invRecProvince = in.readString();
+        invGotoAddr = in.readString();
+        content = in.readString();
+    }
+
+    public static final Creator<Invoice> CREATOR = new Creator<Invoice>() {
+        @Override
+        public Invoice createFromParcel(Parcel in) {
+            return new Invoice(in);
+        }
+
+        @Override
+        public Invoice[] newArray(int size) {
+            return new Invoice[size];
+        }
+    };
+
     public static Invoice objectFromData(String str) {
 
         return new Gson().fromJson(str, Invoice.class);
@@ -207,5 +244,38 @@ public class Invoice {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(invId);
+        dest.writeString(memberId);
+        dest.writeString(invState);
+        dest.writeString(invTitle);
+        dest.writeString(invContent);
+        dest.writeString(invCompany);
+        dest.writeString(invCode);
+        dest.writeString(invRegAddr);
+        dest.writeString(invRegPhone);
+        dest.writeString(invRegBname);
+        dest.writeString(invRegBaccount);
+        dest.writeString(invRecName);
+        dest.writeString(invRecMobphone);
+        dest.writeString(invRecProvince);
+        dest.writeString(invGotoAddr);
+        dest.writeString(content);
     }
 }

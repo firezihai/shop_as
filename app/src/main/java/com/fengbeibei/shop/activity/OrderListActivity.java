@@ -76,8 +76,7 @@ public class OrderListActivity extends BaseActivity implements MyListView.OnItem
     @Override
     public void initData() {
         mLoadState = true;
-        String key = MyApplication.getInstance().getLoginKey();
-        String url = Constants.ORDER_LIST_URL + "&pagesize=5&key="+key+"&orderType="+mOrderType+"&curpage="+mPage;
+        String url = Constants.ORDER_LIST_URL + "&pagesize=5&key="+mKey+"&orderType="+mOrderType+"&curpage="+mPage;
         System.out.println(url);
         HttpClientHelper.asynGet(url, new CallBack() {
 
@@ -206,8 +205,7 @@ public class OrderListActivity extends BaseActivity implements MyListView.OnItem
 
 
     public void cancelOrder(String orderId){
-        String key = MyApplication.getInstance().getLoginKey();
-        String url = Constants.ORDER_CANCEL_URL + "&key="+key;
+        String url = Constants.ORDER_CANCEL_URL + "&key="+mKey;
         HashMap<String,String> params = new HashMap<String,String>();
         params.put("order_id",orderId);
         System.out.println("order_id="+orderId);

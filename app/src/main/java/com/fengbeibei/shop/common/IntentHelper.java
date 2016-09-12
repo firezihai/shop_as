@@ -10,6 +10,7 @@ import com.fengbeibei.shop.activity.AddDeliveryActivity;
 import com.fengbeibei.shop.activity.BuyActivity;
 import com.fengbeibei.shop.activity.GoodsDetailActivity;
 import com.fengbeibei.shop.activity.HomeActivity;
+import com.fengbeibei.shop.activity.InvoiceActivity;
 import com.fengbeibei.shop.activity.LoginActivity;
 import com.fengbeibei.shop.activity.OrderDetailActivity;
 import com.fengbeibei.shop.activity.OrderLogisticsActivity;
@@ -19,6 +20,7 @@ import com.fengbeibei.shop.activity.SelectDeliveryActivity;
 import com.fengbeibei.shop.activity.SettingActivity;
 import com.fengbeibei.shop.activity.SubjectWebActivity;
 import com.fengbeibei.shop.activity.UpdateDeliveryActivity;
+import com.fengbeibei.shop.bean.Invoice;
 import com.fengbeibei.shop.fragment.AddressEditFragment;
 
 public class IntentHelper {
@@ -129,5 +131,12 @@ public class IntentHelper {
 		Intent intent = new Intent(activity, AddDeliveryActivity.class);
 		intent.putExtra(AddDeliveryActivity.EXTRA_ADDRESS,address);
 		activity.startActivityForResult(intent,BuyActivity.REQUEST_ADD_DELIVERY_ADDR);
+	}
+
+	public static void invoice(Activity activity,boolean isOpenInv,Invoice invoice){
+		Intent intent = new Intent(activity, InvoiceActivity.class);
+		intent.putExtra(InvoiceActivity.EXTRA_IS_WRITE_INV,isOpenInv);
+		intent.putExtra(InvoiceActivity.EXTRA_INVOICE,invoice);
+		activity.startActivityForResult(intent,BuyActivity.REQUEST_INVOICE_SETTING);
 	}
 }
