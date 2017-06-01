@@ -14,7 +14,7 @@
         android:text=""
         android:textSize="14dp"
         android:textColor="@color/darkgrey"/>
-    <com.fengbeibei.shop.widget.FlowLayout
+    <com.zihai.shop.widget.FlowLayout
         android:id="@+id/specValueView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

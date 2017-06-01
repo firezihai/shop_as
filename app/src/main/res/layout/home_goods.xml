@@ -11,7 +11,7 @@
         android:background="@color/white"
         android:textSize="13sp"
         android:textColor="@color/darkgrey"/>
-	<com.fengbeibei.shop.widget.MyGridView
+	<com.zihai.shop.widget.MyGridView
 	    android:id="@+id/homeGoodsGridView"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"

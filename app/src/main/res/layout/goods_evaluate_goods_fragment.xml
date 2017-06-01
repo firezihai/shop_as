@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.fengbeibei.shop.widget.MyListView
+<com.zihai.shop.widget.MyListView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/listView"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	style="@style/listViewStyle">
 
-</com.fengbeibei.shop.widget.MyListView>
+</com.zihai.shop.widget.MyListView>

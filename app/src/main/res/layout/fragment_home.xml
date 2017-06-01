@@ -60,7 +60,7 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>
-    <com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView
+    <com.zihai.shop.pulltorefresh.library.PullToRefreshScrollView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/homePullToRefresh"
         android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     android:layout_alignParentEnd="true"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp">
-                    <com.fengbeibei.shop.widget.indicator.CirclePageIndicator
+                    <com.zihai.shop.widget.indicator.CirclePageIndicator
                         android:id="@+id/adPoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -156,6 +156,6 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-    </com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView>
+    </com.zihai.shop.pulltorefresh.library.PullToRefreshScrollView>
 
 </LinearLayout>

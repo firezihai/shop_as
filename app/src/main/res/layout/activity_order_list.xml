@@ -128,7 +128,7 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-	<com.fengbeibei.shop.widget.MyListView
+	<com.zihai.shop.widget.MyListView
 	    android:id="@+id/orderListView"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"

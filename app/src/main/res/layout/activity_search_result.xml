@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_f2f2f2">
-        <com.fengbeibei.shop.widget.PullLoadRecyclerView
+        <com.zihai.shop.widget.PullLoadRecyclerView
             android:id="@+id/pull_search_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        <com.fengbeibei.shop.widget.SearchPageView
+        <com.zihai.shop.widget.SearchPageView
             android:id="@+id/search_page_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,13 +24,13 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
             android:visibility="gone"/>
-        <com.fengbeibei.shop.widget.SearchNoResult
+        <com.zihai.shop.widget.SearchNoResult
             android:id="@+id/search_no_result_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="90dp"
             android:visibility="gone"/>
-        <com.fengbeibei.shop.widget.SearchNetErrorView
+        <com.zihai.shop.widget.SearchNetErrorView
             android:id="@+id/netErrorView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -51,11 +51,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <com.fengbeibei.shop.widget.SearchHeaderView
+                <com.zihai.shop.widget.SearchHeaderView
                     android:id="@+id/searchHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-                <com.fengbeibei.shop.widget.SearchTab
+                <com.zihai.shop.widget.SearchTab
                     android:id="@+id/searchTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

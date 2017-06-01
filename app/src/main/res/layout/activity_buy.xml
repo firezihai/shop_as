@@ -104,7 +104,7 @@
 				android:background="@drawable/bg_buy_delivery_line"
 				android:contentDescription="@string/app_name"/>
 
-			<com.fengbeibei.shop.widget.CartOrderProductView
+			<com.zihai.shop.widget.CartOrderProductView
 				android:id="@+id/product_view"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

@@ -10,7 +10,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="推存商品"/>
-        <com.fengbeibei.shop.widget.MyGridView
+        <com.zihai.shop.widget.MyGridView
             android:id="@+id/goodsCommendGridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:numColumns="3"
             android:verticalSpacing="10dp">
 
-        </com.fengbeibei.shop.widget.MyGridView>
+        </com.zihai.shop.widget.MyGridView>
         <View
             style="@style/h_line"
             android:layout_height="0.5dp"/>

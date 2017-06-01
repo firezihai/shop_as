@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 />
 
-            <com.fengbeibei.shop.widget.indicator.CirclePageIndicator
+            <com.zihai.shop.widget.indicator.CirclePageIndicator
                 android:id="@+id/goodsImagePoint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

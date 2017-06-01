@@ -5,7 +5,7 @@
     android:background="@color/lightgrey"
     android:orientation="vertical" >
    
-	<com.fengbeibei.shop.widget.MyGridView
+	<com.zihai.shop.widget.MyGridView
 	    android:id="@+id/homeGoodsListGridView"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"

@@ -23,7 +23,7 @@
             android:visibility="gone"
             android:textColor="@color/darkgrey"/>
     </LinearLayout>
-    <com.fengbeibei.shop.widget.MyGridView
+    <com.zihai.shop.widget.MyGridView
         android:id="@+id/home3GridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
